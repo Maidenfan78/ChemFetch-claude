@@ -1,0 +1,279 @@
+sds_1.PDF
+{
+  "product_name": {
+    "value": "SUPER GLUE FAST 20G",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Würth Chile Ltda.",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Adhesives",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "9",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": "III",
+    "confidence": 1.0
+  },
+  "issue_date": {
+    "value": "06/26/2025",
+    "confidence": 1.0
+  }
+}
+sds_2.pdf
+{
+  "product_name": {
+    "value": "ISOCOL Rubbing Alcohol",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Nicepak Products",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Antibacterial rub preparation for topical human use.",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "3",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": "III",
+    "confidence": 1.0
+  },
+  "issue_date": {
+    "value": "29/03/2022",
+    "confidence": 1.0
+  }
+}
+sds_3.PDF
+{
+  "product_name": {
+    "value": "Armor All Original Protectant - Spray",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Energizer Manufacturing, Inc.",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "General use",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "none",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": "not assigned",
+    "confidence": 1.0
+  },
+  "issue_date": {
+    "value": "4-01-19",
+    "confidence": 1.0
+  }
+}
+sds_5.pdf
+{
+  "product_name": {
+    "value": "WD-40 Aerosol",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "WD-40 Company Australia",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Lubricant, Penetrant, Drives Out",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "2.1",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "issue_date": {
+    "value": null,
+    "confidence": 0.0
+  }
+}
+sds_6.PDF
+{
+  "product_name": {
+    "value": "ACETONE",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Recochem Inc.",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Solvent",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "3",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": "II",
+    "confidence": 1.0
+  },
+  "issue_date": {
+    "value": "8/02/2022",
+    "confidence": 1.0
+  }
+}
+sds_7.pdf
+{
+  "product_name": {
+    "value": "Full Synthetic 5W-30",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Penrite Oil Company Pty Ltd",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Petrol engine oil.",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "Not classified as Dangerous Goods by the criteria of the \"Australian Code for the Transport of Dangerous Goods",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "issue_date": {
+    "value": "1-07-21",
+    "confidence": 1.0
+  }
+}
+sds_8.PDF
+{
+  "product_name": {
+    "value": "Glen 20 All in One Spray Disinfectant Original",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "RB (Hygiene Home) Australia Pty Ltd",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Disinfectant Spray Consumer use",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "2.1",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "issue_date": {
+    "value": "13/04/2023",
+    "confidence": 1.0
+  }
+}
+sds_9.pdf
+{
+  "product_name": {
+    "value": "Earth Choice Dishwashing Liquid",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "Natures Organics Pty Ltd",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Manual dishwashing liquid",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "None",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": "None",
+    "confidence": 1.0
+  },
+  "packing_group": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "issue_date": {
+    "value": "3/05/2021",
+    "confidence": 1.0
+  }
+}
+sds_10.pdf
+{
+  "product_name": {
+    "value": "JET POWER FUEL – 100GM/230GM/450GM",
+    "confidence": 1.0
+  },
+  "manufacturer": {
+    "value": "TAEYANG CORPORATION",
+    "confidence": 1.0
+  },
+  "product_use": {
+    "value": "Fuel etc.",
+    "confidence": 1.0
+  },
+  "dangerous_goods_class": {
+    "value": "2.1",
+    "confidence": 1.0
+  },
+  "subsidiary_risk": {
+    "value": null,
+    "confidence": 0.0
+  },
+  "packing_group": {
+    "value": "N.A",
+    "confidence": 1.0
+  },
+  "issue_date": {
+    "value": null,
+    "confidence": 0.0
+  }
+}
