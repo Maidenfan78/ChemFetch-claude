@@ -4,15 +4,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import pinoHttp from 'pino-http';
-import sdsByNameRoute from './routes/sdsByName';
+import sdsByNameRoute from '../routes/sdsByName';
 
-import logger from './utils/logger';
+import logger from './logger';
 
-import scanRoute from './routes/scan';
-import confirmRoute from './routes/confirm';
-import healthRoute from './routes/health';
-import ocrProxy from './routes/ocrProxy'; // <— NEW
-import verifySdsProxy from './routes/verifySds'; // <— NEW
+import scanRoute from '../routes/scan';
+import confirmRoute from '../routes/confirm';
+import healthRoute from '../routes/health';
+import ocrProxy from '../routes/ocrProxy'; // <— NEW
+import verifySdsProxy from '../routes/verifySds'; // <— NEW
 
 dotenv.config();
 
