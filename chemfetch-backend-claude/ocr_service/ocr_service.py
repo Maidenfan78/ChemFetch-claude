@@ -315,7 +315,28 @@ def ocr():
 # -----------------------------------------------------------------------------
 
 def verify_pdf_sds(url: str, product_name: str, keywords=None) -> bool:
-    keywords = keywords or ["SDS", "MSDS", "Safety Data Sheet"]
+    # Comprehensive SDS keyword list - removed product name requirement entirely
+    keywords = keywords or [
+        # Core SDS Terms
+        "SDS", "MSDS", "Safety Data Sheet", "Material Safety Data Sheet",
+        "Product Safety Data Sheet", "Chemical Safety Data Sheet",
+        "Hazard Communication", "GHS",
+        
+        # Standard SDS Section Headers
+        "Product Identification", "Hazard Identification", "Composition",
+        "First Aid Measures", "Fire Fighting Measures", "Accidental Release",
+        "Handling and Storage", "Exposure Controls", "Physical and Chemical Properties",
+        "Stability and Reactivity", "Toxicological Information", "Ecological Information",
+        "Disposal Considerations", "Transport Information", "Regulatory Information",
+        
+        # Format Indicators
+        "UN Number", "CAS Number", "Dangerous Goods", "Hazard Class",
+        "Packing Group", "Signal Word", "Hazard Statement", "Precautionary Statement",
+        
+        # Section numbering (SDS documents have numbered sections 1-16)
+        "Section 1", "Section 2", "Section 3", "Section 4", "Section 5"
+    ]
+    
     try:
         # Use streaming and size limits to prevent massive downloads
         response = requests.get(url, timeout=30, stream=True)
@@ -341,22 +362,18 @@ def verify_pdf_sds(url: str, product_name: str, keywords=None) -> bool:
         
         content.seek(0)
         
-        # Extract text with timeout protection
-        text = extract_text(content, maxpages=5).lower()  # Only check first 5 pages
+        # Extract text with timeout protection - check more pages for better coverage
+        text = extract_text(content, maxpages=10).lower()  # Increased from 5 to 10 pages
         
-        # More flexible matching
-        product_words = [word.strip().lower() for word in product_name.lower().split() if len(word.strip()) > 2]
-        keyword_match = any(kw.lower() in text for kw in keywords)
+        # Score-based keyword matching - no product name requirement
+        keyword_matches = sum(1 for kw in keywords if kw.lower() in text)
         
-        # Check if at least 60% of product name words are found
-        if product_words:
-            found_words = sum(1 for word in product_words if word in text)
-            product_match = (found_words / len(product_words)) >= 0.6
-        else:
-            product_match = product_name.lower() in text
+        # Require at least 2 keyword matches to be considered a valid SDS
+        # This is much more reliable than product name matching
+        is_valid_sds = keyword_matches >= 2
         
-        print(f"[verify_pdf_sds] URL: {url[:100]}... Product: {product_name} - Match: {product_match and keyword_match}")
-        return product_match and keyword_match
+        print(f"[verify_pdf_sds] URL: {url[:100]}... Keyword matches: {keyword_matches}//{len(keywords)} - Valid SDS: {is_valid_sds}")
+        return is_valid_sds
         
     except Exception as e:
         print(f"[verify_pdf_sds] Failed to verify {url}: {e}")

@@ -1,82 +1,312 @@
-PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> pyenv shell 3.11.9
-PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> npm run lint
-
-> chemfetch-monorepo@1.0.0 lint
-> node scripts/lint-all.js
-
-🔍 ChemFetch Linting Suite
-=================================
-🔍 Running checks for all projects
-
-📂 Linting Mobile App...
-Running lint check...
-
-> chemfetch-mobile@1.0.0 lint
-> expo lint
-
-env: load .env
-env: export EXPO_PUBLIC_SUPABASE_URL EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_BACKEND_API_URL
-✅ Mobile App linting passed
-Running format check...
-✅ Mobile App formatting is correct
-Running type check...
-✅ Mobile App type checking passed
-
-📂 Linting Client Hub...
-Running lint check...
-
-> chemfetch-client-hub@0.1.0 lint
-> next lint
-
-
-./src/app/api/debug-sds-parse/route.ts
-38:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/app/api/update-sds/route.ts
-31:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/app/login/page.tsx
-46:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/app/register/page.tsx
-51:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
-
-./src/app/watchlist/page.tsx
-10:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
-82:79  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-91:24  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-130:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-131:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-305:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/components/sds-debug-panel.tsx
-30:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-64:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-232:91  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/lib/hooks/useWatchList.ts
-98:26  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
-
-./src/lib/supabase-server.ts
-21:20  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
-
-info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
-✅ Client Hub linting passed
-Running format check...
-✅ Client Hub formatting is correct
-Running type check...
-✅ Client Hub type checking passed
-
-📂 Linting Backend...
-Running lint check...
-
-> chemfetch-backend@1.0.0 lint
-> eslint .
-
-✅ Backend linting passed
-Running format check...
-✅ Backend formatting is correct
-Running type check...
-✅ Backend type checking passed
-
-🎉 Linting suite completed!
+PS C:\Users\Sav\ProgramingProjects\chemfetch-claude\chemfetch-backend-claude> npx tsx server/index.ts                         
+[dotenv@17.2.1] injecting env (4) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.1] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
+{"level":30,"time":1755692375159,"pid":34492,"hostname":"Savs-Desktop","msg":"Backend API listening on port 3000"}
+{"level":30,"time":1755692468880,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","msg":"[SCAN] Searching for barcode"}
+{"level":30,"time":1755692470602,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","rawUrls":["https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera","https://www.ebay.com.au/p/1310188774?msockid=332b215278de6e8b23d1371c79136fd6","https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/","https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l","https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=332b215278de6e8b23d1371c79136fd6","https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/","https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895","https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115","https://www.ebay.com.au/itm/197487855260?msockid=332b215278de6e8b23d1371c79136fd6"],"msg":"[SCAN] Raw URLs from search"}
+{"level":30,"time":1755692470602,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","cleaned":["https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera","https://www.ebay.com.au/p/1310188774?msockid=332b215278de6e8b23d1371c79136fd6","https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/","https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l","https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=332b215278de6e8b23d1371c79136fd6","https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/","https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895","https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115","https://www.ebay.com.au/itm/197487855260?msockid=332b215278de6e8b23d1371c79136fd6"],"msg":"[SCAN] Normalised URLs for scraping"}
+{"level":40,"time":1755692470737,"pid":34492,"hostname":"Savs-Desktop","url":"https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","err":"Error: Parse Error: Header overflow","msg":"[SCAN] scrape failed"}
+{"level":30,"time":1755692473052,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","scraped":[{"url":"https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","name":"","size":"","sdsUrl":""},{"name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","contents_size_weight":"1L","url":"https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera"},{"name":"Earth Choice Dishwash Liquid 1 Litre","contents_size_weight":"5l","url":"https://www.ebay.com.au/p/1310188774?msockid=332b215278de6e8b23d1371c79136fd6"},{"name":"Other Cleaning & Housekeeping","contents_size_weight":"125ml","url":"https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/"},{"name":"Earth Choice Dishwash Liquid Lemon Fresh 1L","contents_size_weight":"1L","url":"https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l"},{"name":"Earths Choice Dish wash Liquid Concentrate 1ltr x 1","contents_size_weight":"0026L","url":"https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=332b215278de6e8b23d1371c79136fd6"},{"name":"Earth Choice 1L Dishwashing Liquid – Lemon Fresh","contents_size_weight":"1L","url":"https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/"},{"name":"","contents_size_weight":"","url":"https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895"},{"name":"Earth Choice, Dishwashing Liquid, Lemon, 1 L.","contents_size_weight":"1 L","url":"https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115"},{"name":"Dishwashing Liquid Earth Choice 1 litre","contents_size_weight":"300g","url":"https://www.ebay.com.au/itm/197487855260?msockid=332b215278de6e8b23d1371c79136fd6"}],"msg":"[SCAN] Scraped results"}
+[SCRAPER] Simple search query: Earth Choice 1L Dishwashing Liquid - Aloe Vera 1L sds
+{"level":30,"time":1755692473052,"pid":34492,"hostname":"Savs-Desktop","top":{"name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","contents_size_weight":"1L","url":"https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera"},"msg":"[SCAN] Top scraped result"}
+{"level":30,"time":1755692473052,"pid":34492,"hostname":"Savs-Desktop","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","msg":"[SCAN] Fetching SDS URL via fallback"}
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=d73f2498cda4e574d3ebbfa4ca9cef692d82a472399f1b7f069850281fdbe86bJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9tYW5kYW1hLnZpYy5lZHUuYXUvdXBsb2Fkcy8xLzMvMS84LzEzMTgzMzg1OS9zZHNfZWFydGhfY2hvaWNlX2Rpc2h3YXNoaW5nX2xpcXVpZC5wZGY&ntb=1
+[SCRAPER] Extracted URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Evaluating link https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Found direct PDF, verifying: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Verifying SDS URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Found SDS-like PDF, verifying: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Verifying SDS URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=721b3e566895e1de4f9a989529b6e429699445a2885af84025e8cf511a4c8c27JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9lYXJ0aGNob2ljZS5jb20uYXUvcHJvZHVjdHMvZWFydGgtY2hvaWNlLTFsLWRpc2h3YXNoaW5nLWxpcXVpZC1hbG9lLWZyZXNo&ntb=1
+[SCRAPER] Extracted URL: https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Evaluating link https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Found 1 PDF candidates on https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh: [
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794'
+]
+[SCRAPER] Found PDF via page scan, verifying: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794
+[SCRAPER] Verifying SDS URL: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794 for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=61cc970fdeaddb1d48f7f3e955aff8d897c6cc5e01c9b83514994218eb6f3c87JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly93d3cua2xlZW5wYWNrLmNvbS5hdS9wcm9kdWN0LzUyMi1lYXJ0aHMtY2hvaWNlLWRpc2h3YXNoLTFs&ntb=1
+[SCRAPER] Extracted URL: https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l
+[SCRAPER] Evaluating link https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l
+[SCRAPER] Found 3 PDF candidates on https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l: [
+  'https://www.kleenpack.com.au/category/359-safety',
+  'https://www.kleenpack.com.au/category/359-safety',
+  'https://www.kleenpack.com.au/category/359-safety'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=1803e952f9107d7204482547dac8a579aa6ea3f2a017b3df198be9bed1c2a1cfJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9pb3MubmV0LmF1L2VhcnRoLWNob2ljZS0xbC1kaXNod2FzaGluZy1saXF1aWQtYWxvZS12ZXJh&ntb=1
+[SCRAPER] Extracted URL: https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera
+[SCRAPER] Evaluating link https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=ddbe53685ee0efc6d8f32a15b743bd18b21fc84770cec1c760f4b5344e0a9c30JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly93d3cuc2NyaWJkLmNvbS9kb2N1bWVudC84MjcyNjc3MDUvRWFydGgtQ2hvaWNlLURpc2h3YXNoaW5nLUxpcXVpZA&ntb=1
+[SCRAPER] Extracted URL: https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid
+[SCRAPER] Evaluating link https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid
+[SCRAPER] Found 6 PDF candidates on https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid: [
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#sidebar',
+  'https://www.scribd.com/upload-document',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#',
+  'mailto:?subject=Read%20Earth%20Choice%20Dishwashing%20Liquid%20on%20Scribd&body=I%E2%80%99m%20reading%20Earth%20Choice%20Dishwashing%20Liquid%20on%20Scribd:%20https%3A%2F%2Fwww.scribd.com%2Fdocument%2F827267705%2FEarth-Choice-Dishwashing-Liquid',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#global_header'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=b37ed3f3c41558885999b8e66b24c04d5eb5b555476070cd635e077ece5a6842JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9wZGY0cHJvLmNvbS92aWV3L3NhZmV0eS1kYXRhLXNoZWV0LW5hdHVyZXMtb3JnYW5pY3MtNjJjOTVmLmh0bWw&ntb=1
+[SCRAPER] Extracted URL: https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html
+[SCRAPER] Evaluating link https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html
+[SCRAPER] Found 68 PDF candidates on https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html: [
+  'https://pdf4pro.com/',
+  'https://pdf4pro.com/trends',
+  'https://pdf4pro.com/dmca',
+  'https://pdf4pro.com/contact',
+  'https://pdf4pro.com/amp/view/safety-data-sheet-natures-organics-62c95f.html',
+  'https://pdf4pro.com/login',
+  'https://pdf4pro.com/fullscreen/safety-data-sheet-natures-organics-62c95f.html',
+  'https://pdf4pro.com/download/safety-data-sheet-natures-organics-62c95f.html',
+  'https://pdf4pro.com/tag/1da/sheet.html',
+  'https://pdf4pro.com/tag/20a/data.html',
+  'https://pdf4pro.com/tag/29c/liquid.html',
+  'https://pdf4pro.com/tag/375/safety.html',
+  'https://pdf4pro.com/tag/5fd/safety-data-sheet.html',
+  'https://pdf4pro.com/tag/1204/dishwashing.html',
+  'https://pdf4pro.com/tag/1a68/fresh.html',
+  'https://pdf4pro.com/tag/8a1f/monel.html',
+  'https://pdf4pro.com/tag/62227/dishwashing-liquid.html',
+  'https://pdf4pro.com/tag/10fc62/lemon-fresh.html',
+  'https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html#',
+  'https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html#',
+  'https://pdf4pro.com/contact/abuse/62c95f',
+  'https://pdf4pro.com/view/safety-data-sheet-natures-organics-62c95f.html#',
+  'https://pdf4pro.com/view/safety-data-sheet-natures-organics-5ed64a.html',
+  'https://pdf4pro.com/view/safety-data-sheet-natures-organics-5ed64a.html',
+  'https://pdf4pro.com/tag/2f42/organic.html',
+  'https://pdf4pro.com/view/material-safety-data-sheet-sunlight-dishwashing-62c95d.html',
+  'https://pdf4pro.com/view/material-safety-data-sheet-sunlight-dishwashing-62c95d.html',
+  'https://pdf4pro.com/tag/29c/liquid.html',
+  'https://pdf4pro.com/tag/375/safety.html',
+  'https://pdf4pro.com/tag/1204/dishwashing.html',
+  'https://pdf4pro.com/tag/1a68/fresh.html',
+  'https://pdf4pro.com/tag/8a1f/monel.html',
+  'https://pdf4pro.com/tag/10fc61/dishwashing-liquid-lemon-fresh.html',
+  'https://pdf4pro.com/view/material-safety-data-sheet-62c960.html',
+  'https://pdf4pro.com/view/material-safety-data-sheet-62c960.html',
+  'https://pdf4pro.com/tag/29c/liquid.html',
+  'https://pdf4pro.com/tag/375/safety.html',
+  'https://pdf4pro.com/tag/1204/dishwashing.html',
+  'https://pdf4pro.com/tag/1a68/fresh.html',
+  'https://pdf4pro.com/tag/8a1f/monel.html',
+  'https://pdf4pro.com/tag/62227/dishwashing-liquid.html',
+  'https://pdf4pro.com/tag/10fc63/lemon-dishwashing-liquid.html',
+  'https://pdf4pro.com/view/select-shine-super-concentrate-dishwashing-liquid-lemon-62c95e.html',
+  'https://pdf4pro.com/view/select-shine-super-concentrate-dishwashing-liquid-lemon-62c95e.html',
+  'https://pdf4pro.com/tag/29c/liquid.html',
+  'https://pdf4pro.com/tag/375/safety.html',
+  'https://pdf4pro.com/tag/1204/dishwashing.html',
+  'https://pdf4pro.com/tag/8a1f/monel.html',
+  'https://pdf4pro.com/tag/62227/dishwashing-liquid.html',
+  'https://pdf4pro.com/view/safety-data-sheet-msds-62c95c.html',
+  'https://pdf4pro.com/view/safety-data-sheet-msds-62c95c.html',
+  'https://pdf4pro.com/tag/375/safety.html',
+  'https://pdf4pro.com/tag/1204/dishwashing.html',
+  'https://pdf4pro.com/tag/8a1f/monel.html',
+  'https://pdf4pro.com/popular/safety.html',
+  'https://pdf4pro.com/popular/dishwashing.html',
+  'https://pdf4pro.com/popular/dishwashing-liquid-lemon-fresh.html',
+  'https://pdf4pro.com/popular/fresh.html',
+  'https://pdf4pro.com/popular/lemon-dishwashing-liquid.html',
+  'https://pdf4pro.com/popular/dishwashing-liquid.html',
+  'https://pdf4pro.com/popular/lemon.html',
+  'https://pdf4pro.com/',
+  'https://pdf4pro.com/about',
+  'https://pdf4pro.com/trends',
+  'https://pdf4pro.com/terms',
+  'https://pdf4pro.com/dmca',
+  'https://pdf4pro.com/contact',
+  'https://pdf4pro.com/amp/view/safety-data-sheet-natures-organics-62c95f.html'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=841c70590ce7f2a0a7e043c2e8774e27258d888897e88170dd6de04096b5ee03JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly93d3cubXNkcy5jb20vbXNkcy8yNzIzMTYwMC9lYXJ0aC1jaG9pY2UtZGlzaHdhc2gtbGlxdWlkLWxlbW9uLWZyZXNoLWFuZC1hbG9lLWZyZXNo&ntb=1
+[SCRAPER] Extracted URL: https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh
+[SCRAPER] Evaluating link https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh
+[SCRAPER] Found 0 PDF candidates on https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=9abd2e974b8cba913252ce8ec7e31e2b75ff42bb4a8e69274a091783202c8162JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9lbmNvdW50ZXJiYXB0aXN0Lm9yZy5hdS9QdWJsaXNoZXIvRmlsZS5hc3B4P2lkPTEwMDAwNTAzODg&ntb=1
+[SCRAPER] Extracted URL: https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388
+[SCRAPER] Evaluating link https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388
+[SCRAPER] Found 0 PDF candidates on https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=6081c06c3fd505f51f7ec6e680024270952f4bd360b49eccdc9ffe63d3d0fc28JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9tYWNsZWFuLXN1cGVybWFya2V0LnNob3Aucml0Y2hpZXMuY29tLmF1L2xpbmVzL2VhcnRoLWNob2ljZS1kaXNod2FzaC1saXF1aWQtYWxvZS1mcmVzaC0xbA&ntb=1
+[SCRAPER] Extracted URL: https://maclean-supermarket.shop.ritchies.com.au/lines/earth-choice-dishwash-liquid-aloe-fresh-1l
+[SCRAPER] Evaluating link https://maclean-supermarket.shop.ritchies.com.au/lines/earth-choice-dishwash-liquid-aloe-fresh-1l
+[SCRAPER] Found 0 PDF candidates on https://maclean-supermarket.shop.ritchies.com.au/lines/earth-choice-dishwash-liquid-aloe-fresh-1l: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=a9ae27c30c801b098517332730b78796994bccdb8578a7b0a84eea29b08152fdJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=22de6a98-8c80-65ce-15f2-7cd68d16646e&u=a1aHR0cHM6Ly9uYXR1cmVzb3JnYW5pY3MuY29tLmF1L3Byb2R1Y3RzL2VhcnRoLWNob2ljZS0xbC1kaXNod2FzaGluZy1saXF1aWQtYWxvZS1mcmVzaA&ntb=1
+[SCRAPER] Extracted URL: https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Evaluating link https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Found 2 PDF candidates on https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh: [
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794',
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794'
+]
+[SCRAPER] Found PDF via page scan, verifying: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794
+[SCRAPER] Verifying SDS URL: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794 for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] No valid SDS PDF found
+{"level":30,"time":1755692572550,"pid":34492,"hostname":"Savs-Desktop","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","fallbackSds":"","topLinks":["https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf","https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh","https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l","https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera","https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid"],"msg":"[SCAN] Fallback SDS result"}
+{"level":30,"time":1755692573016,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","data":{"id":198,"barcode":"9310692111115","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","manufacturer":null,"contents_size_weight":"1L","sds_url":null,"created_at":"2025-08-20T12:22:53.348176+00:00"},"error":null,"msg":"[SCAN] Final database write result"}
+{"level":30,"time":1755692573018,"pid":34492,"hostname":"Savs-Desktop","req":{"id":1,"method":"POST","url":"/scan","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"24","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":58242},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"59","date":"Wed, 20 Aug 2025 12:21:08 GMT","x-ratelimit-reset":"1755692529","content-type":"application/json; charset=utf-8","content-length":"2062","etag":"W/\"80e-3y+KXGM8zxIydLEqHeNj90YTLjA\""}},"responseTime":104143,"msg":"request completed"}
+(node:34492) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{"level":30,"time":1755692607359,"pid":34492,"hostname":"Savs-Desktop","req":{"id":2,"method":"POST","url":"/ocr?mode=debug","query":{"mode":"debug"},"params":{},"headers":{"content-type":"multipart/form-data; boundary=f19b7522-9e38-4ca8-b528-46f8d13d536d","content-length":"4417893","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":48664},"res":{"statusCode":500,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"59","date":"Wed, 20 Aug 2025 12:23:27 GMT","x-ratelimit-reset":"1755692662","server":"Werkzeug/3.1.3 Python/3.11.9","content-type":"application/json","content-length":"56","connection":"close"}},"err":{"type":"Error","message":"failed with status code 500","stack":"Error: failed with status code 500\n    at onResFinished (C:\\Users\\Sav\\ProgramingProjects\\chemfetch-claude\\node_modules\\pino-http\\logger.js:115:39)\n    at ServerResponse.onResponseComplete (C:\\Users\\Sav\\ProgramingProjects\\chemfetch-claude\\node_modules\\pino-http\\logger.js:178:14)\n    at ServerResponse.emit (node:events:530:35)\n    at onFinish (node:_http_outgoing:1081:10)\n    at callback (node:internal/streams/writable:766:21)\n    at afterWrite (node:internal/streams/writable:710:5)\n    at afterWriteTick (node:internal/streams/writable:696:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)"},"responseTime":5637,"msg":"request errored"}
+{"level":30,"time":1755692618437,"pid":34492,"hostname":"Savs-Desktop","req":{"id":3,"method":"POST","url":"/ocr?mode=debug","query":{"mode":"debug"},"params":{},"headers":{"content-type":"multipart/form-data; boundary=05a65bec-1c24-4366-9ba9-2d2f67963057","content-length":"4417893","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":32800},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"58","date":"Wed, 20 Aug 2025 12:23:38 GMT","x-ratelimit-reset":"1755692662","server":"Werkzeug/3.1.3 Python/3.11.9","content-type":"application/json","content-length":"519","connection":"close"}},"responseTime":8506,"msg":"request completed"}
+{"level":30,"time":1755692621705,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","size":"1L","msg":"[CONFIRM] Upserting product"}
+{"level":30,"time":1755692621866,"pid":34492,"hostname":"Savs-Desktop","req":{"id":4,"method":"POST","url":"/confirm","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"92","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":35258},"res":{"statusCode":409,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"57","date":"Wed, 20 Aug 2025 12:23:41 GMT","x-ratelimit-reset":"1755692662","content-type":"application/json; charset=utf-8","content-length":"184","etag":"W/\"b8-Ew46ADx76hzfnFRsB+YDzuEg+QQ\""}},"responseTime":161,"msg":"request completed"}
+[SCRAPER] Simple search query: Earth Choice 1L Dishwashing Liquid - Aloe Vera  sds
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=3468206b26f845328a055d73aff4682e5e7c67458d500c7fdafda78e3610c0e9JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9tYW5kYW1hLnZpYy5lZHUuYXUvdXBsb2Fkcy8xLzMvMS84LzEzMTgzMzg1OS9zZHNfZWFydGhfY2hvaWNlX2Rpc2h3YXNoaW5nX2xpcXVpZC5wZGY&ntb=1
+[SCRAPER] Extracted URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Evaluating link https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Found direct PDF, verifying: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Verifying SDS URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Found SDS-like PDF, verifying: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf
+[SCRAPER] Verifying SDS URL: https://mandama.vic.edu.au/uploads/1/3/1/8/131833859/sds_earth_choice_dishwashing_liquid.pdf for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=ac370a44703bddd675439bca9d5b74273efa8312a52d23581fc2bac43a44601bJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9lYXJ0aGNob2ljZS5jb20uYXUvcHJvZHVjdHMvZWFydGgtY2hvaWNlLTFsLWRpc2h3YXNoaW5nLWxpcXVpZC1hbG9lLWZyZXNo&ntb=1
+[SCRAPER] Extracted URL: https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Evaluating link https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Found 1 PDF candidates on https://earthchoice.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh: [
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794'
+]
+[SCRAPER] Found PDF via page scan, verifying: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794
+[SCRAPER] Verifying SDS URL: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794 for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=43958d6017a8d65e72c7ee25e145b2315bd342f60b55067c28a243ff1804d3f5JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly93d3cua2xlZW5wYWNrLmNvbS5hdS9wcm9kdWN0LzUyMi1lYXJ0aHMtY2hvaWNlLWRpc2h3YXNoLTFs&ntb=1
+[SCRAPER] Extracted URL: https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l
+[SCRAPER] Evaluating link https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l
+[SCRAPER] Found 3 PDF candidates on https://www.kleenpack.com.au/product/522-earths-choice-dishwash-1l: [
+  'https://www.kleenpack.com.au/category/359-safety',
+  'https://www.kleenpack.com.au/category/359-safety',
+  'https://www.kleenpack.com.au/category/359-safety'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=d7230d4609d4191430a192553211302ed5f1ec0cefbd253634e6e1fac8b9353eJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly93d3cuc2NyaWJkLmNvbS9kb2N1bWVudC84MjcyNjc3MDUvRWFydGgtQ2hvaWNlLURpc2h3YXNoaW5nLUxpcXVpZA&ntb=1
+[SCRAPER] Extracted URL: https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid
+[SCRAPER] Evaluating link https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid
+[SCRAPER] Found 6 PDF candidates on https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid: [
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#sidebar',
+  'https://www.scribd.com/upload-document',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#',
+  'mailto:?subject=Read%20Earth%20Choice%20Dishwashing%20Liquid%20on%20Scribd&body=I%E2%80%99m%20reading%20Earth%20Choice%20Dishwashing%20Liquid%20on%20Scribd:%20https%3A%2F%2Fwww.scribd.com%2Fdocument%2F827267705%2FEarth-Choice-Dishwashing-Liquid',
+  'https://www.scribd.com/document/827267705/Earth-Choice-Dishwashing-Liquid#global_header'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=62073a32e6506fdee6c3fb5e8c33df4920438e3d6c3f9390af7a45d44e401794JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly93d3cubXNkcy5jb20vbXNkcy8yNzIzMTYwMC9lYXJ0aC1jaG9pY2UtZGlzaHdhc2gtbGlxdWlkLWxlbW9uLWZyZXNoLWFuZC1hbG9lLWZyZXNo&ntb=1
+[SCRAPER] Extracted URL: https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh
+[SCRAPER] Evaluating link https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh
+[SCRAPER] Found 0 PDF candidates on https://www.msds.com/msds/27231600/earth-choice-dishwash-liquid-lemon-fresh-and-aloe-fresh: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=0ddc7a92b80be0b2e5c038fd9843df9cff22a1ec34d0869254253dbcbdb42f07JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly93d3cud2luYy5jb20uYXUvbWFpbi1jYXRhbG9ndWUtcHJvZHVjdGRldGFpbC9lYXJ0aC1jaG9pY2UtZGlzaHdhc2hpbmctbGlxdWlkLTFsLzg3MjExMjI4&ntb=1
+[SCRAPER] Extracted URL: https://www.winc.com.au/main-catalogue-productdetail/earth-choice-dishwashing-liquid-1l/87211228
+[SCRAPER] Evaluating link https://www.winc.com.au/main-catalogue-productdetail/earth-choice-dishwashing-liquid-1l/87211228
+[SCRAPER] Found 5 PDF candidates on https://www.winc.com.au/main-catalogue-productdetail/earth-choice-dishwashing-liquid-1l/87211228: [
+  'https://www.winc.com.au/main-catalogue-browse/health-safety/4293950869?Ne=8235+8236+8279+4293953616+8278&browsetrigger=category_ajax_menu',
+  'https://sdshosting.chemalert.com/company/10021710/download/3208263_001_001.pdf',
+  'https://www.winc.com.au/main-catalogue-productdetail/kleenex-4440-compact-hand-towels-90-sheet-carton-24/86512953?feature=recommend_blowup&feature_ident=rule_name%3A%5Bauto%5D+dishwashing+liquid+-%3E+paper+towel%7Crange_pop%3A1%7Crec_ord%3A8%7Cweighted%3A75.55%7Cident%3A87211228',
+  'https://www.winc.com.au/main-catalogue-productdetail/kleenex-4440-compact-hand-towels-90-sheet-carton-24/86512953?feature=recommend_blowup&feature_ident=rule_name%3A%5Bauto%5D+dishwashing+liquid+-%3E+paper+towel%7Crange_pop%3A1%7Crec_ord%3A8%7Cweighted%3A75.55%7Cident%3A87211228',
+  'http://sds.chemalert.com/?code=10021710'
+]
+[SCRAPER] Found PDF via page scan, verifying: https://sdshosting.chemalert.com/company/10021710/download/3208263_001_001.pdf
+[SCRAPER] Verifying SDS URL: https://sdshosting.chemalert.com/company/10021710/download/3208263_001_001.pdf for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=b494d9e9450479a32e91999230ae8c4054f692ba5111675af8b78c05cc8cfa33JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9lbmNvdW50ZXJiYXB0aXN0Lm9yZy5hdS9QdWJsaXNoZXIvRmlsZS5hc3B4P2lkPTEwMDAwNTAzODg&ntb=1
+[SCRAPER] Extracted URL: https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388
+[SCRAPER] Evaluating link https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388
+[SCRAPER] Found 0 PDF candidates on https://encounterbaptist.org.au/Publisher/File.aspx?id=1000050388: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=5273a178a52f451f110a605e3657fb6ccad19e42ad8bd07b25c3af5442e9424bJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9pb3MubmV0LmF1L2VhcnRoLWNob2ljZS0xbC1kaXNod2FzaGluZy1saXF1aWQtYWxvZS12ZXJh&ntb=1
+[SCRAPER] Extracted URL: https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera
+[SCRAPER] Evaluating link https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=68e17c3b4d77ab6b524440d8e362e4678e184ab55f11e373169e90087f6cfe2dJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9uYXR1cmVzb3JnYW5pY3MuY29tLmF1L3Byb2R1Y3RzL2VhcnRoLWNob2ljZS0xbC1kaXNod2FzaGluZy1saXF1aWQtYWxvZS1mcmVzaA&ntb=1      
+[SCRAPER] Extracted URL: https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Evaluating link https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh
+[SCRAPER] Found 2 PDF candidates on https://naturesorganics.com.au/products/earth-choice-1l-dishwashing-liquid-aloe-fresh: [
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794',
+  'https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794'
+]
+[SCRAPER] Found PDF via page scan, verifying: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794
+[SCRAPER] Verifying SDS URL: https://cdn.shopify.com/s/files/1/0759/9036/8537/files/SDS-Dish-Earth-Choice-Dishwashing-Liquid-ECD-CED-EDA-CEA-v7-3.05.2021.pdf?v=1685942794 for product: Earth Choice 1L Dishwashing Liquid - Aloe Vera
+[SCRAPER] OCR verification response: { verified: false }
+[SCRAPER] OCR verification result: false
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=61db14cd9a6dff9f0afe995b26b3047d88a3c6eae9beee2ec36007b634e9820cJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=298437cf-2414-6b1b-2baa-2181252f6a59&u=a1aHR0cHM6Ly9iYWxpYnVkYS5jb20vcHJvZHVjdC9lYXJ0aC1jaG9pY2UtYWxvZS12ZXJhLWRpc2h3YXNoaW5nLWxpcXVpZC0xbC8&ntb=1
+[SCRAPER] Extracted URL: https://balibuda.com/product/earth-choice-aloe-vera-dishwashing-liquid-1l/
+[SCRAPER] Evaluating link https://balibuda.com/product/earth-choice-aloe-vera-dishwashing-liquid-1l/
+[SCRAPER] Found 0 PDF candidates on https://balibuda.com/product/earth-choice-aloe-vera-dishwashing-liquid-1l/: []
+[SCRAPER] No valid SDS PDF found
+{"level":30,"time":1755692968129,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","msg":"[SCAN] Searching for barcode"}
+{"level":30,"time":1755692969629,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","rawUrls":["https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera","https://www.ebay.com.au/p/1310188774?msockid=240770d8c0f4617802a76696c142609a","https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/","https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l","https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=240770d8c0f4617802a76696c142609a","https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/","https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895","https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115","https://www.ebay.com.au/itm/197487855260?msockid=240770d8c0f4617802a76696c142609a"],"msg":"[SCAN] Raw URLs from search"}
+{"level":30,"time":1755692969629,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","cleaned":["https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera","https://www.ebay.com.au/p/1310188774?msockid=240770d8c0f4617802a76696c142609a","https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/","https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l","https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=240770d8c0f4617802a76696c142609a","https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/","https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895","https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115","https://www.ebay.com.au/itm/197487855260?msockid=240770d8c0f4617802a76696c142609a"],"msg":"[SCAN] Normalised URLs for scraping"}
+{"level":40,"time":1755692969752,"pid":34492,"hostname":"Savs-Desktop","url":"https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","err":"Error: Parse Error: Header overflow","msg":"[SCAN] scrape failed"}
+{"level":30,"time":1755692972001,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","scraped":[{"url":"https://www.mitre10.com.au/earth-choice-dishwashing-liquid-lemon-fresh-1l-4661799","name":"","size":"","sdsUrl":""},{"name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","contents_size_weight":"1L","url":"https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera"},{"name":"Earth Choice Dishwash Liquid 1 Litre","contents_size_weight":"5l","url":"https://www.ebay.com.au/p/1310188774?msockid=240770d8c0f4617802a76696c142609a"},{"name":"Other Cleaning & Housekeeping","contents_size_weight":"125ml","url":"https://www.dicksmith.com.au/da/buy/my-grocery-3-x-earth-choice-dishwash-liquid-lemon-fresh-kitchen-cleaning-household-essential-1l-iga-9310692111115_3/"},{"name":"Earth Choice Dishwash Liquid Lemon Fresh 1L","contents_size_weight":"1L","url":"https://www.mumzworld.com/global-en/earth-choice-dishwash-liquid-lemon-fresh-1l"},{"name":"Earths Choice Dish wash Liquid Concentrate 1ltr x 1","contents_size_weight":"0026L","url":"https://www.mydeal.com.au/earths-choice-dish-wash-liquid-concentrate-1ltr-x-1-13260022?msockid=240770d8c0f4617802a76696c142609a"},{"name":"Earth Choice 1L Dishwashing Liquid – Lemon Fresh","contents_size_weight":"1L","url":"https://brutheenterprises.com/shop/earth-choice/earth-choice-lebanon-1l-dishwashing-liquid-lemon-fresh/"},{"name":"","contents_size_weight":"","url":"https://www.c-storeonline.com.au/cstore/general-merchandise/cleaning-needs/dishwashing/dishwash-liquid-concentrate/0000498017_895"},{"name":"Earth Choice, Dishwashing Liquid, Lemon, 1 L.","contents_size_weight":"1 L","url":"https://veli.store/en/details/earth-choice-dishwashing-liquid-lemon-1-l/?sku=9310692111115"},{"name":"Checking your browser before you access eBay.","contents_size_weight":"","url":"https://www.ebay.com.au/itm/197487855260?msockid=240770d8c0f4617802a76696c142609a"}],"msg":"[SCAN] Scraped results"}
+{"level":30,"time":1755692972001,"pid":34492,"hostname":"Savs-Desktop","top":{"name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","contents_size_weight":"1L","url":"https://ios.net.au/earth-choice-1l-dishwashing-liquid-aloe-vera"},"msg":"[SCAN] Top scraped result"}
+{"level":30,"time":1755692972001,"pid":34492,"hostname":"Savs-Desktop","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","msg":"[SCAN] Fetching SDS URL via fallback"}
+{"level":30,"time":1755692972001,"pid":34492,"hostname":"Savs-Desktop","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","fallbackSds":"","topLinks":[],"msg":"[SCAN] Fallback SDS result"}
+{"level":30,"time":1755692972080,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","data":{"id":199,"barcode":"9310692111115","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","manufacturer":null,"contents_size_weight":"1L","sds_url":null,"created_at":"2025-08-20T12:29:32.456257+00:00"},"error":null,"msg":"[SCAN] Final database write result"}
+{"level":30,"time":1755692972080,"pid":34492,"hostname":"Savs-Desktop","req":{"id":5,"method":"POST","url":"/scan","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"24","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":56864},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"59","date":"Wed, 20 Aug 2025 12:29:28 GMT","x-ratelimit-reset":"1755693029","content-type":"application/json; charset=utf-8","content-length":"2064","etag":"W/\"810-LO3wysHeZfX1tLC/smvnz9rrLaA\""}},"responseTime":3951,"msg":"request completed"}
+{"level":30,"time":1755692991043,"pid":34492,"hostname":"Savs-Desktop","req":{"id":6,"method":"POST","url":"/ocr?mode=debug","query":{"mode":"debug"},"params":{},"headers":{"content-type":"multipart/form-data; boundary=9f41130f-e196-4851-b41f-7b88333e7013","content-length":"4602277","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":36162},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"58","date":"Wed, 20 Aug 2025 12:29:51 GMT","x-ratelimit-reset":"1755693029","server":"Werkzeug/3.1.3 Python/3.11.9","content-type":"application/json","content-length":"334","connection":"close"}},"responseTime":7907,"msg":"request completed"}
+{"level":30,"time":1755692995113,"pid":34492,"hostname":"Savs-Desktop","code":"9310692111115","name":"Earth Choice 1L Dishwashing Liquid - Aloe Vera","size":"1L","msg":"[CONFIRM] Upserting product"}
+{"level":30,"time":1755692995263,"pid":34492,"hostname":"Savs-Desktop","req":{"id":7,"method":"POST","url":"/confirm","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"92","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":46308},"res":{"statusCode":409,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"57","date":"Wed, 20 Aug 2025 12:29:55 GMT","x-ratelimit-reset":"1755693029","content-type":"application/json; charset=utf-8","content-length":"184","etag":"W/\"b8-YFLiOsXMfRaushLVNgpgRiobMLE\""}},"responseTime":151,"msg":"request completed"}
+{"level":30,"time":1755693003585,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","msg":"[SCAN] Searching for barcode"}
+{"level":30,"time":1755693005017,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","rawUrls":["https://www.pharmacydirect.com.au/palmolive-hand-wash-antibacterial-classic-250ml","https://www.cincottachemist.com.au/shop/102039-palmolive-softwash-anti-bacterial-pump-250ml-9300632016211.html","https://ios.net.au/palmolive-antibacterial-liquid-hand-wash-soap-white-tea-pump-0-parabens-recyclable-250ml","https://www.goodpricepharmacy.com.au/palmolive-antibacterial-liquid-hand-wash-white-tea-250ml-pump-9300632016211","https://pharmacy4less.com.au/palmolive-antibacterial-hand-wash-white-tea-250ml/","https://www.houseofnappies.com.au/palmolive-liquid-hand-wash-anti-bacterial-white-te","https://www.mydeal.com.au/12x-palmolive-250ml-liquid-hand-wash-pump-antibacterial-skin-care-cleaning-soap-13349369?msockid=06934d02c7b56ac805e75b4cc6f06b70","https://discountchemist.com.au/palmolive-antibacterial-liquid-hand-wash-250ml-pump-white-tea/","https://www.chempro.com.au/palmolive-hand-wash-antibacterial-classic-250ml","https://best-before.com.au/products/palmolive-250ml-liquid-hand-wash-pump-antibacterial"],"msg":"[SCAN] Raw URLs from search"}
+{"level":30,"time":1755693005017,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","cleaned":["https://www.pharmacydirect.com.au/palmolive-hand-wash-antibacterial-classic-250ml","https://www.cincottachemist.com.au/shop/102039-palmolive-softwash-anti-bacterial-pump-250ml-9300632016211.html","https://ios.net.au/palmolive-antibacterial-liquid-hand-wash-soap-white-tea-pump-0-parabens-recyclable-250ml","https://www.goodpricepharmacy.com.au/palmolive-antibacterial-liquid-hand-wash-white-tea-250ml-pump-9300632016211","https://pharmacy4less.com.au/palmolive-antibacterial-hand-wash-white-tea-250ml/","https://www.houseofnappies.com.au/palmolive-liquid-hand-wash-anti-bacterial-white-te","https://www.mydeal.com.au/12x-palmolive-250ml-liquid-hand-wash-pump-antibacterial-skin-care-cleaning-soap-13349369?msockid=06934d02c7b56ac805e75b4cc6f06b70","https://discountchemist.com.au/palmolive-antibacterial-liquid-hand-wash-250ml-pump-white-tea/","https://www.chempro.com.au/palmolive-hand-wash-antibacterial-classic-250ml","https://best-before.com.au/products/palmolive-250ml-liquid-hand-wash-pump-antibacterial"],"msg":"[SCAN] Normalised URLs for scraping"}
+{"level":40,"time":1755693021124,"pid":34492,"hostname":"Savs-Desktop","url":"https://www.cincottachemist.com.au/shop/102039-palmolive-softwash-anti-bacterial-pump-250ml-9300632016211.html","err":"Error: aborted","msg":"[SCAN] scrape failed"}
+[SCRAPER] Simple search query: Palmolive Hand Wash Antibacterial Classic 250ml 250ml sds
+{"level":30,"time":1755693021124,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","scraped":[{"name":"Palmolive Hand Wash Antibacterial Classic 250ml","contents_size_weight":"250ml","url":"https://www.pharmacydirect.com.au/palmolive-hand-wash-antibacterial-classic-250ml"},{"url":"https://www.cincottachemist.com.au/shop/102039-palmolive-softwash-anti-bacterial-pump-250ml-9300632016211.html","name":"","size":"","sdsUrl":""},{"name":"Palmolive Antibacterial Liquid Hand Wash Soap White Tea Pump 0% Parabens Recyclable 250mL","contents_size_weight":"250mL","url":"https://ios.net.au/palmolive-antibacterial-liquid-hand-wash-soap-white-tea-pump-0-parabens-recyclable-250ml"},{"name":"Palmolive Antibacterial Liquid Hand Wash, White Tea, 250mL Pump            Shopping Cart is Empty","contents_size_weight":"18.5l","url":"https://www.goodpricepharmacy.com.au/palmolive-antibacterial-liquid-hand-wash-white-tea-250ml-pump-9300632016211"},{"name":"Palmolive Antibacterial Hand Wash White Tea 250ml","contents_size_weight":"250ml","url":"https://pharmacy4less.com.au/palmolive-antibacterial-hand-wash-white-tea-250ml/"},{"name":"Palmolive Liquid Hand Wash Anti-Bacterial White Tea 250mL","contents_size_weight":"250mL","url":"https://www.houseofnappies.com.au/palmolive-liquid-hand-wash-anti-bacterial-white-te"},{"name":"12x Palmolive 250ml Liquid Hand Wash Pump Antibacterial Skin Care Cleaning Soap","contents_size_weight":"250ml","url":"https://www.mydeal.com.au/12x-palmolive-250ml-liquid-hand-wash-pump-antibacterial-skin-care-cleaning-soap-13349369?msockid=06934d02c7b56ac805e75b4cc6f06b70"},{"name":"Palmolive Antibacterial Liquid Hand Wash 250mL Pump – White Tea","contents_size_weight":"250mL","url":"https://discountchemist.com.au/palmolive-antibacterial-liquid-hand-wash-250ml-pump-white-tea/"},{"name":"Palmolive Hand Wash Antibacterial Classic 250ml","contents_size_weight":"250ml","url":"https://www.chempro.com.au/palmolive-hand-wash-antibacterial-classic-250ml"},{"name":"Best-Before","contents_size_weight":"","url":"https://best-before.com.au/products/palmolive-250ml-liquid-hand-wash-pump-antibacterial"}],"msg":"[SCAN] Scraped results"}
+{"level":30,"time":1755693021124,"pid":34492,"hostname":"Savs-Desktop","top":{"name":"Palmolive Hand Wash Antibacterial Classic 250ml","contents_size_weight":"250ml","url":"https://www.pharmacydirect.com.au/palmolive-hand-wash-antibacterial-classic-250ml"},"msg":"[SCAN] Top scraped result"}
+{"level":30,"time":1755693021124,"pid":34492,"hostname":"Savs-Desktop","name":"Palmolive Hand Wash Antibacterial Classic 250ml","msg":"[SCAN] Fetching SDS URL via fallback"}
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=6035da120adb2f9f3693d48b47a8db253a69f481793a587f73265dcff62ec92cJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=3052a8b8-15a2-6f44-0fc4-bef614496e36&u=a1aHR0cHM6Ly93d3cucGFsbW9saXZlLmNvbS5hdS9wcm9kdWN0cy1yYW5nZS9saXF1aWQtaGFuZHdhc2gvcGFsbW9saXZlLWFudGliYWN0ZXJpYWwtY2xhc3NpYy1saXF1aWQtaGFuZC13YXNo&ntb=1
+[SCRAPER] Extracted URL: https://www.palmolive.com.au/products-range/liquid-handwash/palmolive-antibacterial-classic-liquid-hand-wash
+[SCRAPER] Evaluating link https://www.palmolive.com.au/products-range/liquid-handwash/palmolive-antibacterial-classic-liquid-hand-wash
+[SCRAPER] No valid SDS PDF found
+{"level":30,"time":1755693022751,"pid":34492,"hostname":"Savs-Desktop","name":"Palmolive Hand Wash Antibacterial Classic 250ml","fallbackSds":"","topLinks":["https://www.palmolive.com.au/products-range/liquid-handwash/palmolive-antibacterial-classic-liquid-hand-wash"],"msg":"[SCAN] Fallback SDS result"}
+{"level":30,"time":1755693022916,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","data":{"id":200,"barcode":"9300632016211","name":"Palmolive Hand Wash Antibacterial Classic 250ml","manufacturer":null,"contents_size_weight":"250ml","sds_url":null,"created_at":"2025-08-20T12:30:23.290901+00:00"},"error":null,"msg":"[SCAN] Final database write result"}
+{"level":30,"time":1755693022917,"pid":34492,"hostname":"Savs-Desktop","req":{"id":8,"method":"POST","url":"/scan","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"24","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":46312},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"56","date":"Wed, 20 Aug 2025 12:30:03 GMT","x-ratelimit-reset":"1755693029","content-type":"application/json; charset=utf-8","content-length":"2283","etag":"W/\"8eb-URrJ5C42qvJtNRVmwRPTkTjP7ro\""}},"responseTime":19332,"msg":"request completed"}
+{"level":30,"time":1755693039577,"pid":34492,"hostname":"Savs-Desktop","req":{"id":9,"method":"POST","url":"/ocr?mode=debug","query":{"mode":"debug"},"params":{},"headers":{"content-type":"multipart/form-data; boundary=eab618bc-7364-4b89-b29c-efead707ceba","content-length":"4786420","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":32892},"res":{"statusCode":500,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"59","date":"Wed, 20 Aug 2025 12:30:39 GMT","x-ratelimit-reset":"1755693095","server":"Werkzeug/3.1.3 Python/3.11.9","content-type":"application/json","content-length":"56","connection":"close"}},"err":{"type":"Error","message":"failed with status code 500","stack":"Error: failed with status code 500\n    at onResFinished (C:\\Users\\Sav\\ProgramingProjects\\chemfetch-claude\\node_modules\\pino-http\\logger.js:115:39)\n    at ServerResponse.onResponseComplete (C:\\Users\\Sav\\ProgramingProjects\\chemfetch-claude\\node_modules\\pino-http\\logger.js:178:14)\n    at ServerResponse.emit (node:events:530:35)\n    at onFinish (node:_http_outgoing:1081:10)\n    at callback (node:internal/streams/writable:766:21)\n    at afterWrite (node:internal/streams/writable:710:5)\n    at afterWriteTick (node:internal/streams/writable:696:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)"},"responseTime":5143,"msg":"request errored"}
+{"level":30,"time":1755693049264,"pid":34492,"hostname":"Savs-Desktop","req":{"id":10,"method":"POST","url":"/ocr?mode=debug","query":{"mode":"debug"},"params":{},"headers":{"content-type":"multipart/form-data; boundary=2df93aff-1700-4c8f-a7e4-daa218316075","content-length":"4786420","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":47178},"res":{"statusCode":200,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"58","date":"Wed, 20 Aug 2025 12:30:49 GMT","x-ratelimit-reset":"1755693095","server":"Werkzeug/3.1.3 Python/3.11.9","content-type":"application/json","content-length":"280","connection":"close"}},"responseTime":7329,"msg":"request completed"}
+{"level":30,"time":1755693053187,"pid":34492,"hostname":"Savs-Desktop","code":"9300632016211","name":"Palmolive Hand Wash Antibacterial Classic 250ml","size":"250ml","msg":"[CONFIRM] Upserting product"}
+{"level":30,"time":1755693053349,"pid":34492,"hostname":"Savs-Desktop","req":{"id":11,"method":"POST","url":"/confirm","query":{},"params":{},"headers":{"content-type":"application/json","content-length":"96","host":"192.168.68.52:3000","connection":"Keep-Alive","accept-encoding":"gzip","user-agent":"okhttp/4.12.0"},"remoteAddress":"::ffff:192.168.68.57","remotePort":38092},"res":{"statusCode":409,"headers":{"x-powered-by":"Express","access-control-allow-origin":"*","x-ratelimit-limit":"60","x-ratelimit-remaining":"57","date":"Wed, 20 Aug 2025 12:30:53 GMT","x-ratelimit-reset":"1755693095","content-type":"application/json; charset=utf-8","content-length":"188","etag":"W/\"bc-hh72Y9Jeyx0nqYBl3XdNg6K71CA\""}},"responseTime":162,"msg":"request completed"}
+[SCRAPER] Simple search query: Palmolive Hand Wash Antibacterial Classic 250ml  sds
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=12c1aaf6b832c22dd776ebb4a9040679107a1bda2034e0b551619b25e1ad628bJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cuY29sZ2F0ZXBhbG1vbGl2ZS5jb20vZW4tdXMvY29udGFjdC11cy9zZHM&ntb=1
+[SCRAPER] Extracted URL: https://www.colgatepalmolive.com/en-us/contact-us/sds
+[SCRAPER] Evaluating link https://www.colgatepalmolive.com/en-us/contact-us/sds
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=9ea0d1682528ddafcdb30d9f39964a13c19926c2bacbbc73a425e92c89f305acJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cuaGFubGV5cy5jb20uYXUvYW1maWxlL2ZpbGUvZG93bmxvYWQvZmlsZS8xODE0L3Byb2R1Y3QvMzY5MC8&ntb=1
+[SCRAPER] Extracted URL: https://www.hanleys.com.au/amfile/file/download/file/1814/product/3690/
+[SCRAPER] Evaluating link https://www.hanleys.com.au/amfile/file/download/file/1814/product/3690/
+[SCRAPER] Found 0 PDF candidates on https://www.hanleys.com.au/amfile/file/download/file/1814/product/3690/: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=01b508b0062239e1d02a47223dc17c551b87f670068950ef4c363de7b27fdbddJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cuY29sZ2F0ZXBhbG1vbGl2ZS5jb20uYXUvY29udGFjdC11cy9jb250YWN0LXVzLW1zZHMtcmVxdWVzdHM&ntb=1
+[SCRAPER] Extracted URL: https://www.colgatepalmolive.com.au/contact-us/contact-us-msds-requests
+[SCRAPER] Evaluating link https://www.colgatepalmolive.com.au/contact-us/contact-us-msds-requests
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=f59603c994f8db1be1674026686943b0056ee7bfee18d0a3447507965da961eeJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cucGFsbW9saXZlLmNvbS5hdS9wcm9kdWN0cy1yYW5nZS9saXF1aWQtaGFuZHdhc2gvcGFsbW9saXZlLWFudGliYWN0ZXJpYWwtY2xhc3NpYy1saXF1aWQtaGFuZC13YXNo&ntb=1
+[SCRAPER] Extracted URL: https://www.palmolive.com.au/products-range/liquid-handwash/palmolive-antibacterial-classic-liquid-hand-wash
+[SCRAPER] Evaluating link https://www.palmolive.com.au/products-range/liquid-handwash/palmolive-antibacterial-classic-liquid-hand-wash
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=3ec2eaa7ce8a9fbb1496a86f1fa9e9d62cf89561381825a3d414284bbf722104JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cuYmxhY2t3b29kcy5jb20uYXUvaHlnaWVuZS1jbGVhbmluZy9oYW5kLWJvZHktY2xlYW5pbmcvaGFuZC13YXNoL2hhbmR3YXNoLXBhbG1vbGl2ZS1hbnRpYmFjdGVyaWFsLTI1MG1sL3AvMDM0MzEyNzE&ntb=1
+[SCRAPER] Extracted URL: https://www.blackwoods.com.au/hygiene-cleaning/hand-body-cleaning/hand-wash/handwash-palmolive-antibacterial-250ml/p/03431271
+[SCRAPER] Evaluating link https://www.blackwoods.com.au/hygiene-cleaning/hand-body-cleaning/hand-wash/handwash-palmolive-antibacterial-250ml/p/03431271
+[SCRAPER] Found 4 PDF candidates on https://www.blackwoods.com.au/hygiene-cleaning/hand-body-cleaning/hand-wash/handwash-palmolive-antibacterial-250ml/p/03431271: [
+  'https://www.blackwoods.com.au/footwear/safety-boots-lace-up-ankle/oliver-at-45-645z-150mm-lace-up-side-zip-safety-boots/boots-sfty-45-645z-zip-blk-11/p/03577114',
+  'https://www.blackwoods.com.au/footwear/safety-boots-lace-up-ankle/oliver-at-55-332-150mm-lace-up-safety-boots/boots-sfty-55-332-l-up-wht-10/p/03534852',
+  'https://www.blackwoods.com.au/footwear/safety-boots-lace-up-ankle/oliver-at-55-332z-150mm-lace-up-side-zip-safety-boots/boots-sfty-55-332z-l-up-zip-wht-10/p/03535158',
+  'https://www.blackwoods.com.au/footwear/safety-boots-lace-up-high-leg/oliver-at-55-385-200mm-lace-up-side-zip-safety-boots/boots-sfty-55-385-l-up-zip-wht-110/p/03536110'
+]
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=ef103286ff880b440b1aba4eaaf547c048a63c2daa4d56736a36f88143dbf010JmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly93d3cud3N1cHBsaWVzLmNvbS5hdS9hbWZpbGUvZmlsZS9kb3dubG9hZC9maWxlLzQyNy9wcm9kdWN0LzQ5NDgv&ntb=1
+[SCRAPER] Extracted URL: https://www.wsupplies.com.au/amfile/file/download/file/427/product/4948/
+[SCRAPER] Evaluating link https://www.wsupplies.com.au/amfile/file/download/file/427/product/4948/
+[SCRAPER] Found 0 PDF candidates on https://www.wsupplies.com.au/amfile/file/download/file/427/product/4948/: []
+[SCRAPER] Original URL: https://www.bing.com/ck/a?!&&p=29a5daf982b803c4fb7f398b4825ebd2d020524bdd2e41c52ad3b00afe90065eJmltdHM9MTc1NTY0ODAwMA&ptn=3&ver=2&hsh=4&fclid=155ebd9d-af93-6dfc-2084-abd3aef16cb3&u=a1aHR0cHM6Ly9kbDJqeDd6ZmJ0d3ZyLmNsb3VkZnJvbnQubmV0L21zZHMvU09BUDExMzQucGRm&ntb=1
+[SCRAPER] Extracted URL: https://dl2jx7zfbtwvr.cloudfront.net/msds/SOAP1134.pdf
+[SCRAPER] Evaluating link https://dl2jx7zfbtwvr.cloudfront.net/msds/SOAP1134.pdf
+[SCRAPER] Found direct PDF, verifying: https://dl2jx7zfbtwvr.cloudfront.net/msds/SOAP1134.pdf
+[SCRAPER] Verifying SDS URL: https://dl2jx7zfbtwvr.cloudfront.net/msds/SOAP1134.pdf for product: Palmolive Hand Wash Antibacterial Classic 250ml
+[SCRAPER] OCR verification response: { verified: true }
+[SCRAPER] OCR verification result: true
+[SCRAPER] Valid SDS PDF found https://dl2jx7zfbtwvr.cloudfront.net/msds/SOAP1134.pdf
