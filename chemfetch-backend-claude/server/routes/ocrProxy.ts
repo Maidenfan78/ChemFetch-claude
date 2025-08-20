@@ -16,7 +16,6 @@ const proxyOptions: Options = {
   target: OCR_SERVICE_URL,
   changeOrigin: true,
   pathRewrite: () => '/ocr', // always forward as /ocr
-  logLevel: 'debug', // Properly typed with Options interface
 
   onProxyReq: (proxyReq, req, res) => {
     console.log(

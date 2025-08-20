@@ -18,8 +18,8 @@
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitOverride": false,
-    "types": ["node", "jest"]
+    "types": ["node"]
   },
   "include": ["**/*.js", "**/*.ts", "**/*.json"],
-  "exclude": ["node_modules", "dist", "coverage"]
+  "exclude": ["node_modules", "dist", "coverage", "tests"]
 }
