@@ -57,7 +57,6 @@ function normaliseUrl(u: string): string | null {
   return s;
 }
 
-
 // --- Routes ------------------------------------------------------------------
 router.post('/sds-by-name', async (req, res) => {
   const { name, size } = req.body || {};
@@ -70,7 +69,9 @@ router.post('/sds-by-name', async (req, res) => {
     return res.json({ sdsUrl, topLinks });
   } catch (err: any) {
     logger.error({ err: String(err), name }, '[SDS] Failed');
-    return res.status(502).json({ error: 'SDS_LOOKUP_FAILED', message: String(err?.message || err) });
+    return res
+      .status(502)
+      .json({ error: 'SDS_LOOKUP_FAILED', message: String(err?.message || err) });
   }
 });
 
@@ -94,7 +95,10 @@ router.post('/', async (req, res) => {
 
       if (!existing.sds_url && existing.name) {
         try {
-          logger.info({ name: existing.name }, '[SCAN] Fetching missing SDS URL for existing product');
+          logger.info(
+            { name: existing.name },
+            '[SCAN] Fetching missing SDS URL for existing product'
+          );
           const { sdsUrl: foundSds } = await fetchSdsByName(
             existing.name,
             existing.contents_size_weight || undefined
@@ -109,11 +113,14 @@ router.post('/', async (req, res) => {
               .maybeSingle();
             logger.info({ updateResult }, '[SCAN] Updated product with SDS');
             updated.sds_url = foundSds;
-          // Trigger auto-SDS parsing for newly added SDS URL
-          if (updated.id) {
-            logger.info({ productId: updated.id }, '[SCAN] Triggering auto-SDS parsing for updated product');
-            triggerAutoSdsParsing(updated.id, { delay: 1000 });
-          }
+            // Trigger auto-SDS parsing for newly added SDS URL
+            if (updated.id) {
+              logger.info(
+                { productId: updated.id },
+                '[SCAN] Triggering auto-SDS parsing for updated product'
+              );
+              triggerAutoSdsParsing(updated.id, { delay: 1000 });
+            }
           }
         } catch (err: any) {
           logger.warn({ err: String(err) }, '[SCAN] SDS enrichment failed');
@@ -125,7 +132,12 @@ router.post('/', async (req, res) => {
         code,
         product: updated,
         scraped: [
-          { url: '', name: updated.name || '', size: updated.contents_size_weight || '', sdsUrl: updated.sds_url || '' },
+          {
+            url: '',
+            name: updated.name || '',
+            size: updated.contents_size_weight || '',
+            sdsUrl: updated.sds_url || '',
+          },
         ],
         message: 'Item already in database',
       });
@@ -139,7 +151,7 @@ router.post('/', async (req, res) => {
     logger.info({ code, cleaned }, '[SCAN] Normalised URLs for scraping');
 
     const scraped = await Promise.all(
-      cleaned.map(async (u) => {
+      cleaned.map(async u => {
         try {
           const r = (await scrapeProductInfo(u)) as ScrapedProduct;
           return r;
@@ -151,7 +163,12 @@ router.post('/', async (req, res) => {
     );
 
     logger.info({ code, scraped }, '[SCAN] Scraped results');
-    const top: ScrapedProduct = scraped.find((s) => s?.name) || { name: '', size: '', sdsUrl: '', url: '' };
+    const top: ScrapedProduct = scraped.find(s => s?.name) || {
+      name: '',
+      size: '',
+      sdsUrl: '',
+      url: '',
+    };
     logger.info({ top }, '[SCAN] Top scraped result');
 
     if (!top.sdsUrl && top.name) {

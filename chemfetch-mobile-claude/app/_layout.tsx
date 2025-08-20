@@ -11,8 +11,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) router.replace('/login');
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) {
+        router.replace('/login');
+      }
     };
 
     checkAuth();

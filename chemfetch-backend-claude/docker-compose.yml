@@ -3,7 +3,7 @@ services:
   backend:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - SB_URL=${SB_URL}
       - SB_SERVICE_KEY=${SB_SERVICE_KEY}
@@ -14,4 +14,4 @@ services:
   ocr:
     build: ./ocr_service
     expose:
-      - "5001"
+      - '5001'

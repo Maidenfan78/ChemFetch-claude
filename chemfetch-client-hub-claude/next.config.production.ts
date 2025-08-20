@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
   basePath: '/client_hub',
   assetPrefix: '/client_hub',
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

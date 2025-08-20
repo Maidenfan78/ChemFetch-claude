@@ -1,0 +1,76 @@
+#!/bin/sh
+# Pre-commit hook to run linting and formatting
+
+echo "🔍 Running pre-commit checks..."
+
+# Function to check if we're in a git repository
+check_git_repo() {
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo "❌ Not in a git repository"
+        exit 1
+    fi
+}
+
+# Function to run checks for a specific project
+run_project_checks() {
+    local project_path=$1
+    local project_name=$2
+    
+    if [ -d "$project_path" ] && [ -f "$project_path/package.json" ]; then
+        echo "📂 Checking $project_name..."
+        
+        cd "$project_path"
+        
+        # Run linting
+        if ! npm run lint > /dev/null 2>&1; then
+            echo "❌ ESLint failed for $project_name"
+            echo "💡 Run 'npm run lint:fix' in $project_path to fix issues"
+            cd ..
+            exit 1
+        fi
+        
+        # Run formatting check
+        if ! npm run format:check > /dev/null 2>&1; then
+            echo "❌ Prettier formatting failed for $project_name"
+            echo "💡 Run 'npm run format' in $project_path to fix formatting"
+            cd ..
+            exit 1
+        fi
+        
+        # Run type checking
+        if ! npm run type-check > /dev/null 2>&1; then
+            echo "❌ TypeScript check failed for $project_name"
+            cd ..
+            exit 1
+        fi
+        
+        echo "✅ $project_name checks passed"
+        cd ..
+    fi
+}
+
+# Main execution
+check_git_repo
+
+# Get list of changed files
+changed_files=$(git diff --cached --name-only)
+
+# Check if any relevant files were changed
+mobile_changed=$(echo "$changed_files" | grep "^chemfetch-mobile-claude/" | wc -l)
+client_changed=$(echo "$changed_files" | grep "^chemfetch-client-hub-claude/" | wc -l)
+backend_changed=$(echo "$changed_files" | grep "^chemfetch-backend-claude/" | wc -l)
+
+# Run checks only for projects with changes
+if [ "$mobile_changed" -gt 0 ]; then
+    run_project_checks "chemfetch-mobile-claude" "Mobile App"
+fi
+
+if [ "$client_changed" -gt 0 ]; then
+    run_project_checks "chemfetch-client-hub-claude" "Client Hub"
+fi
+
+if [ "$backend_changed" -gt 0 ]; then
+    run_project_checks "chemfetch-backend-claude" "Backend"
+fi
+
+echo "🎉 All pre-commit checks passed!"

@@ -1,10 +1,6 @@
 import { BACKEND_API_URL } from '@/lib/constants';
 import { useIsFocused } from '@react-navigation/native';
-import {
-  BarcodeScanningResult,
-  CameraView,
-  useCameraPermissions,
-} from 'expo-camera';
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -19,9 +15,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // ------- Tuning knobs -------
-const SCAN_CONFIRMATIONS = 2;     // how many identical reads required
-const SCAN_WINDOW_MS = 1200;      // time window to accumulate confirmations
-const RESCAN_COOLDOWN_MS = 1200;  // how long before allowing another scan
+const SCAN_CONFIRMATIONS = 2; // how many identical reads required
+const SCAN_WINDOW_MS = 1200; // time window to accumulate confirmations
+const RESCAN_COOLDOWN_MS = 1200; // how long before allowing another scan
 
 // ================================================================
 // Checksum validators & normalizers for common retail symbologies
@@ -36,7 +32,9 @@ const RESCAN_COOLDOWN_MS = 1200;  // how long before allowing another scan
 // ================================================================
 
 function isValidEAN8(code: string): boolean {
-  if (!/^\d{8}$/.test(code)) return false;
+  if (!/^\d{8}$/.test(code)) {
+    return false;
+  }
   const d = code.split('').map(Number);
   const odd = d[0] + d[2] + d[4] + d[6];
   const even = d[1] + d[3] + d[5];
@@ -46,33 +44,43 @@ function isValidEAN8(code: string): boolean {
 }
 
 function isValidEAN13(code: string): boolean {
-  if (!/^\d{13}$/.test(code)) return false;
+  if (!/^\d{13}$/.test(code)) {
+    return false;
+  }
   const d = code.split('').map(Number);
   let sum = 0; // weight 1 at even indices (0‑based), 3 at odd
-  for (let i = 0; i < 12; i++) sum += d[i] * (i % 2 ? 3 : 1);
+  for (let i = 0; i < 12; i++) {
+    sum += d[i] * (i % 2 ? 3 : 1);
+  }
   const check = (10 - (sum % 10)) % 10;
   return check === d[12];
 }
 
 function isValidUPCA(code: string): boolean {
-  if (!/^\d{12}$/.test(code)) return false;
+  if (!/^\d{12}$/.test(code)) {
+    return false;
+  }
   const d = code.split('').map(Number);
   let sum = 0;
   // positions 0,2,4,6,8,10 weighted by 3; 1,3,5,7,9,11 by 1 (but 11 is check)
-  for (let i = 0; i < 11; i++) sum += d[i] * (i % 2 === 0 ? 3 : 1);
+  for (let i = 0; i < 11; i++) {
+    sum += d[i] * (i % 2 === 0 ? 3 : 1);
+  }
   const check = (10 - (sum % 10)) % 10;
   return check === d[11];
 }
 
 // Expand UPC-E (NS 0/1) to UPC-A (per GS1 rules). Returns null if invalid.
 function expandUPCEtoUPCA(upce: string): string | null {
-  if (!/^\d{8}$/.test(upce)) return null;
+  if (!/^\d{8}$/.test(upce)) {
+    return null;
+  }
   const d = upce.split('').map(Number);
   const numberSystem = d[0];
   const checkDigit = d[7];
-  if (numberSystem !== 0 && numberSystem !== 1) return null; // only NS 0/1 supported here
-  const mfr = `${d[1]}${d[2]}${d[3]}`;
-  const prod = `${d[4]}${d[5]}${d[6]}`;
+  if (numberSystem !== 0 && numberSystem !== 1) {
+    return null;
+  } // only NS 0/1 supported here
   let upcaBody = '';
   switch (d[6]) {
     case 0:
@@ -96,9 +104,13 @@ function expandUPCEtoUPCA(upce: string): string | null {
   // calculate UPC-A checksum
   const digits = upcaBody.split('').map(Number);
   let sum = 0;
-  for (let i = 0; i < 11; i++) sum += digits[i] * (i % 2 === 0 ? 3 : 1);
+  for (let i = 0; i < 11; i++) {
+    sum += digits[i] * (i % 2 === 0 ? 3 : 1);
+  }
   const check = (10 - (sum % 10)) % 10;
-  if (check !== checkDigit) return null;
+  if (check !== checkDigit) {
+    return null;
+  }
   return `${upcaBody}${check}`; // 12-digit UPC-A
 }
 
@@ -108,10 +120,14 @@ function isValidUPCE(code: string): boolean {
 }
 
 function isValidITF14(code: string): boolean {
-  if (!/^\d{14}$/.test(code)) return false;
+  if (!/^\d{14}$/.test(code)) {
+    return false;
+  }
   const d = code.split('').map(Number);
   let sum = 0; // same mod-10 scheme as EAN-13 over first 13 digits
-  for (let i = 0; i < 13; i++) sum += d[i] * (i % 2 ? 3 : 1);
+  for (let i = 0; i < 13; i++) {
+    sum += d[i] * (i % 2 ? 3 : 1);
+  }
   const check = (10 - (sum % 10)) % 10;
   return check === d[13];
 }
@@ -119,13 +135,23 @@ function isValidITF14(code: string): boolean {
 // Normalize scanned payload to a canonical GTIN string we store/use.
 function normalizeToGtin(raw: string): string | null {
   const data = (raw || '').trim();
-  if (!data) return null;
+  if (!data) {
+    return null;
+  }
   // Pure numeric? Try the standard GTIN forms.
   if (/^\d+$/.test(data)) {
-    if (data.length === 8 && isValidEAN8(data)) return data;           // GTIN-8
-    if (data.length === 12 && isValidUPCA(data)) return `0${data}`;    // UPC-A -> GTIN-13
-    if (data.length === 13 && isValidEAN13(data)) return data;         // GTIN-13
-    if (data.length === 14 && isValidITF14(data)) return data;         // GTIN-14
+    if (data.length === 8 && isValidEAN8(data)) {
+      return data;
+    } // GTIN-8
+    if (data.length === 12 && isValidUPCA(data)) {
+      return `0${data}`;
+    } // UPC-A -> GTIN-13
+    if (data.length === 13 && isValidEAN13(data)) {
+      return data;
+    } // GTIN-13
+    if (data.length === 14 && isValidITF14(data)) {
+      return data;
+    } // GTIN-14
   }
   // UPC-E (8) encoded sometimes reported as payload w/ checksum
   if (/^\d{8}$/.test(data) && isValidUPCE(data)) {
@@ -136,16 +162,18 @@ function normalizeToGtin(raw: string): string | null {
   const digits = data.replace(/\D+/g, '');
   if (digits) {
     const n = normalizeToGtin(digits);
-    if (n) return n;
+    if (n) {
+      return n;
+    }
   }
   return null; // unsupported payload
 }
 
 export default function BarcodeScanner() {
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanning, setScanning] = useState(true);       // camera accepting reads
-  const [confirming, setConfirming] = useState(false);  // showing "confirming" UI
-  const [loading, setLoading] = useState(false);        // backend call in flight
+  const [scanning, setScanning] = useState(true); // camera accepting reads
+  const [confirming, setConfirming] = useState(false); // showing "confirming" UI
+  const [loading, setLoading] = useState(false); // backend call in flight
   const router = useRouter();
   const isFocused = useIsFocused();
 
@@ -162,8 +190,12 @@ export default function BarcodeScanner() {
     requestPermission();
   }, [requestPermission]);
 
-  if (!permission) return <Text className="text-center p-4">Loading permissions…</Text>;
-  if (!permission.granted) return <Text className="text-center p-4">No camera access 🙁</Text>;
+  if (!permission) {
+    return <Text className="p-4 text-center">Loading permissions…</Text>;
+  }
+  if (!permission.granted) {
+    return <Text className="p-4 text-center">No camera access 🙁</Text>;
+  }
 
   const resetBuffer = () => {
     bufferRef.current = { counts: {}, firstTs: 0 };
@@ -172,7 +204,9 @@ export default function BarcodeScanner() {
 
   const maybeConfirm = (raw: string) => {
     const gtin = normalizeToGtin(raw);
-    if (!gtin) return null; // ignore unsupported/invalid payloads
+    if (!gtin) {
+      return null;
+    } // ignore unsupported/invalid payloads
 
     const now = Date.now();
     const buf = bufferRef.current;
@@ -194,13 +228,19 @@ export default function BarcodeScanner() {
   };
 
   const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
-    if (!scanning || loading) return;
+    if (!scanning || loading) {
+      return;
+    }
 
     // simple cooldown (prevents rapid-fire duplicate confirmations)
-    if (Date.now() - cooldownRef.current < RESCAN_COOLDOWN_MS) return;
+    if (Date.now() - cooldownRef.current < RESCAN_COOLDOWN_MS) {
+      return;
+    }
 
     const confirmed = maybeConfirm(data);
-    if (!confirmed) return;
+    if (!confirmed) {
+      return;
+    }
 
     // we have a confirmed + normalized GTIN
     setScanning(false);
@@ -213,8 +253,8 @@ export default function BarcodeScanner() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code: confirmed }),
     })
-      .then((res) => res.json())
-      .then((json) => {
+      .then(res => res.json())
+      .then(json => {
         const prod = json.product ?? json;
         router.replace({
           pathname: '/ocr-info',
@@ -225,7 +265,7 @@ export default function BarcodeScanner() {
           },
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.error('❌ Backend error:', err);
         router.replace({ pathname: '/ocr-info', params: { code: confirmed } });
       })
@@ -238,13 +278,10 @@ export default function BarcodeScanner() {
   return (
     <SafeAreaView className="flex-1 bg-black">
       {loading ? (
-        <View className="flex-1 justify-center items-center bg-black">
-          <Image
-            source={require('@/assets/images/splash-icon.png')}
-            className="w-32 h-32 mb-4"
-          />
+        <View className="flex-1 items-center justify-center bg-black">
+          <Image source={require('@/assets/images/splash-icon.png')} className="mb-4 h-32 w-32" />
           <ActivityIndicator size="large" color="#fff" />
-          <Text className="text-white mt-2">Searching...</Text>
+          <Text className="mt-2 text-white">Searching...</Text>
         </View>
       ) : (
         <>
@@ -270,9 +307,9 @@ export default function BarcodeScanner() {
           </View>
 
           {/* Overlay aim box */}
-          <View className="absolute inset-0 justify-center items-center pointer-events-none">
-            <View className="w-[70%] h-48 border-4 border-white rounded-xl bg-white/10 justify-center items-center">
-              <Text className="text-white font-bold text-base text-center px-4">
+          <View className="pointer-events-none absolute inset-0 items-center justify-center">
+            <View className="h-48 w-[70%] items-center justify-center rounded-xl border-4 border-white bg-white/10">
+              <Text className="px-4 text-center text-base font-bold text-white">
                 Align barcode here (EAN/UPC/ITF/Code128/39)
               </Text>
             </View>
@@ -280,7 +317,7 @@ export default function BarcodeScanner() {
 
           {/* Confirming hint */}
           {confirming && !loading && (
-            <View className="absolute bottom-24 self-center bg-black/70 px-4 py-2 rounded-lg">
+            <View className="absolute bottom-24 self-center rounded-lg bg-black/70 px-4 py-2">
               <Text className="text-white">Hold steady… confirming barcode</Text>
             </View>
           )}
@@ -288,13 +325,13 @@ export default function BarcodeScanner() {
           {/* Scan Again button (after a read) */}
           {!scanning && !loading && (
             <Pressable
-              className="absolute bottom-10 self-center bg-primary py-3 px-6 rounded-lg"
+              className="absolute bottom-10 self-center rounded-lg bg-primary px-6 py-3"
               onPress={() => {
                 resetBuffer();
                 setScanning(true);
               }}
             >
-              <Text className="text-white text-base font-bold">Scan Again</Text>
+              <Text className="text-base font-bold text-white">Scan Again</Text>
             </Pressable>
           )}
         </>

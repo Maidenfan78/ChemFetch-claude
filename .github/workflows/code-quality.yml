@@ -1,0 +1,74 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install root dependencies
+      run: npm ci
+      
+    - name: Install Mobile App dependencies
+      run: cd chemfetch-mobile-claude && npm ci
+      
+    - name: Install Client Hub dependencies
+      run: cd chemfetch-client-hub-claude && npm ci
+      
+    - name: Install Backend dependencies
+      run: cd chemfetch-backend-claude && npm ci
+      
+    - name: Run ESLint
+      run: npm run lint
+      
+    - name: Check Prettier formatting
+      run: npm run format:check
+      
+    - name: Run TypeScript type checking
+      run: npm run type-check
+      
+    - name: Run Backend tests
+      run: npm run test:backend
+      
+    - name: Build Client Hub
+      run: npm run build:client
+      
+  security-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Run security audit for Mobile App
+      run: cd chemfetch-mobile-claude && npm audit --audit-level=high
+      
+    - name: Run security audit for Client Hub
+      run: cd chemfetch-client-hub-claude && npm audit --audit-level=high
+      
+    - name: Run security audit for Backend
+      run: cd chemfetch-backend-claude && npm audit --audit-level=high

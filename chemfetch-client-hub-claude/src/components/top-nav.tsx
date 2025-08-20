@@ -1,8 +1,8 @@
 // src/components/top-nav.tsx
 
-'use client'
+'use client';
 
-import { ThemeToggle } from '@/components/theme-toggle'
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export function TopNav() {
   return (
@@ -13,5 +13,5 @@ export function TopNav() {
         <div className="w-8 h-8 bg-gray-300 rounded-full" />
       </div>
     </header>
-  )
+  );
 }

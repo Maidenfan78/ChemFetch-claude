@@ -27,11 +27,11 @@ interface ParseSDSEnhancedResponse {
  * Body: { product_id: number, sds_url?: string, force?: boolean, use_direct_parser?: boolean }
  */
 router.post('/', async (req, res) => {
-  const { 
-    product_id, 
-    sds_url, 
-    force = false, 
-    use_direct_parser = true 
+  const {
+    product_id,
+    sds_url,
+    force = false,
+    use_direct_parser = true,
   }: ParseSDSEnhancedRequest = req.body;
 
   if (!product_id || typeof product_id !== 'number') {
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
 
     // 2. Use provided sds_url or fallback to product's sds_url
     const targetSdsUrl = sds_url || product.sds_url;
-    
+
     if (!targetSdsUrl) {
       return res.status(400).json({
         success: false,
@@ -100,7 +100,7 @@ router.post('/', async (req, res) => {
           },
           body: JSON.stringify({
             pdf_url: targetSdsUrl,
-            product_id: product_id
+            product_id: product_id,
           }),
         });
 
@@ -112,7 +112,6 @@ router.post('/', async (req, res) => {
 
         // Transform the direct parser result to chemfetch format
         parsedData = transformToChemfetchFormat(ocrResult.parsed_data, product_id, product.name);
-
       } catch (ocrError) {
         logger.error('OCR service error:', ocrError);
         return res.status(500).json({
@@ -133,7 +132,7 @@ router.post('/', async (req, res) => {
           },
           body: JSON.stringify({
             product_id: product_id,
-            pdf_url: targetSdsUrl
+            pdf_url: targetSdsUrl,
           }),
         });
 
@@ -142,7 +141,6 @@ router.post('/', async (req, res) => {
         if (!response.ok) {
           throw new Error(parsedData.error || 'OCR service failed');
         }
-
       } catch (ocrError) {
         logger.error('OCR service error:', ocrError);
         return res.status(500).json({
@@ -156,21 +154,19 @@ router.post('/', async (req, res) => {
 
     // 5. Store metadata in database
     logger.info(`Storing enhanced SDS metadata for product ${product_id}:`, parsedData);
-    
-    const { error: upsertError } = await supabase
-      .from('sds_metadata')
-      .upsert({
-        product_id,
-        vendor: parsedData.vendor,
-        issue_date: parsedData.issue_date,
-        hazardous_substance: parsedData.hazardous_substance,
-        dangerous_good: parsedData.dangerous_good,
-        dangerous_goods_class: parsedData.dangerous_goods_class,
-        description: parsedData.product_name,
-        packing_group: parsedData.packing_group,
-        subsidiary_risks: parsedData.subsidiary_risks,
-        raw_json: parsedData,
-      });
+
+    const { error: upsertError } = await supabase.from('sds_metadata').upsert({
+      product_id,
+      vendor: parsedData.vendor,
+      issue_date: parsedData.issue_date,
+      hazardous_substance: parsedData.hazardous_substance,
+      dangerous_good: parsedData.dangerous_good,
+      dangerous_goods_class: parsedData.dangerous_goods_class,
+      description: parsedData.product_name,
+      packing_group: parsedData.packing_group,
+      subsidiary_risks: parsedData.subsidiary_risks,
+      raw_json: parsedData,
+    });
 
     if (upsertError) {
       logger.error('Failed to store SDS metadata:', upsertError);
@@ -208,7 +204,6 @@ router.post('/', async (req, res) => {
       parsed_data: use_direct_parser ? parsedData : undefined,
       metadata: parsedData,
     });
-
   } catch (error) {
     logger.error('Error in enhanced SDS parsing route:', error);
     return res.status(500).json({
@@ -223,7 +218,11 @@ router.post('/', async (req, res) => {
 /**
  * Transform direct parser output to chemfetch format
  */
-function transformToChemfetchFormat(directParserResult: any, productId: number, productName: string): any {
+function transformToChemfetchFormat(
+  directParserResult: any,
+  productId: number,
+  productName: string
+): any {
   function getValue(fieldName: string): string | null {
     const field = directParserResult[fieldName];
     if (field && typeof field === 'object' && field.confidence > 0) {
@@ -234,7 +233,8 @@ function transformToChemfetchFormat(directParserResult: any, productId: number, 
 
   // Map dangerous goods class to boolean
   const dangerousGoodsClass = getValue('dangerous_goods_class');
-  const isDangerousGood = dangerousGoodsClass && 
+  const isDangerousGood =
+    dangerousGoodsClass &&
     !['none', 'not applicable', 'n/a', 'na'].includes(dangerousGoodsClass.toLowerCase());
 
   // Determine if it's hazardous (basic heuristic)
@@ -242,9 +242,11 @@ function transformToChemfetchFormat(directParserResult: any, productId: number, 
 
   // Format subsidiary risks
   const subsidiaryRisk = getValue('subsidiary_risk');
-  const subsidiaryRisks = subsidiaryRisk && 
-    !['none', 'not applicable', 'n/a', 'na'].includes(subsidiaryRisk.toLowerCase()) 
-    ? [subsidiaryRisk] : [];
+  const subsidiaryRisks =
+    subsidiaryRisk &&
+    !['none', 'not applicable', 'n/a', 'na'].includes(subsidiaryRisk.toLowerCase())
+      ? [subsidiaryRisk]
+      : [];
 
   return {
     product_id: productId,
@@ -257,7 +259,7 @@ function transformToChemfetchFormat(directParserResult: any, productId: number, 
     packing_group: getValue('packing_group'),
     subsidiary_risks: subsidiaryRisks,
     hazard_statements: [], // Not extracted by current parser
-    raw_json: directParserResult
+    raw_json: directParserResult,
   };
 }
 

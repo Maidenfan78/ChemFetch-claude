@@ -4,12 +4,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@env": [
-        "env.d.ts"
-      ]
+      "@/*": ["./*"],
+      "@env": ["env.d.ts"]
     }
   },
   "include": [

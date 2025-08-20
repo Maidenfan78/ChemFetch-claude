@@ -9,6 +9,7 @@ This client-facing application provides a comprehensive interface for chemical s
 ## ✨ Features
 
 ### Chemical Register Management
+
 - **📦 Inventory Tracking**: View and manage chemical products across multiple locations
 - **📄 SDS Integration**: Access Safety Data Sheets with parsed metadata display
 - **⚠️ Hazard Assessment**: Risk classifications, dangerous goods information, and safety ratings
@@ -17,6 +18,7 @@ This client-facing application provides a comprehensive interface for chemical s
 - **👥 User Management**: Role-based access control for different team members
 
 ### SDS Management
+
 - **🤖 Automated Parsing**: Display vendor, hazard class, issue dates from parsed SDS documents
 - **🔗 Document Links**: Direct access to PDF Safety Data Sheets
 - **⏱️ Issue Date Tracking**: Monitor SDS currency and expiration
@@ -29,11 +31,13 @@ This client-facing application provides a comprehensive interface for chemical s
 ## 🛠️ Tech Stack
 
 ### Frontend Framework
+
 - **Next.js 15** with App Router for modern React development
 - **React 19** with TypeScript for type safety
 - **Server-Side Rendering** for improved performance and SEO
 
 ### UI & Styling
+
 - **Tailwind CSS 4** for utility-first styling
 - **shadcn/ui** components for consistent design system
 - **Lucide React** for modern iconography
@@ -41,6 +45,7 @@ This client-facing application provides a comprehensive interface for chemical s
 - **Responsive Design** optimized for desktop and tablet use
 
 ### Backend Integration
+
 - **Supabase** for authentication, database, and real-time updates
 - **Row Level Security** for multi-tenant data isolation
 - **Server-Side Auth** with cookie-based sessions
@@ -51,6 +56,7 @@ This client-facing application provides a comprehensive interface for chemical s
 ## ⚙️ Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Supabase project with authentication enabled
 - ChemFetch backend service running
@@ -58,6 +64,7 @@ This client-facing application provides a comprehensive interface for chemical s
 ### 1. Environment Setup
 
 Create `.env.local` file:
+
 ```env
 # Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -86,21 +93,25 @@ Open [http://localhost:3001](http://localhost:3001) to view the application.
 ## 🎯 Core Pages & Features
 
 ### Dashboard (`/`)
+
 - **Overview Cards**: Total chemicals, pending SDS updates, compliance status
 - **Recent Activity**: Latest chemical additions and SDS updates
 - **Quick Actions**: Add new chemicals, trigger SDS parsing, export reports
 
 ### Chemical Register (`/watchlist`)
+
 - **Data Table**: Comprehensive view of all chemicals with sorting and filtering
 - **Columns**: Product name, vendor, issue date, hazard classification, dangerous goods info
 - **Actions**: Update SDS, edit details, remove from inventory
 
 ### SDS Viewer (`/sds`)
+
 - **Document Links**: Direct access to PDF Safety Data Sheets
 - **Metadata Display**: Parsed information including vendor, hazard class, issue dates
 - **Status Indicators**: Document availability and parsing status
 
 ### Authentication (`/login`, `/register`)
+
 - **Secure Login**: Email/password authentication via Supabase Auth
 - **User Registration**: Account creation with email verification
 - **Session Management**: Persistent login with secure cookie sessions
@@ -161,8 +172,8 @@ export function useWatchList() {
         id: item.id,
         product: {
           ...item.product,
-          sds_metadata: sdsMetadata.find(meta => meta.product_id === item.product_id) || null
-        }
+          sds_metadata: sdsMetadata.find(meta => meta.product_id === item.product_id) || null,
+        },
       }));
 
       setData(combinedData);
@@ -211,18 +222,21 @@ NEXT_PUBLIC_BACKEND_URL=https://your-backend-domain.com
 ### Version 2024.12
 
 **New Features:**
+
 - ✅ **Enhanced SDS Display**: Show vendor information and parsed metadata
 - ✅ **Improved Data Fetching**: Separate queries for better performance
 - ✅ **Date Formatting**: Human-readable issue dates instead of ISO strings
 - ✅ **Better Error Handling**: Graceful fallbacks for missing SDS data
 
 **UI Improvements:**
+
 - 🎨 **Responsive Tables**: Better mobile and tablet support
 - 🎨 **Status Indicators**: Visual cues for SDS status and hazard levels
 - 🎨 **Loading States**: Improved feedback during SDS parsing
 - 🎨 **Dark Mode**: Full dark theme support
 
 **Bug Fixes:**
+
 - 🔧 **SDS Metadata Display**: Fixed missing vendor and date information
 - 🔧 **Authentication Flow**: Improved login redirect handling
 - 🔧 **Table Sorting**: Fixed column sorting with null values
@@ -238,11 +252,13 @@ This project is proprietary software. All rights reserved.
 ## 👥 Support
 
 **Technical Issues:**
+
 - Check browser console for error messages
 - Verify Supabase connection and permissions
 - Test backend API connectivity
 
 **Feature Requests:**
+
 - Submit detailed requirements and use cases
 - Include mockups or wireframes if applicable
 - Consider impact on existing functionality
@@ -252,12 +268,14 @@ This project is proprietary software. All rights reserved.
 ## 🗺️ Roadmap
 
 ### Q1 2025
+
 - **Advanced Filtering**: Multi-column search and filter combinations
 - **Bulk Operations**: Mass import/export and batch editing
 - **Reporting Dashboard**: Advanced analytics and compliance reports
 - **Mobile Optimization**: Improved responsive design for mobile devices
 
 ### Q2 2025
+
 - **User Roles**: Admin, manager, and viewer permission levels
 - **Audit Trail**: Detailed change history and user activity logs
 - **API Integration**: Connect with external ERP and safety systems

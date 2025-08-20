@@ -6,9 +6,9 @@ import { triggerAutoSdsParsing } from '../server/utils/autoSdsParsing.js';
 async function processExistingProducts(force: boolean = false) {
   try {
     console.log('🔍 Finding products with SDS URLs that need processing...');
-    
+
     const supabase = createServiceRoleClient();
-    
+
     // Get all products with SDS URLs
     const { data: products, error: productError } = await supabase
       .from('product')
@@ -55,7 +55,7 @@ async function processExistingProducts(force: boolean = false) {
     }
 
     console.log('🚀 Starting batch processing...');
-    
+
     // Process products with delays to avoid overwhelming the system
     let processed = 0;
     let failed = 0;
@@ -63,22 +63,25 @@ async function processExistingProducts(force: boolean = false) {
     for (let i = 0; i < pendingProducts.length; i++) {
       const product = pendingProducts[i];
       const delay = i * 3000; // 3 second delay between each
-      
+
       try {
-        console.log(`📋 [${i + 1}/${pendingProducts.length}] Processing: ${product.name || product.barcode}`);
-        
+        console.log(
+          `📋 [${i + 1}/${pendingProducts.length}] Processing: ${product.name || product.barcode}`
+        );
+
         const triggered = await triggerAutoSdsParsing(product.id, { delay, force });
-        
+
         if (triggered) {
           processed++;
           console.log(`✅ Triggered parsing for product ${product.id}`);
         } else {
-          console.log(`⚠️  Skipped product ${product.id} (may already have metadata and force=false)`);
+          console.log(
+            `⚠️  Skipped product ${product.id} (may already have metadata and force=false)`
+          );
         }
-        
+
         // Small delay to avoid overwhelming logs
         await new Promise(resolve => setTimeout(resolve, 100));
-        
       } catch (error) {
         failed++;
         console.error(`❌ Failed to process product ${product.id}:`, error);
@@ -91,7 +94,6 @@ async function processExistingProducts(force: boolean = false) {
     console.log(`   • Total: ${pendingProducts.length}`);
     console.log(`\n⏳ SDS parsing is running in the background. Check logs for progress.`);
     console.log(`📈 Use GET /parse-sds/status/:product_id to monitor individual products.`);
-
   } catch (error) {
     console.error('💥 Script failed:', error);
     process.exit(1);
@@ -99,19 +101,22 @@ async function processExistingProducts(force: boolean = false) {
 }
 
 // CLI usage
-if (process.argv[1].endsWith('processExistingSds.ts') || process.argv[1].endsWith('processExistingSds.js')) {
+if (
+  process.argv[1].endsWith('processExistingSds.ts') ||
+  process.argv[1].endsWith('processExistingSds.js')
+) {
   console.log('🧪 ChemFetch SDS Processor');
   console.log('==========================\n');
-  
+
   // Check for --force flag in all arguments
   const force = process.argv.some(arg => arg === '--force');
-  
+
   if (force) {
     console.log('🔥 FORCE MODE ENABLED: Will reprocess all products\n');
   } else {
     console.log('📝 Normal mode: Will only process products without existing metadata\n');
   }
-  
+
   processExistingProducts(force)
     .then(() => {
       console.log('\n✨ Script completed successfully');
@@ -120,7 +125,7 @@ if (process.argv[1].endsWith('processExistingSds.ts') || process.argv[1].endsWit
       console.log('   npm run process-existing-sds --force # Reprocess ALL products');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('\n💥 Script failed:', error);
       process.exit(1);
     });

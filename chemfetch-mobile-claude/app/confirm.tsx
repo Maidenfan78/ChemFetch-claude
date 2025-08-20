@@ -5,12 +5,7 @@ import { CropInfo, runOcr } from '@/lib/ocr';
 import { useConfirmStore } from '@/lib/store';
 import { supabase } from '@/lib/supabase';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import {
-  useFocusEffect,
-  useLocalSearchParams,
-  useNavigation,
-  useRouter,
-} from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -60,9 +55,7 @@ export default function Confirm() {
   const cameraRef = useRef<CameraView | null>(null);
 
   // ─────────────────────────── UI state ──────────────────────────────
-  const [step, setStep] = useState<'photo' | 'crop' | 'pick'>(
-    editOnly ? 'pick' : 'photo',
-  );
+  const [step, setStep] = useState<'photo' | 'crop' | 'pick'>(editOnly ? 'pick' : 'photo');
   const [ocrResult, setOcrResult] = useState<OcrPayload>({});
   const [error, setError] = useState('');
   const [ocrLoading, setOcrLoading] = useState(false);
@@ -76,9 +69,7 @@ export default function Confirm() {
   const [manualSize, setManualSize] = useState(sizeParam);
 
   // current selection in the 3‑way choice
-  const [choice, setChoice] = useState<'web' | 'ocr' | 'manual'>(
-    webName ? 'web' : 'manual',
-  );
+  const [choice, setChoice] = useState<'web' | 'ocr' | 'manual'>(webName ? 'web' : 'manual');
 
   // prompt when size missing
   const [sizePromptVisible, setSizePromptVisible] = useState(false);
@@ -92,11 +83,11 @@ export default function Confirm() {
   const [imageLayout, setImageLayout] = useState({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
 
   // ─────────────────────────── zustand store ─────────────────────────
-  const photo = useConfirmStore((s) => s.photo);
-  const crop = useConfirmStore((s) => s.crop);
-  const setPhoto = useConfirmStore((s) => s.setPhoto);
-  const clearPhoto = useConfirmStore((s) => s.clearPhoto);
-  const resetCrop = useConfirmStore((s) => s.resetCrop);
+  const photo = useConfirmStore(s => s.photo);
+  const crop = useConfirmStore(s => s.crop);
+  const setPhoto = useConfirmStore(s => s.setPhoto);
+  const clearPhoto = useConfirmStore(s => s.clearPhoto);
+  const resetCrop = useConfirmStore(s => s.resetCrop);
 
   // Clear previous photo and reset state when a new code is provided
   useEffect(() => {
@@ -115,7 +106,9 @@ export default function Confirm() {
 
   // ───────────────────── permissions & availability ──────────────────
   useEffect(() => {
-    if (!editOnly && !permission) requestPermission();
+    if (!editOnly && !permission) {
+      requestPermission();
+    }
   }, [editOnly, permission, requestPermission]);
 
   // retry until camera frees up (barcode screen may still be shutting down)
@@ -123,16 +116,20 @@ export default function Confirm() {
     React.useCallback(() => {
       let cancelled = false;
       async function checkCamera(retries = 6) {
-        if (!permission?.granted) return;
+        if (!permission?.granted) {
+          return;
+        }
         for (let i = 0; i < retries; i += 1) {
           const available = await CameraView.isAvailableAsync();
-          if (cancelled) return;
+          if (cancelled) {
+            return;
+          }
           if (available) {
             setCameraAvailable(true);
             setError('');
             return;
           }
-          await new Promise((res) => setTimeout(res, 250));
+          await new Promise(res => setTimeout(res, 250));
         }
         if (!cancelled) {
           setCameraAvailable(false);
@@ -143,7 +140,7 @@ export default function Confirm() {
       return () => {
         cancelled = true;
       };
-    }, [permission]),
+    }, [permission])
   );
 
   // ─────────────────────────── helpers ───────────────────────────────
@@ -179,7 +176,9 @@ export default function Confirm() {
   };
 
   const handleOcr = async () => {
-    if (!photo) return;
+    if (!photo) {
+      return;
+    }
     setOcrLoading(true);
     setError('');
     try {
@@ -240,7 +239,9 @@ export default function Confirm() {
       });
       const sds = await sdsRes.json();
       const url: string | undefined = sds.sdsUrl || sds.url;
-      if (!url) return;
+      if (!url) {
+        return;
+      }
 
       // verify before persisting
       const verRes = await fetch(`${BACKEND_API_URL}/verify-sds`, {
@@ -295,9 +296,7 @@ export default function Confirm() {
     try {
       setSaving(true);
       await persistProduct(finalName, finalSize);
-      searchVerifyAndUpsertSds(finalName).catch((e) =>
-        console.error('SDS lookup failed', e),
-      );
+      searchVerifyAndUpsertSds(finalName).catch(e => console.error('SDS lookup failed', e));
       router.replace('/register');
     } finally {
       setSaving(false);
@@ -308,13 +307,13 @@ export default function Confirm() {
     const n = pendingName;
     const s = pendingSize.trim();
     setSizePromptVisible(false);
-    if (!s) return;
+    if (!s) {
+      return;
+    }
     try {
       setSaving(true);
       await persistProduct(n, s);
-      searchVerifyAndUpsertSds(n).catch((e) =>
-        console.error('SDS lookup failed', e),
-      );
+      searchVerifyAndUpsertSds(n).catch(e => console.error('SDS lookup failed', e));
       router.replace('/register');
     } finally {
       setSaving(false);
@@ -325,15 +324,15 @@ export default function Confirm() {
   if (!editOnly) {
     if (!permission) {
       return (
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
         </View>
       );
     }
     if (!permission.granted) {
       return (
-        <View className="flex-1 justify-center items-center p-6">
-          <Text className="text-center mb-4">We need camera access to capture your SDS label.</Text>
+        <View className="flex-1 items-center justify-center p-6">
+          <Text className="mb-4 text-center">We need camera access to capture your SDS label.</Text>
           <Button title="Grant permission" onPress={requestPermission} />
         </View>
       );
@@ -362,27 +361,27 @@ export default function Confirm() {
                 onCameraReady={() => setCameraReady(true)}
               />
             )}
-            <View className="absolute inset-0 justify-center items-center pointer-events-none">
-              <View className="w-[90%] h-48 border-4 border-white rounded-xl bg-white/10 relative">
-                <View className="absolute top-1/2 left-0 right-0 h-0.5 bg-white" />
+            <View className="pointer-events-none absolute inset-0 items-center justify-center">
+              <View className="relative h-48 w-[90%] rounded-xl border-4 border-white bg-white/10">
+                <View className="absolute left-0 right-0 top-1/2 h-0.5 bg-white" />
               </View>
             </View>
           </>
         )}
         <View className="absolute bottom-6 left-0 right-0 items-center">
           <Pressable
-            className={`py-3 px-6 rounded-lg ${photo ? 'bg-primary' : cameraReady ? 'bg-primary' : 'bg-gray-400'}`}
+            className={`rounded-lg px-6 py-3 ${photo ? 'bg-primary' : cameraReady ? 'bg-primary' : 'bg-gray-400'}`}
             disabled={!cameraReady && !photo}
             onPress={() => (photo ? clearPhoto() : capture())}
           >
-            <Text className="text-white font-bold text-base">{photo ? 'Retake' : 'Capture'}</Text>
+            <Text className="text-base font-bold text-white">{photo ? 'Retake' : 'Capture'}</Text>
           </Pressable>
           {photo ? (
             <Pressable
-              className="mt-3 py-3 px-6 rounded-lg bg-accent"
+              className="mt-3 rounded-lg bg-accent px-6 py-3"
               onPress={() => setStep('crop')}
             >
-              <Text className="text-white font-bold text-base">Next: Crop</Text>
+              <Text className="text-base font-bold text-white">Next: Crop</Text>
             </Pressable>
           ) : null}
         </View>
@@ -398,7 +397,7 @@ export default function Confirm() {
           source={{ uri: photo.uri }}
           className="flex-1"
           resizeMode="contain"
-          onLayout={(e) => {
+          onLayout={e => {
             const { width, height } = e.nativeEvent.layout;
             setImageLayout({ width, height });
           }}
@@ -417,20 +416,17 @@ export default function Confirm() {
           ) : (
             <View className="flex-row space-x-4">
               <Pressable
-                className="bg-gray-200 py-3 px-6 rounded-lg"
+                className="rounded-lg bg-gray-200 px-6 py-3"
                 onPress={() => {
                   clearPhoto();
                   resetCrop();
                   setStep('photo');
                 }}
               >
-                <Text className="text-dark-100 font-bold">Retake</Text>
+                <Text className="font-bold text-dark-100">Retake</Text>
               </Pressable>
-              <Pressable
-                className="bg-primary py-3 px-6 rounded-lg"
-                onPress={handleOcr}
-              >
-                <Text className="text-white font-bold">Run OCR</Text>
+              <Pressable className="rounded-lg bg-primary px-6 py-3" onPress={handleOcr}>
+                <Text className="font-bold text-white">Run OCR</Text>
               </Pressable>
             </View>
           )}
@@ -443,59 +439,65 @@ export default function Confirm() {
   else {
     content = (
       <View className="flex-1 bg-white p-6">
-        <Text className="text-center text-lg font-semibold mb-4">Confirm product details</Text>
+        <Text className="mb-4 text-center text-lg font-semibold">Confirm product details</Text>
 
         <View className="flex-col space-y-4">
           {/* Web panel */}
           <Pressable
             onPress={() => setChoice('web')}
-            className={`border rounded-xl p-4 ${choice === 'web' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
+            className={`rounded-xl border p-4 ${choice === 'web' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
           >
-            <Text className="font-bold mb-1">🌐 Web (Item {code || '—'})</Text>
+            <Text className="mb-1 font-bold">🌐 Web (Item {code || '—'})</Text>
             <Text className="text-dark-100">Name: {webName || '—'}</Text>
             <Text className="text-dark-100">Size: {webSize || '—'}</Text>
             {!webName && (
-              <Text className="text-xs text-gray-500 mt-1">No web result provided. You can pick OCR or Manual.</Text>
+              <Text className="mt-1 text-xs text-gray-500">
+                No web result provided. You can pick OCR or Manual.
+              </Text>
             )}
           </Pressable>
 
           {/* OCR panel */}
           <Pressable
             onPress={() => setChoice('ocr')}
-            className={`border rounded-xl p-4 ${choice === 'ocr' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
+            className={`rounded-xl border p-4 ${choice === 'ocr' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
           >
-            <Text className="font-bold mb-1">🧾 OCR</Text>
+            <Text className="mb-1 font-bold">🧾 OCR</Text>
             <Text className="text-dark-100">Name: {ocrResult.bestName || '—'}</Text>
             <Text className="text-dark-100">Size: {ocrResult.bestSize || '—'}</Text>
             {(ocrResult.lines?.length ?? 0) > 0 && (
-              <Text className="text-xs text-gray-600 mt-1" numberOfLines={2}>
+              <Text className="mt-1 text-xs text-gray-600" numberOfLines={2}>
                 {ocrResult.lines!.slice(0, 2).join(' • ')}
               </Text>
             )}
             {typeof ocrResult.confidence === 'number' && (
-              <Text className="text-xs text-gray-500 mt-1">Confidence: {(ocrResult.confidence * 100).toFixed(0)}%</Text>
+              <Text className="mt-1 text-xs text-gray-500">
+                Confidence: {(ocrResult.confidence * 100).toFixed(0)}%
+              </Text>
             )}
             {!ocrResult.bestName && (
-              <Text className="text-xs text-gray-500 mt-1">No OCR yet. {photo ? 'Run OCR below.' : 'Capture → Crop → Run OCR.'}</Text>
+              <Text className="mt-1 text-xs text-gray-500">
+                No OCR yet. {photo ? 'Run OCR below.' : 'Capture → Crop → Run OCR.'}
+              </Text>
             )}
           </Pressable>
 
           {/* Manual panel */}
           <Pressable
             onPress={() => setChoice('manual')}
-            className={`border rounded-xl p-4 ${choice === 'manual' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
+            className={`rounded-xl border p-4 ${choice === 'manual' ? 'border-primary bg-blue-50' : 'border-gray-300 bg-light-100'}`}
           >
-            <Text className="font-bold mb-2">✍️ Manual</Text>
+            <Text className="mb-2 font-bold">✍️ Manual</Text>
             <View className="space-y-2">
               <TextInput
-                className="border border-gray-300 rounded-md px-3 py-2 text-dark-100 bg-white"
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-dark-100"
                 placeholder="Product name"
                 value={manualName}
                 onChangeText={setManualName}
                 editable={choice === 'manual'}
               />
               <TextInput
-                className="border border-gray-300 rounded-md px-3 py-2 text-dark-100 bg-white"
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-dark-100"
                 placeholder="Size/weight"
                 value={manualSize}
                 onChangeText={setManualSize}
@@ -510,26 +512,31 @@ export default function Confirm() {
           {!editOnly && (
             <View className="flex-row justify-between">
               <Pressable
-                className="bg-gray-200 py-3 px-4 rounded-lg flex-1 mr-2"
+                className="mr-2 flex-1 rounded-lg bg-gray-200 px-4 py-3"
                 onPress={() => setStep('photo')}
               >
-                <Text className="text-center text-dark-100 font-semibold">📷 Capture</Text>
+                <Text className="text-center font-semibold text-dark-100">📷 Capture</Text>
               </Pressable>
               <Pressable
-                className="bg-gray-200 py-3 px-4 rounded-lg flex-1 ml-2"
-                onPress={() => (photo ? setStep('crop') : Alert.alert('No photo', 'Capture a photo first.'))}
+                className="ml-2 flex-1 rounded-lg bg-gray-200 px-4 py-3"
+                onPress={() =>
+                  photo ? setStep('crop') : Alert.alert('No photo', 'Capture a photo first.')
+                }
               >
-                <Text className="text-center text-dark-100 font-semibold">🖼️ Crop / OCR</Text>
+                <Text className="text-center font-semibold text-dark-100">🖼️ Crop / OCR</Text>
               </Pressable>
             </View>
           )}
 
-          <Pressable className="bg-primary py-3 px-4 rounded-lg" onPress={onSubmitChoice}>
-            <Text className="text-center text-white font-bold">Save & Find SDS</Text>
+          <Pressable className="rounded-lg bg-primary px-4 py-3" onPress={onSubmitChoice}>
+            <Text className="text-center font-bold text-white">Save & Find SDS</Text>
           </Pressable>
 
-          <Pressable className="bg-gray-300 py-3 px-4 rounded-lg" onPress={() => router.replace('/') }>
-            <Text className="text-center text-dark-100 font-semibold">Cancel</Text>
+          <Pressable
+            className="rounded-lg bg-gray-300 px-4 py-3"
+            onPress={() => router.replace('/')}
+          >
+            <Text className="text-center font-semibold text-dark-100">Cancel</Text>
           </Pressable>
         </View>
 
@@ -550,15 +557,15 @@ export default function Confirm() {
     <>
       {content}
       {ocrLoading && (
-        <View className="absolute inset-0 bg-black/40 justify-center items-center">
+        <View className="absolute inset-0 items-center justify-center bg-black/40">
           <ActivityIndicator size="large" color="#fff" />
-          <Text className="text-white mt-2">Processing...</Text>
+          <Text className="mt-2 text-white">Processing...</Text>
         </View>
       )}
       {saving && (
-        <View className="absolute inset-0 bg-black/40 justify-center items-center">
+        <View className="absolute inset-0 items-center justify-center bg-black/40">
           <ActivityIndicator size="large" color="#fff" />
-          <Text className="text-white mt-2">Saving...</Text>
+          <Text className="mt-2 text-white">Saving...</Text>
         </View>
       )}
       {error ? (

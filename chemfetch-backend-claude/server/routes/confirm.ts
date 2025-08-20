@@ -28,7 +28,10 @@ router.post('/', async (req, res) => {
   if (existing && existing.name === name && existing.contents_size_weight === size) {
     // Even if it's a duplicate, check if we should trigger parsing
     if (existing.sds_url && existing.id) {
-      logger.info({ productId: existing.id }, '[CONFIRM] Triggering auto-SDS parsing for duplicate product');
+      logger.info(
+        { productId: existing.id },
+        '[CONFIRM] Triggering auto-SDS parsing for duplicate product'
+      );
       triggerAutoSdsParsing(existing.id, { delay: 1000 });
     }
     return res.status(409).json({ error: 'Product already registered', product: existing });
@@ -47,7 +50,10 @@ router.post('/', async (req, res) => {
 
   if (product && !product.sds_url && product.name) {
     try {
-      const { sdsUrl } = await fetchSdsByName(product.name, product.contents_size_weight || undefined);
+      const { sdsUrl } = await fetchSdsByName(
+        product.name,
+        product.contents_size_weight || undefined
+      );
       if (sdsUrl) {
         const update = await supabase
           .from('product')
@@ -58,7 +64,10 @@ router.post('/', async (req, res) => {
         if (!update.error) {
           product = update.data || { ...product, sds_url: sdsUrl };
           sdsUrlAdded = true;
-          logger.info({ productId: product.id, sdsUrl }, '[CONFIRM] Added SDS URL to confirmed product');
+          logger.info(
+            { productId: product.id, sdsUrl },
+            '[CONFIRM] Added SDS URL to confirmed product'
+          );
         }
       }
     } catch (err: any) {
@@ -69,7 +78,10 @@ router.post('/', async (req, res) => {
   // Trigger auto-SDS parsing if we have an SDS URL
   if (product?.sds_url && product?.id) {
     const delay = sdsUrlAdded ? 2000 : 1000; // Longer delay if we just found the SDS
-    logger.info({ productId: product.id }, '[CONFIRM] Triggering auto-SDS parsing for confirmed product');
+    logger.info(
+      { productId: product.id },
+      '[CONFIRM] Triggering auto-SDS parsing for confirmed product'
+    );
     triggerAutoSdsParsing(product.id, { delay });
   }
 

@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     const verified = !!sdsUrl;
     res.json({ sdsUrl, verified });
   } catch (err) {
-    console.error("[/sds-by-name] Error:", err);
+    console.error('[/sds-by-name] Error:', err);
     res.status(500).json({ error: 'Failed to search SDS' });
   }
 });

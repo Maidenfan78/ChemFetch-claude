@@ -24,16 +24,11 @@ async function safeJson(res: Response) {
   try {
     return JSON.parse(text);
   } catch {
-    throw new Error(
-      `Unexpected response from OCR service (${res.status}): ${text.slice(0, 120)}…`
-    );
+    throw new Error(`Unexpected response from OCR service (${res.status}): ${text.slice(0, 120)}…`);
   }
 }
 
-export async function runOcr(
-  imageUri: string,
-  cropInfo: CropInfo
-): Promise<OcrResult> {
+export async function runOcr(imageUri: string, cropInfo: CropInfo): Promise<OcrResult> {
   // DEBUG: Raw image URI
   console.debug('[DEBUG][imageUri]', imageUri);
   // DEBUG: Crop coordinates
@@ -58,11 +53,7 @@ export async function runOcr(
   form.append('photoHeight', String(cropInfo.photoHeight));
 
   const fileName = `capture.${Platform.OS === 'ios' ? 'heic' : 'jpg'}`;
-  form.append(
-    'image',
-    { uri: imageUri, name: fileName, type: 'image/jpeg' } as any,
-    fileName
-  );
+  form.append('image', { uri: imageUri, name: fileName, type: 'image/jpeg' } as any, fileName);
 
   const ocrUrl = `${OCR_API_URL}/ocr${__DEV__ ? '?mode=debug' : ''}`;
   console.info('[OCR] Posting to', ocrUrl);

@@ -22,10 +22,14 @@ const proxyOptions: Options = {
     console.log(
       '[OCR Proxy ▶︎ Python]',
       new Date().toISOString(),
-      'method:', proxyReq.method,
-      'path:', proxyReq.path,
-      'content-type:', proxyReq.getHeader('content-type'),
-      'content-length:', proxyReq.getHeader('content-length')
+      'method:',
+      proxyReq.method,
+      'path:',
+      proxyReq.path,
+      'content-type:',
+      proxyReq.getHeader('content-type'),
+      'content-length:',
+      proxyReq.getHeader('content-length')
     );
   },
 
@@ -33,8 +37,10 @@ const proxyOptions: Options = {
     console.log(
       '[OCR Python ◀︎ Proxy]',
       new Date().toISOString(),
-      'status:', proxyRes.statusCode,
-      'headers:', proxyRes.headers
+      'status:',
+      proxyRes.statusCode,
+      'headers:',
+      proxyRes.headers
     );
   },
 

@@ -216,6 +216,53 @@ CREATE TABLE sds_metadata (
 
 ---
 
+## 🧹 Code Quality & Linting
+
+This monorepo includes comprehensive linting and formatting configurations for all projects:
+
+### Features
+- **ESLint**: Code quality checks with project-specific rules
+- **Prettier**: Consistent code formatting across all projects
+- **TypeScript**: Strict type checking for better code quality
+- **Pre-commit Hooks**: Automatic linting before commits
+- **GitHub Actions**: Continuous integration with quality checks
+
+### Quick Start
+```bash
+# Install all dependencies and set up linting
+npm run setup
+
+# Check all projects for linting issues
+npm run lint
+
+# Fix linting issues automatically
+npm run lint:fix
+
+# Format all code with Prettier
+npm run format
+
+# Run TypeScript type checking
+npm run type-check
+```
+
+### Project-Specific Linting
+Each project has its own linting configuration:
+
+- **Mobile App**: React Native/Expo ESLint config with NativeWind support
+- **Client Hub**: Next.js ESLint config with TypeScript strict mode
+- **Backend**: Node.js ESLint config with modern JavaScript rules
+
+### VSCode Integration
+The workspace includes VSCode settings for:
+- Auto-formatting on save
+- ESLint auto-fix on save
+- Recommended extensions
+- Multi-project support
+
+See [LINTING.md](./LINTING.md) for detailed documentation.
+
+---
+
 ## 🔧 Development Setup
 
 ### Prerequisites

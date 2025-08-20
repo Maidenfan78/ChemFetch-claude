@@ -3,21 +3,24 @@ import { View, Text, Pressable } from 'react-native';
 
 export default function OcrInfoScreen() {
   const router = useRouter();
-  const { code = '', name = '', size = '' } = useLocalSearchParams<{
+  const {
+    code = '',
+    name = '',
+    size = '',
+  } = useLocalSearchParams<{
     code: string;
     name: string;
     size: string;
   }>();
 
   return (
-    <View className="flex-1 bg-white p-6 justify-center">
-      <Text className="text-lg text-center mb-4">
-        Position the product name within the frame and align it with the
-        horizontal line on the next screen. Make sure the text is clear and
-        readable.
+    <View className="flex-1 justify-center bg-white p-6">
+      <Text className="mb-4 text-center text-lg">
+        Position the product name within the frame and align it with the horizontal line on the next
+        screen. Make sure the text is clear and readable.
       </Text>
       <Pressable
-        className="bg-primary py-3 px-6 rounded-lg self-center"
+        className="self-center rounded-lg bg-primary px-6 py-3"
         onPress={() =>
           router.replace({
             pathname: '/confirm',
@@ -25,7 +28,7 @@ export default function OcrInfoScreen() {
           })
         }
       >
-        <Text className="text-white font-bold text-base">Next</Text>
+        <Text className="text-base font-bold text-white">Next</Text>
       </Pressable>
     </View>
   );

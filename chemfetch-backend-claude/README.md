@@ -10,19 +10,20 @@ This backend powers the mobile app (barcode scanning & OCR) and web client hub (
 
 ### API Endpoints
 
-| Endpoint | Method | Purpose | Response Time |
-|----------|--------|---------|---------------|
-| `/scan` | POST | Barcode lookup with web scraping fallback | ~2-5 seconds |
-| `/confirm` | POST | Save OCR-confirmed product data | ~200ms |
-| `/sds-by-name` | POST | Find Safety Data Sheet URLs via intelligent search | ~3-8 seconds |
-| `/parse-sds` | POST | Extract structured metadata from SDS PDFs | ~30-120 seconds |
-| `/parse-sds/batch` | POST | Batch process multiple SDS documents | Variable |
-| `/parse-sds/status/:id` | GET | Check SDS parsing status for a product | ~100ms |
-| `/verify-sds` | POST | Validate SDS document relevance | ~30 seconds |
-| `/ocr` | POST | Process images for text extraction | ~2-5 seconds |
-| `/health` | GET | API health check | ~50ms |
+| Endpoint                | Method | Purpose                                            | Response Time   |
+| ----------------------- | ------ | -------------------------------------------------- | --------------- |
+| `/scan`                 | POST   | Barcode lookup with web scraping fallback          | ~2-5 seconds    |
+| `/confirm`              | POST   | Save OCR-confirmed product data                    | ~200ms          |
+| `/sds-by-name`          | POST   | Find Safety Data Sheet URLs via intelligent search | ~3-8 seconds    |
+| `/parse-sds`            | POST   | Extract structured metadata from SDS PDFs          | ~30-120 seconds |
+| `/parse-sds/batch`      | POST   | Batch process multiple SDS documents               | Variable        |
+| `/parse-sds/status/:id` | GET    | Check SDS parsing status for a product             | ~100ms          |
+| `/verify-sds`           | POST   | Validate SDS document relevance                    | ~30 seconds     |
+| `/ocr`                  | POST   | Process images for text extraction                 | ~2-5 seconds    |
+| `/health`               | GET    | API health check                                   | ~50ms           |
 
 ### Key Capabilities
+
 - **Australian-Focused Scraping**: Prioritizes `.com.au` domains and local retailers
 - **Intelligent SDS Discovery**: Multiple search strategies including blob storage detection
 - **Race Condition Protection**: Robust handling of long-running processes
@@ -35,6 +36,7 @@ This backend powers the mobile app (barcode scanning & OCR) and web client hub (
 ## 🛠️ Tech Stack
 
 ### Core Technologies
+
 - **Node.js 18+** with TypeScript and ESM modules
 - **Express 5** for HTTP server and routing
 - **Puppeteer 24** for headless browser automation
@@ -42,6 +44,7 @@ This backend powers the mobile app (barcode scanning & OCR) and web client hub (
 - **Supabase Admin SDK** for database operations
 
 ### Python Microservice
+
 - **Flask** web framework for OCR endpoints
 - **PaddleOCR** for GPU-accelerated text recognition
 - **pdfplumber + Tesseract** for PDF text extraction
@@ -49,6 +52,7 @@ This backend powers the mobile app (barcode scanning & OCR) and web client hub (
 - **requests** for PDF downloading and verification
 
 ### Security & Performance
+
 - **express-rate-limit** with Redis support
 - **helmet** for security headers
 - **CORS** configuration for cross-origin requests
@@ -101,6 +105,7 @@ chemfetch-backend-claude/
 ## ⚙️ Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Python 3.9+ and pip
 - Supabase project with service role key
@@ -108,6 +113,7 @@ chemfetch-backend-claude/
 ### 1. Environment Setup
 
 Create `.env` file:
+
 ```env
 # Server Configuration
 PORT=3000
@@ -171,6 +177,7 @@ curl -X POST http://localhost:3000/scan \
 ### Barcode Scanning
 
 **POST /scan**
+
 ```http
 POST /scan
 Content-Type: application/json
@@ -181,6 +188,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -199,6 +207,7 @@ Content-Type: application/json
 ### SDS Parsing
 
 **POST /parse-sds**
+
 ```http
 POST /parse-sds
 Content-Type: application/json
@@ -211,6 +220,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -231,6 +241,7 @@ Content-Type: application/json
 ### OCR Processing
 
 **POST /ocr**
+
 ```http
 POST /ocr
 Content-Type: multipart/form-data
@@ -245,13 +256,19 @@ screenHeight: 1920
 ```
 
 **Response:**
+
 ```json
 {
   "lines": [
     {
       "text": "Isocol Rubbing Alcohol",
       "confidence": 0.95,
-      "box": [[10, 10], [200, 10], [200, 30], [10, 30]]
+      "box": [
+        [10, 10],
+        [200, 10],
+        [200, 30],
+        [10, 30]
+      ]
     }
   ],
   "text": "Isocol Rubbing Alcohol 75mL",
@@ -268,26 +285,29 @@ screenHeight: 1920
 
 ### Endpoints
 
-| Endpoint | Purpose | GPU Accelerated |
-|----------|---------|-----------------|
-| `/ocr` | Extract text from images | ✅ |
-| `/verify-sds` | Validate SDS document relevance | ❌ |
-| `/parse-sds` | Extract structured SDS metadata | ❌ |
-| `/gpu-check` | Check CUDA availability | - |
+| Endpoint      | Purpose                         | GPU Accelerated |
+| ------------- | ------------------------------- | --------------- |
+| `/ocr`        | Extract text from images        | ✅              |
+| `/verify-sds` | Validate SDS document relevance | ❌              |
+| `/parse-sds`  | Extract structured SDS metadata | ❌              |
+| `/gpu-check`  | Check CUDA availability         | -               |
 
 ### Performance Optimization
 
 **Image Preprocessing:**
+
 - Automatic contrast enhancement with CLAHE
 - Grayscale conversion for better OCR accuracy
 - Smart resizing to optimal dimensions (max 4000px)
 
 **PDF Processing:**
+
 - Stream downloading with size limits (50MB max)
 - Process only first 5 pages for verification
 - Timeout protection (2 minutes per request)
 
 **GPU Acceleration:**
+
 - Automatic CUDA detection and usage
 - Fallback to CPU if GPU unavailable
 - Optimized batch processing for multiple images
@@ -297,6 +317,7 @@ screenHeight: 1920
 ## 🧪 Testing
 
 ### Unit Tests
+
 ```bash
 npm test                    # Run all tests
 npm test -- --watch        # Watch mode
@@ -304,6 +325,7 @@ npm test -- --coverage     # Coverage report
 ```
 
 ### OCR Service Tests
+
 ```bash
 cd ocr_service
 python -m pytest test_parse_sds.py -v
@@ -311,6 +333,7 @@ python test_dependencies.py  # Verify all dependencies
 ```
 
 ### Manual Testing
+
 ```bash
 # Test barcode scanning
 curl -X POST http://localhost:3000/scan \
@@ -336,29 +359,31 @@ services:
   backend:
     build: .
     ports:
-      - "3000:3000"
-      - "5001:5001"
+      - '3000:3000'
+      - '5001:5001'
     environment:
       - NODE_ENV=production
       - PORT=3000
       - OCR_SERVICE_URL=http://localhost:5001
     depends_on:
       - redis
-      
+
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
 ```
 
 ### Cloud Deployment
 
 **Railway/Render:**
+
 - Build command: `npm install`
 - Start command: `npm start`
 - Set environment variables for production
 
 **Fly.io (with GPU support):**
+
 - Use GPU-enabled machines for OCR service
 - Configure proper resource limits
 - Set up health checks for both services
@@ -368,6 +393,7 @@ services:
 ## 🔒 Security
 
 ### API Security
+
 - **Rate Limiting**: Prevent abuse and DDoS attacks
 - **Input Validation**: Zod schemas for all request bodies
 - **CORS Configuration**: Restrict cross-origin requests
@@ -375,6 +401,7 @@ services:
 - **Service Role Authentication**: Secure database access
 
 ### Data Protection
+
 - **Environment Variables**: Sensitive data in environment config
 - **Database Isolation**: Row-level security for user data
 - **Request Sanitization**: Clean and validate all inputs
@@ -387,6 +414,7 @@ services:
 ### Common Issues
 
 **OCR Service Connection Errors:**
+
 ```bash
 # Check if OCR service is running
 curl http://localhost:5001/gpu-check
@@ -397,6 +425,7 @@ python ocr_service.py
 ```
 
 **Database Connection Issues:**
+
 ```bash
 # Verify Supabase credentials
 echo $SB_URL
@@ -407,11 +436,13 @@ curl http://localhost:3000/health
 ```
 
 **Memory Issues with Large PDFs:**
+
 - Increase Node.js memory limit: `node --max-old-space-size=4096`
 - Configure PDF size limits in `ocr_service/ocr_service.py`
 - Monitor memory usage during SDS parsing
 
 **Timeout Errors:**
+
 - Adjust timeout values in route handlers
 - Check network connectivity to external sites
 - Verify scraping targets are accessible
@@ -419,6 +450,7 @@ curl http://localhost:3000/health
 ### Debug Mode
 
 Enable detailed logging:
+
 ```bash
 export LOG_LEVEL=debug
 export DEBUG_IMAGES=1
@@ -430,12 +462,14 @@ npm start
 ## 📊 Performance Tuning
 
 ### Node.js Optimization
+
 - **Cluster Mode**: Use PM2 for multi-process deployment
 - **Memory Management**: Configure heap size for large operations
 - **Connection Pooling**: Optimize database connection usage
 - **Caching Strategy**: Cache expensive scraping results
 
 ### Python OCR Optimization
+
 - **GPU Utilization**: Ensure CUDA drivers are properly installed
 - **Batch Processing**: Process multiple images simultaneously
 - **Model Warming**: Pre-load OCR models on service start
@@ -448,6 +482,7 @@ npm start
 ### Version 2024.12
 
 **New Features:**
+
 - ✅ SDS metadata parsing with vendor information
 - ✅ Batch SDS processing capabilities
 - ✅ Enhanced PDF verification with size limits
@@ -455,12 +490,14 @@ npm start
 - ✅ Race condition fixes for concurrent requests
 
 **Performance Improvements:**
+
 - 🚀 SDS verification reduced from 6+ minutes to ~30 seconds
 - 🚀 Stream processing for large PDF files
 - 🚀 Smart caching for repeated scraping requests
 - 🚀 Australian-focused search optimization
 
 **Bug Fixes:**
+
 - 🔧 Fixed "ERR_HTTP_HEADERS_SENT" race conditions
 - 🔧 Improved client disconnect handling
 - 🔧 Enhanced error messages for timeout scenarios
@@ -470,19 +507,20 @@ npm start
 
 ## 📚 API Rate Limits
 
-| Endpoint | Rate Limit | Window | Notes |
-|----------|------------|--------|-------|
-| `/scan` | 60/hour | 1 hour | Per IP address |
-| `/parse-sds` | 10/hour | 1 hour | Resource intensive |
-| `/ocr` | 100/hour | 1 hour | Per IP address |
-| `/verify-sds` | 30/hour | 1 hour | External requests |
-| `/health` | Unlimited | - | Monitoring endpoint |
+| Endpoint      | Rate Limit | Window | Notes               |
+| ------------- | ---------- | ------ | ------------------- |
+| `/scan`       | 60/hour    | 1 hour | Per IP address      |
+| `/parse-sds`  | 10/hour    | 1 hour | Resource intensive  |
+| `/ocr`        | 100/hour   | 1 hour | Per IP address      |
+| `/verify-sds` | 30/hour    | 1 hour | External requests   |
+| `/health`     | Unlimited  | -      | Monitoring endpoint |
 
 ---
 
 ## 🤝 Contributing
 
 ### Development Workflow
+
 1. Create feature branch from `main`
 2. Implement changes with tests
 3. Run full test suite: `npm test`
@@ -490,6 +528,7 @@ npm start
 5. Submit pull request with detailed description
 
 ### Code Standards
+
 - **TypeScript**: Strict mode enabled
 - **ESLint**: Follow configured rules
 - **Prettier**: Auto-format on save
@@ -507,16 +546,19 @@ This project is proprietary software. All rights reserved.
 ## 👥 Support
 
 **Technical Issues:**
+
 - Check troubleshooting section above
 - Review logs for detailed error messages
 - Test individual components in isolation
 
 **Feature Requests:**
+
 - Submit detailed requirements
 - Include use cases and expected behavior
 - Consider backward compatibility
 
 **Performance Issues:**
+
 - Enable debug logging
 - Monitor resource usage
 - Check external service dependencies
@@ -526,12 +568,14 @@ This project is proprietary software. All rights reserved.
 ## 🗺️ Roadmap
 
 ### Q1 2025
+
 - **Async Processing**: Queue-based SDS parsing
 - **Advanced Caching**: Redis-based response caching
 - **Metrics API**: Detailed performance and usage metrics
 - **Webhook Support**: Real-time notifications for parsing completion
 
 ### Q2 2025
+
 - **Multi-language OCR**: Support for non-English labels
 - **Image Enhancement**: Advanced preprocessing for poor quality images
 - **Batch Operations**: Bulk processing APIs

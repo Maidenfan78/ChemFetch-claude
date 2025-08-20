@@ -47,7 +47,9 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
         .ilike('name', nameTrimmed)
         .maybeSingle();
 
-      if (searchError) throw searchError;
+      if (searchError) {
+        throw searchError;
+      }
 
       let productId: number;
 
@@ -67,53 +69,53 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
           .select('id')
           .single();
 
-        if (createError) throw createError;
+        if (createError) {
+          throw createError;
+        }
         productId = newProduct.id;
       }
 
       // 3) Add to user's watchlist without duplicates
-      const { error: watchlistError } = await supabase
-        .from('user_chemical_watch_list')
-        .upsert(
-          {
+      const { error: watchlistError } = await supabase.from('user_chemical_watch_list').upsert(
+        {
+          product_id: productId,
+          quantity_on_hand: formData.quantity ? parseInt(formData.quantity) : null,
+          location: formData.location || null,
+          sds_available: Boolean(formData.sdsUrl),
+          sds_issue_date: formData.issueDate || null,
+          hazardous_substance: formData.hazardous,
+          dangerous_good: formData.dangerousGood,
+          dangerous_goods_class: formData.dgClass || null,
+          description: formData.itemDescription || null,
+          packing_group: formData.packingGroup || null,
+          subsidiary_risks: formData.subsidiaryRisk || null,
+          consequence: formData.consequence || null,
+          likelihood: formData.likelihood || null,
+          risk_rating: formData.riskRating || null,
+          swp_required: formData.swpRequired,
+          comments_swp: formData.commentsSWP || null,
+        },
+        { onConflict: 'user_id,product_id', ignoreDuplicates: false }
+      );
+
+      if (watchlistError) {
+        throw watchlistError;
+      }
+
+      // 4) Try to add SDS metadata if we have manufacturer info
+      if (formData.manufacturer) {
+        try {
+          await supabase.from('sds_metadata').upsert({
             product_id: productId,
-            quantity_on_hand: formData.quantity ? parseInt(formData.quantity) : null,
-            location: formData.location || null,
-            sds_available: Boolean(formData.sdsUrl),
-            sds_issue_date: formData.issueDate || null,
+            vendor: formData.manufacturer,
+            issue_date: formData.issueDate || null,
             hazardous_substance: formData.hazardous,
             dangerous_good: formData.dangerousGood,
             dangerous_goods_class: formData.dgClass || null,
             description: formData.itemDescription || null,
             packing_group: formData.packingGroup || null,
             subsidiary_risks: formData.subsidiaryRisk || null,
-            consequence: formData.consequence || null,
-            likelihood: formData.likelihood || null,
-            risk_rating: formData.riskRating || null,
-            swp_required: formData.swpRequired,
-            comments_swp: formData.commentsSWP || null,
-          },
-          { onConflict: 'user_id,product_id', ignoreDuplicates: false }
-        );
-
-      if (watchlistError) throw watchlistError;
-
-      // 4) Try to add SDS metadata if we have manufacturer info
-      if (formData.manufacturer) {
-        try {
-          await supabase
-            .from('sds_metadata')
-            .upsert({
-              product_id: productId,
-              vendor: formData.manufacturer,
-              issue_date: formData.issueDate || null,
-              hazardous_substance: formData.hazardous,
-              dangerous_good: formData.dangerousGood,
-              dangerous_goods_class: formData.dgClass || null,
-              description: formData.itemDescription || null,
-              packing_group: formData.packingGroup || null,
-              subsidiary_risks: formData.subsidiaryRisk || null,
-            });
+          });
         } catch (sdsError) {
           console.warn('Could not add SDS metadata:', sdsError);
           // Don't fail the whole operation if SDS metadata fails
@@ -147,8 +149,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
     } catch (error) {
       console.error('Error adding chemical:', error);
       alert(
-        'Failed to add chemical: ' +
-          (error instanceof Error ? error.message : 'Unknown error')
+        'Failed to add chemical: ' + (error instanceof Error ? error.message : 'Unknown error')
       );
     } finally {
       setLoading(false);
@@ -187,9 +188,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
               type="text"
               required
               value={formData.productName}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, productName: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, productName: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             />
           </div>
@@ -199,9 +198,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="text"
               value={formData.manufacturer}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, manufacturer: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, manufacturer: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             />
           </div>
@@ -211,9 +208,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="text"
               value={formData.itemDescription}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, itemDescription: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, itemDescription: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
               placeholder="Contents, size, weight"
             />
@@ -224,9 +219,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="number"
               value={formData.quantity}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, quantity: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, quantity: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
               placeholder="Quantity on hand"
             />
@@ -237,9 +230,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="text"
               value={formData.location}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, location: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, location: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
               placeholder="Storage location"
             />
@@ -250,9 +241,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="url"
               value={formData.sdsUrl}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, sdsUrl: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, sdsUrl: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
               placeholder="https://example.com/sds.pdf"
             />
@@ -263,9 +252,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="date"
               value={formData.issueDate}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, issueDate: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, issueDate: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             />
           </div>
@@ -274,9 +261,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <label className="block text-sm font-medium">DG Class</label>
             <select
               value={formData.dgClass}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, dgClass: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, dgClass: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             >
               <option value="">Select...</option>
@@ -287,7 +272,9 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
               <option value="3">3 - Flammable liquids</option>
               <option value="4.1">4.1 - Flammable solids</option>
               <option value="4.2">4.2 - Substances liable to spontaneous combustion</option>
-              <option value="4.3">4.3 - Substances which emit flammable gases when in contact with water</option>
+              <option value="4.3">
+                4.3 - Substances which emit flammable gases when in contact with water
+              </option>
               <option value="5.1">5.1 - Oxidizing substances</option>
               <option value="5.2">5.2 - Organic peroxides</option>
               <option value="6.1">6.1 - Toxic substances</option>
@@ -302,9 +289,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <label className="block text-sm font-medium">Packing Group</label>
             <select
               value={formData.packingGroup}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, packingGroup: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, packingGroup: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             >
               <option value="">Select...</option>
@@ -319,9 +304,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="text"
               value={formData.subsidiaryRisk}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, subsidiaryRisk: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, subsidiaryRisk: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
               placeholder="e.g., 6.1"
             />
@@ -331,9 +314,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <label className="block text-sm font-medium">Consequence</label>
             <select
               value={formData.consequence}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, consequence: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, consequence: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             >
               <option value="">Select...</option>
@@ -349,9 +330,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <label className="block text-sm font-medium">Likelihood</label>
             <select
               value={formData.likelihood}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, likelihood: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, likelihood: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             >
               <option value="">Select...</option>
@@ -367,9 +346,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <label className="block text-sm font-medium">Risk Rating</label>
             <select
               value={formData.riskRating}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, riskRating: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, riskRating: e.target.value }))}
               className="w-full rounded border p-2 dark:bg-gray-700"
             >
               <option value="">Select...</option>
@@ -385,9 +362,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
           <label className="block text-sm font-medium">Comments/SWP</label>
           <textarea
             value={formData.commentsSWP}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, commentsSWP: e.target.value }))
-            }
+            onChange={e => setFormData(prev => ({ ...prev, commentsSWP: e.target.value }))}
             className="w-full rounded border p-2 dark:bg-gray-700"
             rows={3}
             placeholder="Comments or Safe Work Procedure details"
@@ -399,9 +374,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="checkbox"
               checked={formData.hazardous}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, hazardous: e.target.checked }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, hazardous: e.target.checked }))}
               className="mr-2"
             />
             Hazardous Substance
@@ -411,8 +384,8 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="checkbox"
               checked={formData.dangerousGood}
-              onChange={(e) =>
-                setFormData((prev) => ({
+              onChange={e =>
+                setFormData(prev => ({
                   ...prev,
                   dangerousGood: e.target.checked,
                 }))
@@ -426,9 +399,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
             <input
               type="checkbox"
               checked={formData.swpRequired}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, swpRequired: e.target.checked }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, swpRequired: e.target.checked }))}
               className="mr-2"
             />
             SWP Required

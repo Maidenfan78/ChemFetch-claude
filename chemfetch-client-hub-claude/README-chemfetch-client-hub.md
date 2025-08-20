@@ -8,13 +8,13 @@ This repo is part of the larger **ChemFetch** platform.
 
 ## 🔗 Related Repositories
 
-| Repo                     | Purpose                                                   |
-|--------------------------|-----------------------------------------------------------|
-| [`chemfetch-mobile`](https://github.com/YOUR_ORG/chemfetch-mobile)     | Expo app for barcode scanning, OCR, and SDS capture         |
-| [`chemfetch-client-hub`](.)                               | **(This repo)** Web dashboard for chemical register management |
-| [`chemfetch-backend`](https://github.com/YOUR_ORG/chemfetch-backend)   | Node.js API server for OCR, scraping, and logic             |
-| [`chemfetch-supabase`](https://github.com/YOUR_ORG/chemfetch-supabase) | Supabase migrations and schema                             |
-| [`chemfetch-admin-hub`](https://github.com/YOUR_ORG/chemfetch-admin-hub) (optional) | Internal admin tools                                        |
+| Repo                                                                                | Purpose                                                        |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| [`chemfetch-mobile`](https://github.com/YOUR_ORG/chemfetch-mobile)                  | Expo app for barcode scanning, OCR, and SDS capture            |
+| [`chemfetch-client-hub`](.)                                                         | **(This repo)** Web dashboard for chemical register management |
+| [`chemfetch-backend`](https://github.com/YOUR_ORG/chemfetch-backend)                | Node.js API server for OCR, scraping, and logic                |
+| [`chemfetch-supabase`](https://github.com/YOUR_ORG/chemfetch-supabase)              | Supabase migrations and schema                                 |
+| [`chemfetch-admin-hub`](https://github.com/YOUR_ORG/chemfetch-admin-hub) (optional) | Internal admin tools                                           |
 
 ---
 
@@ -46,7 +46,6 @@ components/ # Shared UI components
 lib/ # Supabase client and utilities
 types/ # Shared types (e.g. Supabase schema)
 styles/ # Tailwind + global styles
-
 
 ---
 
@@ -90,6 +89,4 @@ MIT (or custom license if commercial)
 🙋 Support
 This is part of a private platform. For access, onboarding, or bug reports, please contact the project maintainer.
 
-
 ---
-

@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
 
     // 2. Use provided sds_url or fallback to product's sds_url
     const targetSdsUrl = sds_url || product.sds_url;
-    
+
     if (!targetSdsUrl) {
       return res.status(400).json({
         success: false,
@@ -89,11 +89,15 @@ router.post('/', async (req, res) => {
 
     // 4. Execute Python parsing script
     const scriptPath = path.join(__dirname, '../../ocr_service/parse_sds.py');
-    logger.info(`Starting Python script: python ${scriptPath} --product-id ${product_id} --url ${targetSdsUrl}`);
+    logger.info(
+      `Starting Python script: python ${scriptPath} --product-id ${product_id} --url ${targetSdsUrl}`
+    );
     const pythonProcess = spawn('python', [
       scriptPath,
-      '--product-id', product_id.toString(),
-      '--url', targetSdsUrl
+      '--product-id',
+      product_id.toString(),
+      '--url',
+      targetSdsUrl,
     ]);
 
     let stdout = '';
@@ -106,28 +110,32 @@ router.post('/', async (req, res) => {
         responseHandled = true;
         return res.status(statusCode).json(data);
       } else {
-        logger.warn(`Attempted to send response after headers sent or response handled for product ${product_id}`);
+        logger.warn(
+          `Attempted to send response after headers sent or response handled for product ${product_id}`
+        );
       }
     };
 
-    pythonProcess.stdout.on('data', (data) => {
+    pythonProcess.stdout.on('data', data => {
       stdout += data.toString();
     });
 
-    pythonProcess.stderr.on('data', (data) => {
+    pythonProcess.stderr.on('data', data => {
       stderr += data.toString();
     });
 
-    pythonProcess.on('close', async (code) => {
+    pythonProcess.on('close', async code => {
       if (responseHandled) {
-        logger.info(`Python script finished but response already handled for product ${product_id}`);
+        logger.info(
+          `Python script finished but response already handled for product ${product_id}`
+        );
         return;
       }
 
       logger.info(`Python script finished with code ${code}`);
       logger.info(`Python stdout:`, stdout);
       logger.info(`Python stderr:`, stderr);
-      
+
       if (code !== 0) {
         logger.error(`Python script failed with code ${code}:`, stderr);
         return sendResponse(500, {
@@ -142,10 +150,10 @@ router.post('/', async (req, res) => {
         // 5. Parse the output from Python script
         const output = stdout.trim();
         let parsedMetadata;
-        
+
         try {
           parsedMetadata = JSON.parse(output);
-          
+
           // Check if Python script returned an error
           if (parsedMetadata.error) {
             logger.error('Python script returned error:', parsedMetadata.error);
@@ -168,21 +176,19 @@ router.post('/', async (req, res) => {
 
         // 6. Store metadata in database
         logger.info(`Storing SDS metadata for product ${product_id}:`, parsedMetadata);
-        
-        const { error: upsertError } = await supabase
-          .from('sds_metadata')
-          .upsert({
-            product_id,
-            vendor: parsedMetadata.vendor,
-            issue_date: parsedMetadata.issue_date,
-            hazardous_substance: parsedMetadata.hazardous_substance,
-            dangerous_good: parsedMetadata.dangerous_good,
-            dangerous_goods_class: parsedMetadata.dangerous_goods_class,
-            description: parsedMetadata.product_name,
-            packing_group: parsedMetadata.packing_group,
-            subsidiary_risks: parsedMetadata.subsidiary_risks,
-            raw_json: parsedMetadata,
-          });
+
+        const { error: upsertError } = await supabase.from('sds_metadata').upsert({
+          product_id,
+          vendor: parsedMetadata.vendor,
+          issue_date: parsedMetadata.issue_date,
+          hazardous_substance: parsedMetadata.hazardous_substance,
+          dangerous_good: parsedMetadata.dangerous_good,
+          dangerous_goods_class: parsedMetadata.dangerous_goods_class,
+          description: parsedMetadata.product_name,
+          packing_group: parsedMetadata.packing_group,
+          subsidiary_risks: parsedMetadata.subsidiary_risks,
+          raw_json: parsedMetadata,
+        });
 
         if (upsertError) {
           logger.error('Failed to store SDS metadata:', upsertError);
@@ -220,7 +226,6 @@ router.post('/', async (req, res) => {
           message: 'SDS parsed and stored successfully',
           metadata: parsedMetadata,
         });
-
       } catch (dbError) {
         logger.error('Database error during SDS parsing:', dbError);
         return sendResponse(500, {
@@ -244,24 +249,26 @@ router.post('/', async (req, res) => {
     });
 
     // Set timeout for Python script execution (5 minutes)
-    const timeoutId = setTimeout(() => {
-      if (!responseHandled && !pythonProcess.killed) {
-        pythonProcess.kill();
-        logger.error(`Python script timeout for product ${product_id}`);
-        sendResponse(504, {
-          success: false,
-          product_id,
-          message: 'SDS parsing timeout',
-          error: 'Script execution exceeded 5 minute limit',
-        });
-      }
-    }, 5 * 60 * 1000);
+    const timeoutId = setTimeout(
+      () => {
+        if (!responseHandled && !pythonProcess.killed) {
+          pythonProcess.kill();
+          logger.error(`Python script timeout for product ${product_id}`);
+          sendResponse(504, {
+            success: false,
+            product_id,
+            message: 'SDS parsing timeout',
+            error: 'Script execution exceeded 5 minute limit',
+          });
+        }
+      },
+      5 * 60 * 1000
+    );
 
     // Clear timeout if process completes normally
     pythonProcess.on('close', () => {
       clearTimeout(timeoutId);
     });
-
   } catch (error) {
     logger.error('Error in SDS parsing route:', error);
     return res.status(500).json({
@@ -312,9 +319,7 @@ router.post('/batch', async (req, res) => {
 
       // Filter out products that already have metadata (unless force=true)
       if (!force) {
-        const { data: existingMetadata } = await supabase
-          .from('sds_metadata')
-          .select('product_id');
+        const { data: existingMetadata } = await supabase.from('sds_metadata').select('product_id');
 
         const existingIds = new Set(existingMetadata?.map(m => m.product_id) || []);
         targetProducts = products?.filter(p => !existingIds.has(p.id)) || [];
@@ -354,26 +359,28 @@ router.post('/batch', async (req, res) => {
 
       try {
         // Simulate the parsing request internally
-        const parseRequest = new Promise<any>((resolve) => {
+        const parseRequest = new Promise<any>(resolve => {
           const scriptPath = path.join(__dirname, '../../ocr_service/parse_sds.py');
           const pythonProcess = spawn('python', [
             scriptPath,
-            '--product-id', product.id.toString(),
-            '--url', product.sds_url
+            '--product-id',
+            product.id.toString(),
+            '--url',
+            product.sds_url,
           ]);
 
           let stdout = '';
           let stderr = '';
 
-          pythonProcess.stdout.on('data', (data) => {
+          pythonProcess.stdout.on('data', data => {
             stdout += data.toString();
           });
 
-          pythonProcess.stderr.on('data', (data) => {
+          pythonProcess.stderr.on('data', data => {
             stderr += data.toString();
           });
 
-          pythonProcess.on('close', async (code) => {
+          pythonProcess.on('close', async code => {
             if (code !== 0) {
               resolve({
                 product_id: product.id,
@@ -388,20 +395,18 @@ router.post('/batch', async (req, res) => {
               const parsedMetadata = JSON.parse(stdout.trim());
 
               // Store in database
-              await supabase
-                .from('sds_metadata')
-                .upsert({
-                  product_id: product.id,
-                  vendor: parsedMetadata.vendor,
-                  issue_date: parsedMetadata.issue_date,
-                  hazardous_substance: parsedMetadata.hazardous_substance,
-                  dangerous_good: parsedMetadata.dangerous_good,
-                  dangerous_goods_class: parsedMetadata.dangerous_goods_class,
-                  description: parsedMetadata.product_name,
-                  packing_group: parsedMetadata.packing_group,
-                  subsidiary_risks: parsedMetadata.subsidiary_risks,
-                  raw_json: parsedMetadata,
-                });
+              await supabase.from('sds_metadata').upsert({
+                product_id: product.id,
+                vendor: parsedMetadata.vendor,
+                issue_date: parsedMetadata.issue_date,
+                hazardous_substance: parsedMetadata.hazardous_substance,
+                dangerous_good: parsedMetadata.dangerous_good,
+                dangerous_goods_class: parsedMetadata.dangerous_goods_class,
+                description: parsedMetadata.product_name,
+                packing_group: parsedMetadata.packing_group,
+                subsidiary_risks: parsedMetadata.subsidiary_risks,
+                raw_json: parsedMetadata,
+              });
 
               // Update watch lists
               await supabase
@@ -423,7 +428,6 @@ router.post('/batch', async (req, res) => {
                 message: 'SDS parsed successfully',
                 metadata: parsedMetadata,
               });
-
             } catch (error) {
               resolve({
                 product_id: product.id,
@@ -435,24 +439,26 @@ router.post('/batch', async (req, res) => {
           });
 
           // Timeout after 5 minutes
-          setTimeout(() => {
-            if (!pythonProcess.killed) {
-              pythonProcess.kill();
-              resolve({
-                product_id: product.id,
-                success: false,
-                message: 'SDS parsing timeout',
-              });
-            }
-          }, 5 * 60 * 1000);
+          setTimeout(
+            () => {
+              if (!pythonProcess.killed) {
+                pythonProcess.kill();
+                resolve({
+                  product_id: product.id,
+                  success: false,
+                  message: 'SDS parsing timeout',
+                });
+              }
+            },
+            5 * 60 * 1000
+          );
         });
 
         const result = await parseRequest;
         results.push(result);
-        
+
         // Small delay between requests to avoid overwhelming the system
         await new Promise(resolve => setTimeout(resolve, 1000));
-
       } catch (error) {
         results.push({
           product_id: product.id,
@@ -471,7 +477,6 @@ router.post('/batch', async (req, res) => {
       message: `Batch parsing completed: ${successCount}/${results.length} successful`,
       results,
     });
-
   } catch (error) {
     logger.error('Error in batch SDS parsing:', error);
     return res.status(500).json({
@@ -505,7 +510,8 @@ router.get('/status/:product_id', async (req, res) => {
       .eq('product_id', product_id)
       .single();
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 = row not found
+    if (error && error.code !== 'PGRST116') {
+      // PGRST116 = row not found
       return res.status(500).json({
         success: false,
         message: 'Database error',
@@ -519,7 +525,6 @@ router.get('/status/:product_id', async (req, res) => {
       has_metadata: !!metadata,
       metadata: metadata || null,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,

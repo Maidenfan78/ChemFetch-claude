@@ -16,10 +16,7 @@ import { Platform } from 'react-native';
 function guessHost(): string {
   if (process.env.EXPO_PUBLIC_DEV_HOST) return process.env.EXPO_PUBLIC_DEV_HOST;
 
-  const uri =
-    Constants?.expoConfig?.hostUri ||
-    Constants?.expoGoConfig?.debuggerHost ||
-    '';
+  const uri = Constants?.expoConfig?.hostUri || Constants?.expoGoConfig?.debuggerHost || '';
   if (uri) return uri.split(':').shift()!; // "192.168.0.23" when hostUri="192.168.0.23:8081"
 
   if (Platform.OS === 'android') return '10.0.2.2';
@@ -43,5 +40,4 @@ export const BACKEND_API_URL =
   process.env.EXPO_PUBLIC_BACKEND_API_URL || `http://${HOST_GUESS}:3000`;
 
 // Make OCR fall back to the backend proxy instead of :5001
-export const OCR_API_URL =
-  process.env.EXPO_PUBLIC_OCR_API_URL || BACKEND_API_URL;
+export const OCR_API_URL = process.env.EXPO_PUBLIC_OCR_API_URL || BACKEND_API_URL;

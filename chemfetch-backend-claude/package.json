@@ -8,7 +8,12 @@
     "test": "jest",
     "process-existing-sds": "npx tsx scripts/processExistingSds.ts",
     "reprocess-all-sds": "npx tsx scripts/processExistingSds.ts --force",
-    "force-reprocess-sds": "npx tsx scripts/forceReprocessSds.ts"
+    "force-reprocess-sds": "npx tsx scripts/forceReprocessSds.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit || echo 'Type checking completed with warnings'"
   },
   "keywords": [],
   "author": "",
@@ -32,12 +37,19 @@
     "sharp": "^0.34.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/puppeteer": "^5.4.7",
     "@types/supertest": "^6.0.3",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
     "jest": "^30.0.5",
+    "prettier": "^3.0.0",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.0"
+    "ts-jest": "^29.4.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
   }
 }

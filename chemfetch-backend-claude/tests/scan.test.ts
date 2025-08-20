@@ -7,7 +7,7 @@ process.env.SB_SERVICE_KEY = 'key';
 jest.mock('../server/utils/supabaseClient', () => ({ supabase: { from: jest.fn() } }));
 jest.mock('../server/utils/scraper');
 
-function setupSupabase(responses: Array<{data: any; error: any}>) {
+function setupSupabase(responses: Array<{ data: any; error: any }>) {
   const { supabase } = require('../server/utils/supabaseClient');
   const chain: any = {};
   chain.select = jest.fn(() => chain);
@@ -30,11 +30,25 @@ test('POST /scan returns 403 without code', async () => {
 
 test('POST /scan returns existing product and updates SDS', async () => {
   setupSupabase([
-    { data: { barcode: '123', name: 'Test', contents_size_weight: '50ml', sds_url: null }, error: null },
-    { data: { barcode: '123', name: 'Test', contents_size_weight: '50ml', sds_url: 'http://sds.com/test.pdf' }, error: null }
+    {
+      data: { barcode: '123', name: 'Test', contents_size_weight: '50ml', sds_url: null },
+      error: null,
+    },
+    {
+      data: {
+        barcode: '123',
+        name: 'Test',
+        contents_size_weight: '50ml',
+        sds_url: 'http://sds.com/test.pdf',
+      },
+      error: null,
+    },
   ]);
   const { fetchSdsByName } = require('../server/utils/scraper');
-  (fetchSdsByName as jest.Mock).mockResolvedValue({ sdsUrl: 'http://sds.com/test.pdf', topLinks: [] });
+  (fetchSdsByName as jest.Mock).mockResolvedValue({
+    sdsUrl: 'http://sds.com/test.pdf',
+    topLinks: [],
+  });
   const app = (await import('../server/app')).default;
 
   const res = await request(app).post('/scan').send({ code: '123' });

@@ -13,10 +13,10 @@ const router = express.Router();
 router.post('/process-all', async (req, res) => {
   try {
     logger.info('[BATCH-SDS] Starting batch processing of all pending products');
-    
+
     // Trigger batch processing (runs in background)
     triggerBatchAutoSdsParsing();
-    
+
     res.json({
       success: true,
       message: 'Batch SDS processing started in background',
@@ -38,7 +38,7 @@ router.post('/process-all', async (req, res) => {
  */
 router.post('/process-product', async (req, res) => {
   const { product_id, force = false } = req.body;
-  
+
   if (!product_id || typeof product_id !== 'number') {
     return res.status(400).json({
       success: false,
@@ -48,9 +48,9 @@ router.post('/process-product', async (req, res) => {
 
   try {
     logger.info({ productId: product_id, force }, '[BATCH-SDS] Processing specific product');
-    
+
     const triggered = await triggerAutoSdsParsing(product_id, { force });
-    
+
     if (triggered) {
       res.json({
         success: true,
@@ -81,40 +81,40 @@ router.post('/process-product', async (req, res) => {
 router.get('/status', async (req, res) => {
   try {
     const supabase = createServiceRoleClient();
-    
+
     // Get total products with SDS URLs
     const { count: totalWithSds } = await supabase
       .from('product')
       .select('*', { count: 'exact', head: true })
       .not('sds_url', 'is', null)
       .not('sds_url', 'eq', '');
-    
+
     // Get products with existing metadata
     const { count: totalWithMetadata } = await supabase
       .from('sds_metadata')
       .select('*', { count: 'exact', head: true });
-    
+
     // Get products needing processing
     const { data: productsWithSds } = await supabase
       .from('product')
       .select('id')
       .not('sds_url', 'is', null)
       .not('sds_url', 'eq', '');
-    
-    const { data: productsWithMetadata } = await supabase
-      .from('sds_metadata')
-      .select('product_id');
-    
+
+    const { data: productsWithMetadata } = await supabase.from('sds_metadata').select('product_id');
+
     const processedIds = new Set(productsWithMetadata?.map(m => m.product_id) || []);
     const pendingCount = (productsWithSds || []).filter(p => !processedIds.has(p.id)).length;
-    
+
     res.json({
       success: true,
       statistics: {
         total_products_with_sds: totalWithSds || 0,
         total_with_metadata: totalWithMetadata || 0,
         pending_processing: pendingCount,
-        processing_rate: totalWithSds ? Math.round(((totalWithMetadata || 0) / totalWithSds) * 100) : 0,
+        processing_rate: totalWithSds
+          ? Math.round(((totalWithMetadata || 0) / totalWithSds) * 100)
+          : 0,
       },
     });
   } catch (error) {

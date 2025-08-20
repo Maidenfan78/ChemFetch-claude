@@ -24,15 +24,14 @@ const defaultCrop: CropRatios = {
   heightRatio: 0.2,
 };
 
-export const useConfirmStore = create<ConfirmStore>((set) => ({
+export const useConfirmStore = create<ConfirmStore>(set => ({
   photo: null,
   crop: { ...defaultCrop },
-  setPhoto: (photo) => set({ photo }),
+  setPhoto: photo => set({ photo }),
   clearPhoto: () => set({ photo: null }),
-  setCrop: (crop) =>
-    set((state) => {
-      const partial =
-        typeof crop === 'function' ? crop(state.crop) : crop;
+  setCrop: crop =>
+    set(state => {
+      const partial = typeof crop === 'function' ? crop(state.crop) : crop;
 
       return { crop: { ...state.crop, ...partial } };
     }),
@@ -51,11 +50,11 @@ interface ProductState extends Product {
   clear: () => void;
 }
 
-export const useProductStore = create<ProductState>((set) => ({
+export const useProductStore = create<ProductState>(set => ({
   barcode: '',
   name: '',
   size: '',
   sdsUrl: '',
-  setProduct: (p) => set((state) => ({ ...state, ...p })),
+  setProduct: p => set(state => ({ ...state, ...p })),
   clear: () => set({ barcode: '', name: '', size: '', sdsUrl: '' }),
 }));

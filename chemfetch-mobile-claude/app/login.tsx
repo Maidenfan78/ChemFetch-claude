@@ -10,31 +10,30 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
 
-const handleAuth = async () => {
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  if (!isValidEmail) {
-    Alert.alert('Invalid Email', 'Please enter a valid email address.');
-    return;
-  }
+  const handleAuth = async () => {
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmail) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      return;
+    }
 
-  const { data, error } = isRegistering
-    ? await supabase.auth.signUp({ email, password })
-    : await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = isRegistering
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password });
 
-  console.log(isRegistering ? '📝 Register result:' : '📥 Login result:', { data, error });
+    console.log(isRegistering ? '📝 Register result:' : '📥 Login result:', { data, error });
 
-  if (error) {
-    Alert.alert(isRegistering ? 'Registration failed' : 'Login failed', error.message);
-    return;
-  }
+    if (error) {
+      Alert.alert(isRegistering ? 'Registration failed' : 'Login failed', error.message);
+      return;
+    }
 
-  router.replace('/');
-};
-
+    router.replace('/');
+  };
 
   return (
-    <View className="flex-1 justify-center p-6 bg-white">
-      <Text className="text-2xl font-bold text-center mb-4">
+    <View className="flex-1 justify-center bg-white p-6">
+      <Text className="mb-4 text-center text-2xl font-bold">
         {isRegistering ? 'Create Account' : 'Login'}
       </Text>
 
@@ -45,7 +44,7 @@ const handleAuth = async () => {
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="email-address"
-        className="border px-4 py-3 mb-4 bg-light-100 rounded-md"
+        className="mb-4 rounded-md border bg-light-100 px-4 py-3"
       />
       <TextInput
         placeholder="Password"
@@ -54,13 +53,13 @@ const handleAuth = async () => {
         secureTextEntry
         autoCapitalize="none"
         autoCorrect={false}
-        className="border px-4 py-3 mb-6 bg-light-100 rounded-md"
+        className="mb-6 rounded-md border bg-light-100 px-4 py-3"
       />
 
       <Button title={isRegistering ? 'Sign Up' : 'Login'} onPress={handleAuth} />
 
       <Pressable onPress={() => setIsRegistering(!isRegistering)} className="mt-4">
-        <Text className="text-center text-blue-600 font-medium">
+        <Text className="text-center font-medium text-blue-600">
           {isRegistering ? 'Already have an account? Login' : 'No account? Register'}
         </Text>
       </Pressable>

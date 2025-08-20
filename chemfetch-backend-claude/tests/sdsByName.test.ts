@@ -17,7 +17,10 @@ test('POST /sds-by-name requires name', async () => {
 
 test('POST /sds-by-name returns URL', async () => {
   const { fetchSdsByName } = require('../server/utils/scraper');
-  (fetchSdsByName as jest.Mock).mockResolvedValue({ sdsUrl: 'http://example.com/sds.pdf', topLinks: [] });
+  (fetchSdsByName as jest.Mock).mockResolvedValue({
+    sdsUrl: 'http://example.com/sds.pdf',
+    topLinks: [],
+  });
   const app = (await import('../server/app')).default;
   const res = await request(app).post('/sds-by-name').send({ name: 'test', size: '20g' });
   expect(res.status).toBe(200);

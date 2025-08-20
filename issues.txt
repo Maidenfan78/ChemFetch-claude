@@ -1,0 +1,82 @@
+PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> pyenv shell 3.11.9
+PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> npm run lint
+
+> chemfetch-monorepo@1.0.0 lint
+> node scripts/lint-all.js
+
+🔍 ChemFetch Linting Suite
+=================================
+🔍 Running checks for all projects
+
+📂 Linting Mobile App...
+Running lint check...
+
+> chemfetch-mobile@1.0.0 lint
+> expo lint
+
+env: load .env
+env: export EXPO_PUBLIC_SUPABASE_URL EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_BACKEND_API_URL
+✅ Mobile App linting passed
+Running format check...
+✅ Mobile App formatting is correct
+Running type check...
+✅ Mobile App type checking passed
+
+📂 Linting Client Hub...
+Running lint check...
+
+> chemfetch-client-hub@0.1.0 lint
+> next lint
+
+
+./src/app/api/debug-sds-parse/route.ts
+38:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/api/update-sds/route.ts
+31:15  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/login/page.tsx
+46:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/register/page.tsx
+51:14  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/watchlist/page.tsx
+10:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+82:79  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:24  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+130:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+131:17  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+305:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/sds-debug-panel.tsx
+30:52  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+64:20  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+232:91  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/hooks/useWatchList.ts
+98:26  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/supabase-server.ts
+21:20  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+✅ Client Hub linting passed
+Running format check...
+✅ Client Hub formatting is correct
+Running type check...
+✅ Client Hub type checking passed
+
+📂 Linting Backend...
+Running lint check...
+
+> chemfetch-backend@1.0.0 lint
+> eslint .
+
+✅ Backend linting passed
+Running format check...
+✅ Backend formatting is correct
+Running type check...
+✅ Backend type checking passed
+
+🎉 Linting suite completed!

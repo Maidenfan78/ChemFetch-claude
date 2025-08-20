@@ -14,8 +14,8 @@ export const BottomBar = () => {
   };
 
   return (
-    <SafeAreaView edges={["bottom"]} className="bg-white">
-      <View className="flex-row justify-around py-2 border-t border-gray-200 bg-white">
+    <SafeAreaView edges={['bottom']} className="bg-white">
+      <View className="flex-row justify-around border-t border-gray-200 bg-white py-2">
         <Pressable onPress={() => router.replace('/')} className="flex-1 items-center">
           <Text className="text-sm text-gray-700">Home</Text>
         </Pressable>

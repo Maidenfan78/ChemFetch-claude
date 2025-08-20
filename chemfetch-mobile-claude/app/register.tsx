@@ -34,9 +34,10 @@ export default function WatchListScreen() {
         return;
       }
 
-const { data, error } = await supabase
-  .from('user_chemical_watch_list')
-  .select(`
+      const { data, error } = await supabase
+        .from('user_chemical_watch_list')
+        .select(
+          `
     id,
     sds_issue_date,
     product (
@@ -44,17 +45,17 @@ const { data, error } = await supabase
       contents_size_weight,
       sds_url
     )
-  `)
-  .eq('user_id', session.user.id)
-  .order('sds_issue_date', { ascending: false });
+  `
+        )
+        .eq('user_id', session.user.id)
+        .order('sds_issue_date', { ascending: false });
 
-if (error) {
-  Alert.alert('Error', error.message);
-} else {
-  // Ensure TS type matches
-  setItems(data as unknown as WatchItem[]);
-}
-
+      if (error) {
+        Alert.alert('Error', error.message);
+      } else {
+        // Ensure TS type matches
+        setItems(data as unknown as WatchItem[]);
+      }
 
       setLoading(false);
     };
@@ -72,7 +73,7 @@ if (error) {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-white">
+      <View className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#3A3D98" />
       </View>
     );
@@ -80,24 +81,30 @@ if (error) {
 
   return (
     <View className="flex-1 bg-white p-4">
-      <Text className="text-xl font-bold text-dark-100 mb-4 text-center">📋 My Chemical Register</Text>
+      <Text className="mb-4 text-center text-xl font-bold text-dark-100">
+        📋 My Chemical Register
+      </Text>
       {items.length === 0 ? (
         <Text className="text-center text-dark-100">Your watch list is empty.</Text>
       ) : (
         <FlatList
           data={items}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <View className="border border-gray-200 rounded-xl p-4 mb-4 bg-light-100">
-              <Text className="font-bold text-lg text-dark-100">{item.product.name}</Text>
-              <Text className="text-dark-100">Size: {item.product.contents_size_weight || 'N/A'}</Text>
-              <Text className="text-dark-100">SDS Available: {item.product.sds_url ? '✅' : '❌'}</Text>
+            <View className="mb-4 rounded-xl border border-gray-200 bg-light-100 p-4">
+              <Text className="text-lg font-bold text-dark-100">{item.product.name}</Text>
+              <Text className="text-dark-100">
+                Size: {item.product.contents_size_weight || 'N/A'}
+              </Text>
+              <Text className="text-dark-100">
+                SDS Available: {item.product.sds_url ? '✅' : '❌'}
+              </Text>
 
               <Pressable
                 onPress={() => openSds(item.product.sds_url)}
-                className="bg-primary mt-3 py-2 px-4 rounded-lg"
+                className="mt-3 rounded-lg bg-primary px-4 py-2"
               >
-                <Text className="text-white font-semibold text-center">🔎 View SDS</Text>
+                <Text className="text-center font-semibold text-white">🔎 View SDS</Text>
               </Pressable>
             </View>
           )}

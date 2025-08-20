@@ -47,7 +47,9 @@ export default function SdsViewer() {
   }, [decodedUrl]);
 
   const openPdfExternally = async () => {
-    if (!localPdfUri) return;
+    if (!localPdfUri) {
+      return;
+    }
 
     try {
       if (Platform.OS === 'android') {
@@ -75,7 +77,7 @@ export default function SdsViewer() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-white">
+      <View className="flex-1 items-center justify-center bg-white">
         <ActivityIndicator size="large" color="#3A3D98" />
         <Text className="mt-4 text-dark-100">Downloading SDS…</Text>
       </View>
@@ -84,8 +86,10 @@ export default function SdsViewer() {
 
   if (error || !localPdfUri) {
     return (
-      <View className="flex-1 justify-center items-center bg-white px-6">
-        <Text className="text-center text-dark-100 mb-4">{error || 'Unknown error loading SDS.'}</Text>
+      <View className="flex-1 items-center justify-center bg-white px-6">
+        <Text className="mb-4 text-center text-dark-100">
+          {error || 'Unknown error loading SDS.'}
+        </Text>
         <Text className="text-accent" onPress={() => router.back()}>
           💙 Go Back
         </Text>
@@ -94,19 +98,16 @@ export default function SdsViewer() {
   }
 
   return (
-    <View className="flex-1 bg-white justify-center items-center px-6">
-      <Text className="text-lg text-dark-100 text-center mb-4">SDS downloaded.</Text>
-      <Pressable
-        className="bg-primary py-3 px-6 rounded-lg mb-4"
-        onPress={openPdfExternally}
-      >
-        <Text className="text-white font-bold text-center">📂 Open SDS</Text>
+    <View className="flex-1 items-center justify-center bg-white px-6">
+      <Text className="mb-4 text-center text-lg text-dark-100">SDS downloaded.</Text>
+      <Pressable className="mb-4 rounded-lg bg-primary px-6 py-3" onPress={openPdfExternally}>
+        <Text className="text-center font-bold text-white">📂 Open SDS</Text>
       </Pressable>
       <Pressable
-        className="bg-gray-300 py-3 px-6 rounded-lg"
+        className="rounded-lg bg-gray-300 px-6 py-3"
         onPress={() => router.replace('/register')}
       >
-        <Text className="text-dark-100 font-medium text-center">🔙 Back to Register</Text>
+        <Text className="text-center font-medium text-dark-100">🔙 Back to Register</Text>
       </Pressable>
     </View>
   );

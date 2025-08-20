@@ -1,54 +1,54 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabaseBrowser } from '@/lib/supabase-browser'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabaseBrowser } from '@/lib/supabase-browser';
+import Link from 'next/link';
 
 export default function LoginPage() {
-  const router = useRouter()
-  const supabase = supabaseBrowser()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const supabase = supabaseBrowser();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValidEmail) {
-      setError('Please enter a valid email address.')
-      setLoading(false)
-      return
+      setError('Please enter a valid email address.');
+      setLoading(false);
+      return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.')
-      setLoading(false)
-      return
+      setError('Password must be at least 6 characters.');
+      setLoading(false);
+      return;
     }
 
     try {
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
-      })
+      });
 
       if (signInError) {
-        setError(signInError.message)
+        setError(signInError.message);
       } else {
-        router.push('/')
-        router.refresh()
+        router.push('/');
+        router.refresh();
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -89,5 +89,5 @@ export default function LoginPage() {
         </p>
       </form>
     </div>
-  )
+  );
 }

@@ -1,61 +1,59 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabaseBrowser } from '@/lib/supabase-browser'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabaseBrowser } from '@/lib/supabase-browser';
+import Link from 'next/link';
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const supabase = supabaseBrowser()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
+  const router = useRouter();
+  const supabase = supabaseBrowser();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setMessage('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setLoading(true);
 
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValidEmail) {
-      setError('Please enter a valid email address.')
-      setLoading(false)
-      return
+      setError('Please enter a valid email address.');
+      setLoading(false);
+      return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.')
-      setLoading(false)
-      return
+      setError('Password must be at least 6 characters.');
+      setLoading(false);
+      return;
     }
 
     try {
       const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-      })
+      });
 
       if (signUpError) {
-        setError(signUpError.message)
+        setError(signUpError.message);
       } else {
-        setMessage(
-          'Registration successful! Check your email for a confirmation link.'
-        )
+        setMessage('Registration successful! Check your email for a confirmation link.');
         // Redirect to login after a short delay
         setTimeout(() => {
-          router.push('/login')
-        }, 2000)
+          router.push('/login');
+        }, 2000);
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.')
+      setError('An unexpected error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -97,5 +95,5 @@ export default function RegisterPage() {
         </p>
       </form>
     </div>
-  )
+  );
 }

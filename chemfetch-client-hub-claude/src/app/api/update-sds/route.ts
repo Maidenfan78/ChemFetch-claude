@@ -16,23 +16,30 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // Backend expects { product_id, sds_url, force }
-      body: JSON.stringify({ 
-        product_id: parseInt(productId), 
+      body: JSON.stringify({
+        product_id: parseInt(productId),
         sds_url: pdfUrl,
-        force: false 
+        force: false,
       }),
       signal: controller.signal,
-    }).catch((e) => {
+    }).catch(e => {
       throw new Error(e?.name === 'AbortError' ? 'Parse timed out' : String(e));
     });
     clearTimeout(id);
 
     const text = await resp.text();
     let data: any;
-    try { data = JSON.parse(text); } catch { data = { raw: text }; }
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { raw: text };
+    }
 
     if (!resp.ok) {
-      return NextResponse.json({ error: data?.error || data?.raw || 'Failed to trigger parse' }, { status: resp.status });
+      return NextResponse.json(
+        { error: data?.error || data?.raw || 'Failed to trigger parse' },
+        { status: resp.status }
+      );
     }
 
     // bubble up parsed fields so the UI can refresh row(s)

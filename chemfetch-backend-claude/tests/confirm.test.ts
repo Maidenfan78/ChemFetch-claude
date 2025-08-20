@@ -76,10 +76,18 @@ test('POST /confirm stores SDS URL when lookup succeeds', async () => {
   setupSupabase(
     { barcode: '123', name: 'Old', contents_size_weight: '5ml' },
     { barcode: '123', name: 'New', contents_size_weight: '10ml', sds_url: null },
-    { barcode: '123', name: 'New', contents_size_weight: '10ml', sds_url: 'http://sds.com/test.pdf' }
+    {
+      barcode: '123',
+      name: 'New',
+      contents_size_weight: '10ml',
+      sds_url: 'http://sds.com/test.pdf',
+    }
   );
   const { fetchSdsByName } = require('../server/utils/scraper');
-  (fetchSdsByName as jest.Mock).mockResolvedValue({ sdsUrl: 'http://sds.com/test.pdf', topLinks: [] });
+  (fetchSdsByName as jest.Mock).mockResolvedValue({
+    sdsUrl: 'http://sds.com/test.pdf',
+    topLinks: [],
+  });
   const app = (await import('../server/app')).default;
 
   const res = await request(app).post('/confirm').send({ code: '123', name: 'New', size: '10ml' });

@@ -31,14 +31,20 @@ export function SdsDebugPanel({
 
   useEffect(() => {
     const onEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
     };
-    if (isOpen) window.addEventListener('keydown', onEsc);
+    if (isOpen) {
+      window.addEventListener('keydown', onEsc);
+    }
     return () => window.removeEventListener('keydown', onEsc);
   }, [isOpen]);
 
   const handleDebugParse = async (useEnhancedParser = false) => {
-    if (!sdsUrl) return;
+    if (!sdsUrl) {
+      return;
+    }
     setParsing(true);
     setDebugResults(null);
 
@@ -108,7 +114,7 @@ export function SdsDebugPanel({
     >
       <div
         className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-4xl max-h-[90vh] w-full mx-4 overflow-auto"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label={`SDS Debug Panel - ${productName}`}
@@ -129,32 +135,33 @@ export function SdsDebugPanel({
           <div>
             <h4 className="font-medium mb-2">Current Information</h4>
             <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm">
-              <p><strong>Product ID:</strong> {productId}</p>
+              <p>
+                <strong>Product ID:</strong> {productId}
+              </p>
               <p>
                 <strong>SDS URL:</strong>{' '}
                 {sdsUrl ? (
-                  <a
-                    href={sdsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline"
-                  >
+                  <a href={sdsUrl} target="_blank" rel="noopener noreferrer" className="underline">
                     {sdsUrl}
                   </a>
                 ) : (
                   'None'
                 )}
               </p>
-              <p><strong>Current Issue Date:</strong> {currentMetadata?.issue_date ?? 'Not set'}</p>
-              <p><strong>Vendor:</strong> {currentMetadata?.vendor ?? 'Not set'}</p>
+              <p>
+                <strong>Current Issue Date:</strong> {currentMetadata?.issue_date ?? 'Not set'}
+              </p>
+              <p>
+                <strong>Vendor:</strong> {currentMetadata?.vendor ?? 'Not set'}
+              </p>
               <p>
                 <strong>Hazardous:</strong>{' '}
                 {currentMetadata?.hazardous_substance === null ||
                 currentMetadata?.hazardous_substance === undefined
                   ? 'Not set'
                   : currentMetadata.hazardous_substance
-                  ? 'Yes'
-                  : 'No'}
+                    ? 'Yes'
+                    : 'No'}
               </p>
               <p>
                 <strong>Dangerous Good:</strong>{' '}
@@ -162,11 +169,15 @@ export function SdsDebugPanel({
                 currentMetadata?.dangerous_good === undefined
                   ? 'Not set'
                   : currentMetadata.dangerous_good
-                  ? 'Yes'
-                  : 'No'}
+                    ? 'Yes'
+                    : 'No'}
               </p>
-              <p><strong>DG Class:</strong> {currentMetadata?.dangerous_goods_class ?? 'Not set'}</p>
-              <p><strong>Packing Group:</strong> {currentMetadata?.packing_group ?? 'Not set'}</p>
+              <p>
+                <strong>DG Class:</strong> {currentMetadata?.dangerous_goods_class ?? 'Not set'}
+              </p>
+              <p>
+                <strong>Packing Group:</strong> {currentMetadata?.packing_group ?? 'Not set'}
+              </p>
             </div>
           </div>
 
@@ -199,18 +210,20 @@ export function SdsDebugPanel({
           {debugResults && (
             <div>
               <h4 className="font-medium mb-2">
-                Parse Results 
+                Parse Results
                 {debugResults.parser_type && (
-                  <span className={`ml-2 px-2 py-1 text-xs rounded ${
-                    debugResults.parser_type === 'enhanced' 
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                      : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                  }`}>
+                  <span
+                    className={`ml-2 px-2 py-1 text-xs rounded ${
+                      debugResults.parser_type === 'enhanced'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                    }`}
+                  >
                     {debugResults.parser_type === 'enhanced' ? 'Enhanced Parser' : 'Legacy Parser'}
                   </span>
                 )}
               </h4>
-              
+
               {/* Show confidence scores for enhanced parser */}
               {debugResults.parser_type === 'enhanced' && debugResults.parsed_data && (
                 <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-700">
@@ -219,12 +232,18 @@ export function SdsDebugPanel({
                     {Object.entries(debugResults.parsed_data).map(([key, value]: [string, any]) => {
                       if (value && typeof value === 'object' && 'confidence' in value) {
                         const confidence = value.confidence || 0;
-                        const confidenceColor = confidence > 0.8 ? 'text-green-600' : 
-                                               confidence > 0.5 ? 'text-yellow-600' : 'text-red-600';
+                        const confidenceColor =
+                          confidence > 0.8
+                            ? 'text-green-600'
+                            : confidence > 0.5
+                              ? 'text-yellow-600'
+                              : 'text-red-600';
                         return (
                           <div key={key} className="flex justify-between">
                             <span className="capitalize">{key.replace(/_/g, ' ')}:</span>
-                            <span className={confidenceColor}>{(confidence * 100).toFixed(1)}%</span>
+                            <span className={confidenceColor}>
+                              {(confidence * 100).toFixed(1)}%
+                            </span>
                           </div>
                         );
                       }
@@ -233,7 +252,7 @@ export function SdsDebugPanel({
                   </div>
                 </div>
               )}
-              
+
               <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded text-sm max-h-96 overflow-auto">
                 <pre className="whitespace-pre-wrap break-words">
                   {(() => {

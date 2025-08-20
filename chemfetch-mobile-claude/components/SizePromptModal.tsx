@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Modal, Pressable, Text, TextInput, View } from 'react-native';
 
 interface SizePromptModalProps {
   visible: boolean;
@@ -25,29 +19,24 @@ export const SizePromptModal = ({
   onCancel,
 }: SizePromptModalProps) => {
   return (
-    <Modal
-      transparent
-      visible={visible}
-      animationType="fade"
-      onRequestClose={onCancel}
-    >
-      <View className="flex-1 bg-black/50 justify-center items-center">
-        <View className="bg-white p-6 rounded-xl w-72">
-          <Text className="text-center text-base text-dark-100 mb-3">
+    <Modal transparent visible={visible} animationType="fade" onRequestClose={onCancel}>
+      <View className="flex-1 items-center justify-center bg-black/50">
+        <View className="w-72 rounded-xl bg-white p-6">
+          <Text className="mb-3 text-center text-base text-dark-100">
             Enter size/weight for <Text className="font-semibold">{name}</Text>
           </Text>
           <TextInput
-            className="border border-gray-300 rounded-md px-3 py-2 mb-4 text-dark-100 bg-light-100"
+            className="mb-4 rounded-md border border-gray-300 bg-light-100 px-3 py-2 text-dark-100"
             value={size}
             onChangeText={onChangeSize}
             placeholder="Size/weight"
             placeholderTextColor="#aaa"
           />
-          <Pressable className="bg-primary py-2 rounded-lg mb-2" onPress={onSave}>
-            <Text className="text-white text-center font-bold">Save</Text>
+          <Pressable className="mb-2 rounded-lg bg-primary py-2" onPress={onSave}>
+            <Text className="text-center font-bold text-white">Save</Text>
           </Pressable>
-          <Pressable className="bg-gray-200 py-2 rounded-lg" onPress={onCancel}>
-            <Text className="text-dark-100 text-center font-medium">Cancel</Text>
+          <Pressable className="rounded-lg bg-gray-200 py-2" onPress={onCancel}>
+            <Text className="text-center font-medium text-dark-100">Cancel</Text>
           </Pressable>
         </View>
       </View>

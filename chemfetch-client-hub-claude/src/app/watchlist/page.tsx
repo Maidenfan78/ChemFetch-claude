@@ -148,8 +148,12 @@ export default function WatchListPage() {
         bValue = (b.location || '').toLowerCase();
         break;
       case 'sds_issue_date':
-        aValue = a.product.sds_metadata?.issue_date ? new Date(a.product.sds_metadata.issue_date) : new Date(0);
-        bValue = b.product.sds_metadata?.issue_date ? new Date(b.product.sds_metadata.issue_date) : new Date(0);
+        aValue = a.product.sds_metadata?.issue_date
+          ? new Date(a.product.sds_metadata.issue_date)
+          : new Date(0);
+        bValue = b.product.sds_metadata?.issue_date
+          ? new Date(b.product.sds_metadata.issue_date)
+          : new Date(0);
         break;
       case 'hazardous_substance':
         aValue = a.product.sds_metadata?.hazardous_substance ? 1 : 0;
@@ -205,17 +209,21 @@ export default function WatchListPage() {
   });
 
   const getSortIcon = (field: string) => {
-    if (sortField !== field) return '↕️';
+    if (sortField !== field) {
+      return '↕️';
+    }
     return sortDirection === 'asc' ? '▲' : '▼';
   };
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return '—';
+    if (!dateString) {
+      return '—';
+    }
     try {
       return new Date(dateString).toLocaleDateString('en-AU', {
         day: '2-digit',
         month: '2-digit',
-        year: 'numeric'
+        year: 'numeric',
       });
     } catch {
       return '—';
@@ -223,7 +231,9 @@ export default function WatchListPage() {
   };
 
   const getDateStatus = (dateString: string | null) => {
-    if (!dateString) return null;
+    if (!dateString) {
+      return null;
+    }
 
     try {
       const issueDate = new Date(dateString);
@@ -235,11 +245,20 @@ export default function WatchListPage() {
       sixMonthsBeforeExpiry.setMonth(sixMonthsBeforeExpiry.getMonth() - 6);
 
       if (today > threeYearsFromIssue) {
-        return { status: 'expired', class: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' };
+        return {
+          status: 'expired',
+          class: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+        };
       } else if (today > sixMonthsBeforeExpiry) {
-        return { status: 'expiring-soon', class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' };
+        return {
+          status: 'expiring-soon',
+          class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+        };
       } else {
-        return { status: 'current', class: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' };
+        return {
+          status: 'current',
+          class: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+        };
       }
     } catch {
       return null;
@@ -247,7 +266,9 @@ export default function WatchListPage() {
   };
 
   const getDangerousGoodsClassDescription = (dgClass: string | null) => {
-    if (!dgClass) return '—';
+    if (!dgClass) {
+      return '—';
+    }
 
     // Normalize the class by removing trailing .0
     const normalizedClass = dgClass.replace(/\.0$/, '');
@@ -271,14 +292,19 @@ export default function WatchListPage() {
       '6.2': 'Infectious substances',
       '7': 'Radioactive material',
       '8': 'Corrosive substances',
-      '9': 'Miscellaneous dangerous substances and articles'
+      '9': 'Miscellaneous dangerous substances and articles',
     };
 
     // First try exact match, then try normalized match
     return descriptions[dgClass] || descriptions[normalizedClass] || dgClass;
   };
 
-  const renderEditableCell = (watchListId: string, field: string, value: any, isTextArea = false) => {
+  const renderEditableCell = (
+    watchListId: string,
+    field: string,
+    value: any,
+    isTextArea = false
+  ) => {
     const editKey = `${watchListId}-${field}`;
     const isEditing = editingField === editKey;
 
@@ -288,8 +314,8 @@ export default function WatchListPage() {
           {isTextArea ? (
             <textarea
               value={editingValue}
-              onChange={(e) => setEditingValue(e.target.value)}
-              onKeyDown={(e) => {
+              onChange={e => setEditingValue(e.target.value)}
+              onKeyDown={e => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault();
                   handleSaveEdit(watchListId, field);
@@ -305,8 +331,8 @@ export default function WatchListPage() {
             <input
               type={field === 'quantity_on_hand' ? 'number' : 'text'}
               value={editingValue}
-              onChange={(e) => setEditingValue(e.target.value)}
-              onKeyDown={(e) => {
+              onChange={e => setEditingValue(e.target.value)}
+              onKeyDown={e => {
                 if (e.key === 'Enter') {
                   handleSaveEdit(watchListId, field);
                 } else if (e.key === 'Escape') {
@@ -351,9 +377,7 @@ export default function WatchListPage() {
       <AddChemicalForm onSuccess={refresh} />
 
       {statusMsg && (
-        <div className="rounded border p-2 text-sm bg-gray-50 dark:bg-gray-800">
-          {statusMsg}
-        </div>
+        <div className="rounded border p-2 text-sm bg-gray-50 dark:bg-gray-800">{statusMsg}</div>
       )}
 
       {loading && <p>Loading...</p>}
@@ -366,98 +390,120 @@ export default function WatchListPage() {
           <table className="min-w-full border text-sm">
             <thead>
               <tr className="bg-gray-50 dark:bg-gray-800">
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('product_name')}
-                  title="Click to sort by Product Name">
+                  title="Click to sort by Product Name"
+                >
                   Product Name {getSortIcon('product_name')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('manufacturer')}
-                  title="Click to sort by Manufacturer">
+                  title="Click to sort by Manufacturer"
+                >
                   Manufacturer {getSortIcon('manufacturer')}
                 </th>
-                <th className="p-2 border text-left">
-                  Item Description
-                </th>
-                <th className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th className="p-2 border text-left">Item Description</th>
+                <th
+                  className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('quantity')}
-                  title="Click to sort by Quantity">
+                  title="Click to sort by Quantity"
+                >
                   Quantity {getSortIcon('quantity')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('location')}
-                  title="Click to sort by Location">
+                  title="Click to sort by Location"
+                >
                   Location {getSortIcon('location')}
                 </th>
-                <th className="p-2 border text-center">
-                  SDS Available?
-                </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th className="p-2 border text-center">SDS Available?</th>
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('sds_issue_date')}
-                  title="Click to sort by SDS Issue Date">
+                  title="Click to sort by SDS Issue Date"
+                >
                   SDS Issue Date {getSortIcon('sds_issue_date')}
                 </th>
-                <th className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('hazardous_substance')}
-                  title="Click to sort by Hazardous Substance">
+                  title="Click to sort by Hazardous Substance"
+                >
                   Hazardous Substance? {getSortIcon('hazardous_substance')}
                 </th>
-                <th className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('dangerous_good')}
-                  title="Click to sort by Dangerous Good">
+                  title="Click to sort by Dangerous Good"
+                >
                   Dangerous Good? {getSortIcon('dangerous_good')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('dangerous_goods_class')}
-                  title="Click to sort by Dangerous Goods Class">
+                  title="Click to sort by Dangerous Goods Class"
+                >
                   Dangerous Goods Class {getSortIcon('dangerous_goods_class')}
                 </th>
-                <th className="p-2 border text-left">
-                  Dangerous Goods Class Description
-                </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th className="p-2 border text-left">Dangerous Goods Class Description</th>
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('packing_group')}
-                  title="Click to sort by Packing Group">
+                  title="Click to sort by Packing Group"
+                >
                   Packing Group {getSortIcon('packing_group')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('subsidiary_risks')}
-                  title="Click to sort by Subsidiary Risk">
+                  title="Click to sort by Subsidiary Risk"
+                >
                   Subsidiary Risk {getSortIcon('subsidiary_risks')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('consequence')}
-                  title="Click to sort by Consequence">
+                  title="Click to sort by Consequence"
+                >
                   Consequence {getSortIcon('consequence')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('likelihood')}
-                  title="Click to sort by Likelihood">
+                  title="Click to sort by Likelihood"
+                >
                   Likelihood {getSortIcon('likelihood')}
                 </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('risk_rating')}
-                  title="Click to sort by Risk Rating">
+                  title="Click to sort by Risk Rating"
+                >
                   Risk Rating {getSortIcon('risk_rating')}
                 </th>
-                <th className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th
+                  className="p-2 border text-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('swp_required')}
-                  title="Click to sort by SWP Requirement">
+                  title="Click to sort by SWP Requirement"
+                >
                   SWP Requirement? {getSortIcon('swp_required')}
                 </th>
-                <th className="p-2 border text-left">
-                  Comments/SWP
-                </th>
-                <th className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+                <th className="p-2 border text-left">Comments/SWP</th>
+                <th
+                  className="p-2 border text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   onClick={() => handleSort('date_added')}
-                  title="Click to sort by Date Added">
+                  title="Click to sort by Date Added"
+                >
                   Date Added {getSortIcon('date_added')}
                 </th>
                 <th className="p-2 border text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((entry) => {
+              {sortedData.map(entry => {
                 const product = entry.product;
                 const meta = product.sds_metadata;
 
@@ -481,9 +527,7 @@ export default function WatchListPage() {
                       )}
                     </td>
 
-                    <td className="p-2 border">
-                      {meta?.vendor ?? product.manufacturer ?? '—'}
-                    </td>
+                    <td className="p-2 border">{meta?.vendor ?? product.manufacturer ?? '—'}</td>
 
                     <td className="p-2 border">
                       {product.contents_size_weight ?? entry.description ?? '—'}
@@ -497,13 +541,12 @@ export default function WatchListPage() {
                       {renderEditableCell(entry.id, 'location', entry.location)}
                     </td>
 
-                    <td className="p-2 border text-center">
-                      {hasPdf ? 'Yes' : 'No'}
-                    </td>
+                    <td className="p-2 border text-center">{hasPdf ? 'Yes' : 'No'}</td>
 
                     <td className="p-2 border">
                       {(() => {
-                        const issueDate: string | null = (meta?.issue_date ?? entry.sds_issue_date) ?? null;
+                        const issueDate: string | null =
+                          meta?.issue_date ?? entry.sds_issue_date ?? null;
                         const dateStatus = getDateStatus(issueDate);
                         const formattedDate = formatDate(issueDate);
 
@@ -513,8 +556,9 @@ export default function WatchListPage() {
 
                         return (
                           <span
-                            className={`px-2 py-1 rounded text-sm ${dateStatus ? dateStatus.class : ''
-                              }`}
+                            className={`px-2 py-1 rounded text-sm ${
+                              dateStatus ? dateStatus.class : ''
+                            }`}
                             title={
                               dateStatus?.status === 'expired'
                                 ? 'SDS is expired (over 5 years old)'
@@ -543,7 +587,7 @@ export default function WatchListPage() {
 
                     <td className="p-2 border">
                       {getDangerousGoodsClassDescription(
-                        (meta?.dangerous_goods_class ?? entry.dangerous_goods_class) ?? null
+                        meta?.dangerous_goods_class ?? entry.dangerous_goods_class ?? null
                       )}
                     </td>
 
@@ -555,29 +599,19 @@ export default function WatchListPage() {
                       {meta?.subsidiary_risks ?? entry.subsidiary_risks ?? '—'}
                     </td>
 
-                    <td className="p-2 border">
-                      {entry.consequence ?? '—'}
-                    </td>
+                    <td className="p-2 border">{entry.consequence ?? '—'}</td>
 
-                    <td className="p-2 border">
-                      {entry.likelihood ?? '—'}
-                    </td>
+                    <td className="p-2 border">{entry.likelihood ?? '—'}</td>
 
-                    <td className="p-2 border">
-                      {entry.risk_rating ?? '—'}
-                    </td>
+                    <td className="p-2 border">{entry.risk_rating ?? '—'}</td>
 
-                    <td className="p-2 border text-center">
-                      {entry.swp_required ? 'Yes' : 'No'}
-                    </td>
+                    <td className="p-2 border text-center">{entry.swp_required ? 'Yes' : 'No'}</td>
 
                     <td className="p-2 border">
                       {renderEditableCell(entry.id, 'comments_swp', entry.comments_swp, true)}
                     </td>
 
-                    <td className="p-2 border">
-                      {formatDate(entry.created_at ?? null)}
-                    </td>
+                    <td className="p-2 border">{formatDate(entry.created_at ?? null)}</td>
 
                     <td className="p-2 border text-center">
                       <div className="flex gap-2 justify-center">

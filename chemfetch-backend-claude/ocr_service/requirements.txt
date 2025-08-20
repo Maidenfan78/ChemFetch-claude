@@ -1,39 +1,39 @@
 # Core Flask and web services
-Flask==2.3.3
-flask-cors==4.0.0
-requests==2.31.0
+Flask
+flask-cors
+requests
 
 # PDF processing
-PyMuPDF==1.26.3
-pymupdf4llm==0.0.9
-pdfminer.six==20231228
+PyMuPDF
+pymupdf4llm
+pdfminer.six
 
 # OCR capabilities
-paddleocr==2.7.3
-paddlepaddle==2.5.2
-pytesseract==0.3.10
-pdf2image==1.17.0
+paddleocr
+paddlepaddle
+pytesseract
+pdf2image
 
 # Image processing
-opencv-python==4.8.1.78
-Pillow==10.1.0
-numpy==1.24.3
+opencv-python
+Pillow
+numpy
 
 # Text processing and parsing
-regex==2023.10.3
-python-dateutil==2.8.2
-fuzzywuzzy==0.18.0
+regex
+python-dateutil
+fuzzywuzzy
 
 # ML and NLP (optional, for advanced features)
-spacy>=3.7.0
-transformers>=4.35.0
-torch>=2.1.0
-pandas>=2.0.0
-scikit-learn>=1.3.0
+spacy
+transformers
+torch
+pandas
+scikit-learn
 
 # Table extraction (optional)
-camelot-py[base]>=0.11.0
-tabula-py>=2.8.0
+camelot-py
+tabula-py
 
 # Utilities
-tqdm>=4.66.0
+tqdm

@@ -6,13 +6,13 @@ export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const watchListId = searchParams.get('id');
-    
+
     if (!watchListId) {
       return NextResponse.json({ error: 'Invalid watchlist ID' }, { status: 400 });
     }
 
     const supabase = await supabaseServer();
-    
+
     // Get the current user to ensure they can only delete their own items
     const {
       data: { user },
@@ -53,9 +53,9 @@ export async function DELETE(request: Request) {
     // For example, if this was the last reference to a product, you might want to delete SDS metadata
     // However, this depends on your business logic and whether products are shared between users
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Item deleted successfully' 
+    return NextResponse.json({
+      success: true,
+      message: 'Item deleted successfully',
     });
   } catch (error) {
     console.error('Unexpected error in delete-item route:', error);
