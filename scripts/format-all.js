@@ -107,4 +107,15 @@ function main() {
   }
 }
 
-main();
+module.exports = {
+  log,
+  runCommand,
+  runFormatForProject,
+  projects,
+  colors,
+  main,
+};
+
+if (require.main === module) {
+  main();
+}
