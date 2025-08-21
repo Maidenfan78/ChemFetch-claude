@@ -353,20 +353,36 @@ def verify_pdf_sds(url: str, product_name: str, keywords=None) -> bool:
         content = BytesIO()
         size = 0
         
+        print(f"[verify_pdf_sds] Starting PDF download with {max_size // (1024*1024)}MB limit...")
+        
         for chunk in response.iter_content(chunk_size=8192):
             size += len(chunk)
             if size > max_size:
                 print(f"[verify_pdf_sds] PDF too large: {size} bytes")
                 return False
             content.write(chunk)
+            
+            # Log progress every 5MB
+            if size % (5 * 1024 * 1024) == 0:
+                print(f"[verify_pdf_sds] Downloaded {size // (1024*1024)}MB...")
         
+        print(f"[verify_pdf_sds] Download complete: {size} bytes")
         content.seek(0)
         
         # Extract text with timeout protection - check more pages for better coverage
+        print(f"[verify_pdf_sds] Extracting text from PDF (max 10 pages)...")
         text = extract_text(content, maxpages=10).lower()  # Increased from 5 to 10 pages
+        print(f"[verify_pdf_sds] Extracted {len(text)} characters of text")
         
         # Score-based keyword matching - no product name requirement
+        print(f"[verify_pdf_sds] Checking for SDS keywords in extracted text...")
         keyword_matches = sum(1 for kw in keywords if kw.lower() in text)
+        
+        print(f"[verify_pdf_sds] Found keyword matches: {keyword_matches}/{len(keywords)}")
+        
+        # Log some of the matched keywords for debugging
+        matched_keywords = [kw for kw in keywords if kw.lower() in text]
+        print(f"[verify_pdf_sds] Matched keywords: {matched_keywords[:10]}...")  # Show first 10
         
         # Require at least 2 keyword matches to be considered a valid SDS
         # This is much more reliable than product name matching
@@ -376,7 +392,9 @@ def verify_pdf_sds(url: str, product_name: str, keywords=None) -> bool:
         return is_valid_sds
         
     except Exception as e:
-        print(f"[verify_pdf_sds] Failed to verify {url}: {e}")
+        print(f"[verify_pdf_sds] Failed to verify {url}: {type(e).__name__}: {e}")
+        import traceback
+        print(f"[verify_pdf_sds] Verification traceback: {traceback.format_exc()}")
         return False
 
 
@@ -385,17 +403,28 @@ def verify_sds():
     data = request.json or {}
     url = data.get('url', '')
     name = data.get('name', '')
+    
+    print(f"[verify-sds] Endpoint called with URL: {url}")
+    print(f"[verify-sds] Product name: {name}")
+    
     if not url or not name:
+        print(f"[verify-sds] Missing required parameters: url={bool(url)}, name={bool(name)}")
         return jsonify({'error': 'Missing url or name'}), 400
 
     try:
+        print(f"[verify-sds] Starting verification with 120s timeout...")
         # Use cross-platform timeout protection
         verified = run_with_timeout(verify_pdf_sds, args=(url, name), timeout=120)
+        print(f"[verify-sds] Verification complete: {verified}")
         return jsonify({'verified': verified}), 200
         
     except TimeoutError:
+        print(f"[verify-sds] Verification timeout after 120s")
         return jsonify({'error': 'Verification timeout - PDF too large or slow to process'}), 408
     except Exception as e:
+        print(f"[verify-sds] Verification exception: {type(e).__name__}: {e}")
+        import traceback
+        print(f"[verify-sds] Exception traceback: {traceback.format_exc()}")
         return jsonify({'error': f'Verification failed: {str(e)}'}), 500
 
 # -----------------------------------------------------------------------------
@@ -410,20 +439,29 @@ def parse_sds_http():
     Body: { "product_id": 123, "pdf_url": "https://..." }
     Returns: Parsed fields suitable for upsert into sds_metadata.
     """
+    print(f"[parse-sds] HTTP endpoint called")
+    
     if parse_sds_pdf is None:
         # Avoid syntax errors by building string normally
         err_msg = f"parse_sds_pdf could not be imported: {_import_err}" if '_import_err' in globals() else "Unknown import error"
+        print(f"[parse-sds] Import error: {err_msg}")
         return jsonify({"error": err_msg}), 500
 
     data = request.json or {}
     product_id = data.get("product_id")
     pdf_url = data.get("pdf_url")
+    
+    print(f"[parse-sds] Product ID: {product_id}")
+    print(f"[parse-sds] PDF URL: {pdf_url}")
 
     if not product_id or not pdf_url:
+        print(f"[parse-sds] Missing required parameters: product_id={bool(product_id)}, pdf_url={bool(pdf_url)}")
         return jsonify({"error": "Missing product_id or pdf_url"}), 400
 
     try:
+        print(f"[parse-sds] Starting SDS parsing...")
         parsed = parse_sds_pdf(pdf_url, product_id=int(product_id))
+        print(f"[parse-sds] Parsing complete")
 
         def _get(attr, default=None):
             if hasattr(parsed, attr):
@@ -446,6 +484,9 @@ def parse_sds_http():
         }), 200
 
     except Exception as e:
+        print(f"[parse-sds] Parsing failed: {type(e).__name__}: {e}")
+        import traceback
+        print(f"[parse-sds] Exception traceback: {traceback.format_exc()}")
         return jsonify({"error": f"parse_sds failed: {e}"}), 500
 
 

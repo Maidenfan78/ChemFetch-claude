@@ -29,5 +29,12 @@ CREATE TABLE user_chemical_watch_list (
   risk_rating TEXT,
   swp_required BOOLEAN,
   comments_swp TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now())
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc', now()),
+  -- Ensure each user can only have one entry per product
+  CONSTRAINT user_chemical_watch_list_user_product_unique UNIQUE (user_id, product_id)
 );
+
+-- Add index for better query performance on user-product lookups
+CREATE INDEX idx_user_chemical_watch_list_user_product 
+ON user_chemical_watch_list(user_id, product_id) 
+WHERE user_id IS NOT NULL AND product_id IS NOT NULL;

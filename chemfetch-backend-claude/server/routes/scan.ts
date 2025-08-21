@@ -76,12 +76,49 @@ router.post('/sds-by-name', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { code } = req.body || {};
+  const { code, userId } = req.body || {};
   if (!isValidCode(code)) return res.status(403).json({ error: 'Invalid barcode' });
-  logger.info({ code }, '[SCAN] Searching for barcode');
+  logger.info({ code, userId }, '[SCAN] Searching for barcode');
 
   try {
-    // 1) DB lookup first
+    // 1) First check if user already has this item in their watchlist
+    if (userId) {
+      // Get product by barcode first
+      const { data: product, error: productError } = await supabase
+        .from('product')
+        .select('id, name')
+        .eq('barcode', code)
+        .maybeSingle();
+
+      if (!productError && product) {
+        // Check if user already has this product in their watchlist
+        const { data: watchlistItem, error: watchlistError } = await supabase
+          .from('user_chemical_watch_list')
+          .select('id, created_at')
+          .eq('user_id', userId)
+          .eq('product_id', product.id)
+          .maybeSingle();
+
+        if (!watchlistError && watchlistItem) {
+          logger.info(
+            { code, productId: product.id, userId },
+            '[SCAN] Item already in user watchlist'
+          );
+          return res.json({
+            code,
+            alreadyInWatchlist: true,
+            product: product,
+            watchlistEntry: {
+              id: watchlistItem.id,
+              created_at: watchlistItem.created_at,
+            },
+            message: `"${product.name}" is already in your chemical register list`,
+          });
+        }
+      }
+    }
+
+    // 2) DB lookup for product (continue with normal flow if no userId provided)
     const { data: existing, error: fetchErr } = await supabase
       .from('product')
       .select('*')
@@ -93,6 +130,7 @@ router.post('/', async (req, res) => {
     if (existing) {
       let updated = { ...existing } as typeof existing & { sds_url?: string };
 
+      // Only fetch SDS if it's missing AND we have a product name
       if (!existing.sds_url && existing.name) {
         try {
           logger.info(
@@ -127,10 +165,14 @@ router.post('/', async (req, res) => {
         }
       }
 
-      logger.info({ code, updated }, '[SCAN] Returning existing product with updated SDS');
+      logger.info(
+        { code, updated },
+        '[SCAN] Returning existing product from database (no scraping)'
+      );
       return res.json({
         code,
         product: updated,
+        existingInDatabase: true,
         scraped: [
           {
             url: '',
@@ -139,7 +181,7 @@ router.post('/', async (req, res) => {
             sdsUrl: updated.sds_url || '',
           },
         ],
-        message: 'Item already in database',
+        message: 'Product found in database',
       });
     }
 

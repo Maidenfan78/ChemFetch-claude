@@ -37,7 +37,7 @@ if (__DEV__) {
 // ----------------------  Public URLs  ------------------------------------
 // lib/constants.ts
 export const BACKEND_API_URL =
-  process.env.EXPO_PUBLIC_BACKEND_API_URL || `http://${HOST_GUESS}:3000`;
+  process.env.EXPO_PUBLIC_BACKEND_API_URL || `http://${HOST_GUESS}:3001`;
 
 // Make OCR fall back to the backend proxy instead of :5001
 export const OCR_API_URL = process.env.EXPO_PUBLIC_OCR_API_URL || BACKEND_API_URL;

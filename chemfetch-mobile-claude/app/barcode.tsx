@@ -1,10 +1,12 @@
 import { BACKEND_API_URL } from '@/lib/constants';
+import { supabase } from '@/lib/supabase';
 import { useIsFocused } from '@react-navigation/native';
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Pressable,
   StyleSheet,
@@ -248,31 +250,83 @@ export default function BarcodeScanner() {
     setLoading(true);
     Vibration.vibrate(80);
 
-    fetch(`${BACKEND_API_URL}/scan`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: confirmed }),
-    })
-      .then(res => res.json())
-      .then(json => {
-        const prod = json.product ?? json;
-        router.replace({
-          pathname: '/ocr-info',
-          params: {
-            code: confirmed,
-            name: prod.product_name || prod.name || '',
-            size: prod.contents_size_weight || prod.size || '',
-          },
+    // Get current user ID if available
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const userId = session?.user?.id;
+
+      fetch(`${BACKEND_API_URL}/scan`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: confirmed, userId }),
+      })
+        .then(res => res.json())
+        .then(json => {
+          // Check if item is already in watchlist
+          if (json.alreadyInWatchlist) {
+            setLoading(false);
+            setScanning(true);
+            cooldownRef.current = Date.now();
+
+            // Show alert to user
+            Alert.alert(
+              'Item Already in Register',
+              json.message || `This item is already in your chemical register list.`,
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    // Reset scanner to allow scanning another item
+                    resetBuffer();
+                  },
+                },
+              ]
+            );
+            return;
+          }
+
+          // Check if item was found in database (no scraping needed)
+          const prod = json.product ?? json;
+
+          if (json.existingInDatabase) {
+            // Product exists in database - skip OCR and go straight to confirmation
+            // This adds it to the user's watchlist without re-scraping
+
+            // Quick double vibration to indicate product was found in database
+            Vibration.vibrate([0, 50, 50, 50]);
+
+            // Go directly to confirm screen with pre-filled data
+            router.replace({
+              pathname: '/confirm',
+              params: {
+                code: confirmed,
+                name: prod.name || '',
+                size: prod.contents_size_weight || '',
+                editOnly: '1', // Skip photo capture since we have the data
+              },
+            });
+          } else {
+            // New product - proceed with normal OCR flow
+            router.replace({
+              pathname: '/ocr-info',
+              params: {
+                code: confirmed,
+                name: prod.product_name || prod.name || '',
+                size: prod.contents_size_weight || prod.size || '',
+              },
+            });
+          }
+        })
+        .catch(err => {
+          console.error('❌ Backend error:', err);
+          router.replace({ pathname: '/ocr-info', params: { code: confirmed } });
+        })
+        .finally(() => {
+          if (!json?.alreadyInWatchlist) {
+            setLoading(false);
+            cooldownRef.current = Date.now();
+          }
         });
-      })
-      .catch(err => {
-        console.error('❌ Backend error:', err);
-        router.replace({ pathname: '/ocr-info', params: { code: confirmed } });
-      })
-      .finally(() => {
-        setLoading(false);
-        cooldownRef.current = Date.now();
-      });
+    });
   };
 
   return (

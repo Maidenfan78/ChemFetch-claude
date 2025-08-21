@@ -4,6 +4,10 @@ from typing import cast
 import fitz
 from pdf2image import convert_from_path
 import pytesseract
+import logging
+
+# Configure logging for this module
+logger = logging.getLogger(__name__)
 
 
 # detect section headers like "Section 3" or "14:" but avoid subpoints such as "1.1"
@@ -31,13 +35,41 @@ ALL_LABELS = [lab for labs in FIELD_LABELS.values() for lab in labs] + ['SDS no.
 
 
 def extract_text(path: Path) -> str:
-    doc = fitz.open(str(path))
-    text = "".join(cast(fitz.Page, page).get_text() for page in doc)  # type: ignore[attr-defined]
-    if text.strip():
-        return text
-    images = convert_from_path(str(path))
-    ocr_text = ''.join(pytesseract.image_to_string(img) for img in images)
-    return ocr_text
+    logger.info(f"[SDS_EXTRACTOR] Starting text extraction from: {path}")
+    logger.info(f"[SDS_EXTRACTOR] File size: {path.stat().st_size} bytes")
+    
+    try:
+        logger.info(f"[SDS_EXTRACTOR] Attempting PyMuPDF text extraction...")
+        doc = fitz.open(str(path))
+        logger.info(f"[SDS_EXTRACTOR] PDF opened, pages: {len(doc)}")
+        
+        text = "".join(cast(fitz.Page, page).get_text() for page in doc)  # type: ignore[attr-defined]
+        logger.info(f"[SDS_EXTRACTOR] PyMuPDF extracted {len(text)} characters")
+        
+        if text.strip():
+            logger.info(f"[SDS_EXTRACTOR] PyMuPDF extraction successful")
+            return text
+            
+        logger.warning(f"[SDS_EXTRACTOR] PyMuPDF extracted empty text, falling back to OCR...")
+        
+    except Exception as e:
+        logger.error(f"[SDS_EXTRACTOR] PyMuPDF extraction failed: {type(e).__name__}: {e}")
+        logger.info(f"[SDS_EXTRACTOR] Falling back to OCR...")
+    
+    try:
+        logger.info(f"[SDS_EXTRACTOR] Converting PDF to images for OCR...")
+        images = convert_from_path(str(path))
+        logger.info(f"[SDS_EXTRACTOR] Converted to {len(images)} images")
+        
+        logger.info(f"[SDS_EXTRACTOR] Running OCR on images...")
+        ocr_text = ''.join(pytesseract.image_to_string(img) for img in images)
+        logger.info(f"[SDS_EXTRACTOR] OCR extracted {len(ocr_text)} characters")
+        
+        return ocr_text
+        
+    except Exception as e:
+        logger.error(f"[SDS_EXTRACTOR] OCR extraction failed: {type(e).__name__}: {e}")
+        raise Exception(f"Both PyMuPDF and OCR text extraction failed: {e}")
 
 
 def get_section(text: str, number: int) -> str:
@@ -127,10 +159,30 @@ def extract_section14_field(sec14: str, labels, value_pattern):
 
 
 def parse_pdf(path: Path):
+    logger.info(f"[SDS_EXTRACTOR] Starting PDF parsing: {path}")
+    
+    # Step 1: Extract text
+    logger.info(f"[SDS_EXTRACTOR] Step 1: Extracting text from PDF...")
     text = extract_text(path)
+    logger.info(f"[SDS_EXTRACTOR] Text extraction complete, total length: {len(text)}")
+    
+    if len(text) < 100:
+        logger.warning(f"[SDS_EXTRACTOR] Very short text extracted ({len(text)} chars), may indicate extraction failure")
+    
     result = {}
+    
+    # Step 2: Extract sections
+    logger.info(f"[SDS_EXTRACTOR] Step 2: Extracting sections...")
     sec1 = get_section(text, 1)
     sec14 = get_section(text, 14)
+    
+    logger.info(f"[SDS_EXTRACTOR] Section 1 length: {len(sec1)} chars")
+    logger.info(f"[SDS_EXTRACTOR] Section 14 length: {len(sec14)} chars")
+    
+    if len(sec1) == 0:
+        logger.warning(f"[SDS_EXTRACTOR] Section 1 not found or empty")
+    if len(sec14) == 0:
+        logger.warning(f"[SDS_EXTRACTOR] Section 14 not found or empty")
     # product name with fallback
     product_name = extract_after_label(sec1, FIELD_LABELS['product_name'])
     if not product_name or 'sds' in product_name.lower() or 'use' in product_name.lower():
@@ -186,6 +238,14 @@ def parse_pdf(path: Path):
             if not chosen:
                 chosen = candidate
     result['issue_date'] = {'value': chosen, 'confidence': 1.0 if chosen else 0.0}
+    
+    # Step 5: Summary
+    logger.info(f"[SDS_EXTRACTOR] Parsing complete. Results:")
+    for key, value in result.items():
+        conf = value.get('confidence', 0) if isinstance(value, dict) else 0
+        val = value.get('value', value) if isinstance(value, dict) else value
+        logger.info(f"[SDS_EXTRACTOR]   {key}: '{val}' (confidence: {conf})")
+    
     return result
 
 

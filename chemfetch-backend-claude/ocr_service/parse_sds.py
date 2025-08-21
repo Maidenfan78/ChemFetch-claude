@@ -25,27 +25,42 @@ logger = logging.getLogger(__name__)
 def download_pdf(url: str, temp_dir: Path) -> Optional[Path]:
     """Download PDF from URL to temporary file."""
     try:
-        logger.info(f"Downloading PDF from: {url}")
+        logger.info(f"[PARSE_SDS] Starting PDF download from: {url}")
+        logger.info(f"[PARSE_SDS] Download timeout: 30 seconds")
+        logger.info(f"[PARSE_SDS] Temp directory: {temp_dir}")
+        
         response = requests.get(url, timeout=30, stream=True)
+        logger.info(f"[PARSE_SDS] HTTP response status: {response.status_code}")
         response.raise_for_status()
         
         # Check content type
         content_type = response.headers.get('content-type', '').lower()
+        content_length = response.headers.get('content-length', 'unknown')
+        logger.info(f"[PARSE_SDS] Content type: {content_type}")
+        logger.info(f"[PARSE_SDS] Content length: {content_length} bytes")
+        
         if 'pdf' not in content_type:
-            logger.warning(f"Content type is not PDF: {content_type}")
+            logger.warning(f"[PARSE_SDS] Content type is not PDF: {content_type}")
         
         # Save to temporary file
         temp_file = temp_dir / f"sds_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+        logger.info(f"[PARSE_SDS] Saving to temp file: {temp_file}")
         
+        downloaded_bytes = 0
         with open(temp_file, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
+                downloaded_bytes += len(chunk)
+                if downloaded_bytes % (1024 * 1024) == 0:  # Log every MB
+                    logger.info(f"[PARSE_SDS] Downloaded {downloaded_bytes // (1024 * 1024)}MB...")
         
-        logger.info(f"Downloaded PDF to: {temp_file}")
+        logger.info(f"[PARSE_SDS] Download complete: {temp_file} ({downloaded_bytes} bytes)")
         return temp_file
         
     except Exception as e:
-        logger.error(f"Failed to download PDF: {e}")
+        logger.error(f"[PARSE_SDS] Failed to download PDF: {type(e).__name__}: {e}")
+        import traceback
+        logger.error(f"[PARSE_SDS] Download traceback: {traceback.format_exc()}")
         return None
 
 
@@ -110,22 +125,47 @@ def parse_sds_pdf(pdf_url: str, product_id: int) -> Dict[str, Any]:
         Dictionary with parsed SDS data in chemfetch format
     """
     
+    logger.info(f"[PARSE_SDS] Starting SDS parsing for product {product_id}")
+    logger.info(f"[PARSE_SDS] PDF URL: {pdf_url}")
+    
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
+        logger.info(f"[PARSE_SDS] Created temp directory: {temp_path}")
         
         # Download PDF
+        logger.info(f"[PARSE_SDS] Step 1: Downloading PDF...")
         pdf_file = download_pdf(pdf_url, temp_path)
         if not pdf_file:
             raise Exception("Failed to download PDF")
         
+        logger.info(f"[PARSE_SDS] Step 2: PDF downloaded successfully: {pdf_file}")
+        logger.info(f"[PARSE_SDS] File size: {pdf_file.stat().st_size} bytes")
+        
         # Parse PDF
-        logger.info(f"Parsing PDF: {pdf_file}")
-        parsed_data = parse_pdf(pdf_file)
+        logger.info(f"[PARSE_SDS] Step 3: Starting PDF parsing...")
+        try:
+            parsed_data = parse_pdf(pdf_file)
+            logger.info(f"[PARSE_SDS] Step 3 complete: PDF parsing successful")
+            logger.info(f"[PARSE_SDS] Parsed data keys: {list(parsed_data.keys()) if isinstance(parsed_data, dict) else 'Non-dict result'}")
+        except Exception as e:
+            logger.error(f"[PARSE_SDS] PDF parsing failed: {type(e).__name__}: {e}")
+            import traceback
+            logger.error(f"[PARSE_SDS] Parsing traceback: {traceback.format_exc()}")
+            raise
         
         # Transform to chemfetch format
-        result = transform_to_chemfetch_format(parsed_data, product_id)
+        logger.info(f"[PARSE_SDS] Step 4: Transforming to chemfetch format...")
+        try:
+            result = transform_to_chemfetch_format(parsed_data, product_id)
+            logger.info(f"[PARSE_SDS] Step 4 complete: Transformation successful")
+            logger.info(f"[PARSE_SDS] Result keys: {list(result.keys())}")
+        except Exception as e:
+            logger.error(f"[PARSE_SDS] Format transformation failed: {type(e).__name__}: {e}")
+            import traceback
+            logger.error(f"[PARSE_SDS] Transform traceback: {traceback.format_exc()}")
+            raise
         
-        logger.info(f"Successfully parsed SDS for product {product_id}")
+        logger.info(f"[PARSE_SDS] Successfully parsed SDS for product {product_id}")
         return result
 
 
@@ -141,18 +181,35 @@ def main():
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
+    logger.info(f"[PARSE_SDS] Script started with args: product_id={args.product_id}, url={args.url}")
+    logger.info(f"[PARSE_SDS] Verbose mode: {args.verbose}")
+    logger.info(f"[PARSE_SDS] Python version: {sys.version}")
+    logger.info(f"[PARSE_SDS] Working directory: {Path.cwd()}")
+    
     try:
+        start_time = datetime.now()
+        logger.info(f"[PARSE_SDS] Starting parse at: {start_time.isoformat()}")
+        
         result = parse_sds_pdf(args.url, args.product_id)
+        
+        end_time = datetime.now()
+        duration = (end_time - start_time).total_seconds()
+        logger.info(f"[PARSE_SDS] Parse completed at: {end_time.isoformat()}")
+        logger.info(f"[PARSE_SDS] Total duration: {duration:.2f} seconds")
+        
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
         
     except Exception as e:
         error_result = {
             'error': str(e),
-            'product_id': args.product_id
+            'product_id': args.product_id,
+            'timestamp': datetime.now().isoformat()
         }
         print(json.dumps(error_result, indent=2))
-        logger.error(f"Failed to parse SDS: {e}")
+        logger.error(f"[PARSE_SDS] Script failed to parse SDS: {type(e).__name__}: {e}")
+        import traceback
+        logger.error(f"[PARSE_SDS] Script traceback: {traceback.format_exc()}")
         return 1
 
 

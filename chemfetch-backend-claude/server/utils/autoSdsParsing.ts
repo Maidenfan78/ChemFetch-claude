@@ -74,28 +74,45 @@ export async function triggerAutoSdsParsing(
 async function executeSdsParsing(productId: number, sdsUrl: string): Promise<void> {
   try {
     logger.info(`Auto-SDS: Starting background parsing for product ${productId}`);
+    logger.info(`Auto-SDS: SDS URL: ${sdsUrl}`);
+    logger.info(`Auto-SDS: Process timestamp: ${new Date().toISOString()}`);
 
     const scriptPath = path.join(__dirname, '../../ocr_service/parse_sds.py');
-    const pythonProcess = spawn('python', [
+    logger.info(`Auto-SDS: Script path: ${scriptPath}`);
+    const pythonArgs = [
       scriptPath,
       '--product-id',
       productId.toString(),
       '--url',
       sdsUrl,
-    ]);
+      '--verbose',
+    ];
+    logger.info(`Auto-SDS: Python command: python ${pythonArgs.join(' ')}`);
+
+    const pythonProcess = spawn('python', pythonArgs);
+    logger.info(`Auto-SDS: Python process spawned with PID: ${pythonProcess.pid}`);
 
     let stdout = '';
     let stderr = '';
 
     pythonProcess.stdout.on('data', data => {
-      stdout += data.toString();
+      const chunk = data.toString();
+      stdout += chunk;
+      logger.debug(`Auto-SDS: Python stdout chunk for product ${productId}: ${chunk.trim()}`);
     });
 
     pythonProcess.stderr.on('data', data => {
-      stderr += data.toString();
+      const chunk = data.toString();
+      stderr += chunk;
+      logger.warn(`Auto-SDS: Python stderr chunk for product ${productId}: ${chunk.trim()}`);
     });
 
     pythonProcess.on('close', async code => {
+      logger.info(
+        `Auto-SDS: Python process closed for product ${productId} with exit code ${code}`
+      );
+      logger.info(`Auto-SDS: Process duration: ${Date.now() - startTime}ms`);
+
       if (code !== 0) {
         logger.error(
           `Auto-SDS: Python script failed for product ${productId} with exit code ${code}:`
@@ -156,16 +173,30 @@ async function executeSdsParsing(productId: number, sdsUrl: string): Promise<voi
       }
     });
 
+    const startTime = Date.now();
+
     // Set timeout (3 minutes for background processing)
-    setTimeout(
+    const timeoutHandle = setTimeout(
       () => {
         if (!pythonProcess.killed) {
-          pythonProcess.kill();
+          const duration = Date.now() - startTime;
+          logger.error(`Auto-SDS: TIMEOUT after ${duration}ms parsing product ${productId}`);
+          logger.error(`Auto-SDS: Timeout - Current stdout: ${stdout}`);
+          logger.error(`Auto-SDS: Timeout - Current stderr: ${stderr}`);
+          logger.error(`Auto-SDS: Timeout - Process PID: ${pythonProcess.pid}`);
+          logger.error(`Auto-SDS: Timeout - SDS URL: ${sdsUrl}`);
+
+          pythonProcess.kill('SIGKILL'); // Force kill
           logger.warn(`Auto-SDS: Timeout parsing product ${productId}`);
         }
       },
       3 * 60 * 1000
     );
+
+    // Clear timeout when process completes
+    pythonProcess.on('close', () => {
+      clearTimeout(timeoutHandle);
+    });
   } catch (error) {
     logger.error(`Auto-SDS: Execution error for product ${productId}:`, error);
   }

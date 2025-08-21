@@ -217,11 +217,23 @@ export default function Confirm() {
         .single();
 
       if (userId && product?.id) {
-        const { error: wlError } = await supabase
+        // Check if item already exists in watchlist before adding
+        const { data: existingItem } = await supabase
           .from('user_chemical_watch_list')
-          .insert({ user_id: userId, product_id: product.id });
-        if (wlError) {
-          console.warn('watch_list insert skipped:', wlError.message);
+          .select('id')
+          .eq('user_id', userId)
+          .eq('product_id', product.id)
+          .maybeSingle();
+
+        if (!existingItem) {
+          const { error: wlError } = await supabase
+            .from('user_chemical_watch_list')
+            .insert({ user_id: userId, product_id: product.id });
+          if (wlError) {
+            console.warn('watch_list insert skipped:', wlError.message);
+          }
+        } else {
+          console.info('Product already in watchlist, skipping insert');
         }
       }
     } catch (e) {

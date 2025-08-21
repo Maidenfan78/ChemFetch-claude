@@ -13,7 +13,7 @@ app.get('/ocr/health', (_req, res) => res.json({ status: 'ok', target: '127.0.0.
 // ---------------------------------------------------------------------------
 // 🏁  Start server
 // ---------------------------------------------------------------------------
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => logger.info(`Backend API listening on port ${PORT}`));
 
 // ---------------------------------------------------------------------------

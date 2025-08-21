@@ -40,6 +40,14 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
       const supabase = supabaseBrowser();
       const nameTrimmed = formData.productName.trim();
 
+      // Get current user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       // 1) Find (case-insensitive) existing product by name
       const { data: existingProduct, error: searchError } = await supabase
         .from('product')
@@ -55,6 +63,30 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
 
       if (existingProduct?.id) {
         productId = existingProduct.id;
+
+        // Check if user already has this product in their watchlist
+        const { data: existingWatchlistItem, error: checkError } = await supabase
+          .from('user_chemical_watch_list')
+          .select('id, created_at')
+          .eq('user_id', user.id)
+          .eq('product_id', productId)
+          .maybeSingle();
+
+        if (checkError && checkError.code !== 'PGRST116') {
+          throw checkError;
+        }
+
+        if (existingWatchlistItem) {
+          const addedDate = new Date(existingWatchlistItem.created_at).toLocaleDateString('en-AU');
+          if (
+            !confirm(
+              `"${nameTrimmed}" is already in your chemical register list (added ${addedDate}).\n\nDo you want to update its details instead?`
+            )
+          ) {
+            setLoading(false);
+            return;
+          }
+        }
       } else {
         // 2) Create product
         const { data: newProduct, error: createError } = await supabase
