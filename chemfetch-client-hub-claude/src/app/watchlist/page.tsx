@@ -90,7 +90,7 @@ export default function WatchListPage() {
 
       let updateValue: any = editingValue;
       if (field === 'quantity_on_hand') {
-        updateValue = editingValue ? parseInt(editingValue) : null;
+        updateValue = editingValue ? parseInt(editingValue, 10) : null;
       }
 
       const { error } = await supabase
@@ -238,13 +238,13 @@ export default function WatchListPage() {
     try {
       const issueDate = new Date(dateString);
       const today = new Date();
-      const threeYearsFromIssue = new Date(issueDate);
-      threeYearsFromIssue.setFullYear(threeYearsFromIssue.getFullYear() + 3);
+      const fiveYearsFromIssue = new Date(issueDate);
+      fiveYearsFromIssue.setFullYear(fiveYearsFromIssue.getFullYear() + 5);
 
-      const sixMonthsBeforeExpiry = new Date(threeYearsFromIssue);
+      const sixMonthsBeforeExpiry = new Date(fiveYearsFromIssue);
       sixMonthsBeforeExpiry.setMonth(sixMonthsBeforeExpiry.getMonth() - 6);
 
-      if (today > threeYearsFromIssue) {
+      if (today > fiveYearsFromIssue) {
         return {
           status: 'expired',
           class: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
