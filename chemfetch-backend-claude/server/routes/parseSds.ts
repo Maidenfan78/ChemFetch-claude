@@ -6,9 +6,9 @@ import { fileURLToPath } from 'url';
 import logger from '../utils/logger';
 import { createServiceRoleClient } from '../utils/supabaseClient';
 
-// Get __dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Resolve directory name for ES modules without redefining Node globals
+const moduleFilename = fileURLToPath(import.meta.url);
+const moduleDirname = path.dirname(moduleFilename);
 
 const router = Router();
 
@@ -88,7 +88,7 @@ router.post('/', async (req, res) => {
     }
 
     // 4. Execute Python parsing script
-    const scriptPath = path.join(__dirname, '../../ocr_service/parse_sds.py');
+    const scriptPath = path.join(moduleDirname, '../../ocr_service/parse_sds.py');
     logger.info(
       `Starting Python script: python ${scriptPath} --product-id ${product_id} --url ${targetSdsUrl}`
     );
@@ -360,7 +360,7 @@ router.post('/batch', async (req, res) => {
       try {
         // Simulate the parsing request internally
         const parseRequest = new Promise<any>(resolve => {
-          const scriptPath = path.join(__dirname, '../../ocr_service/parse_sds.py');
+          const scriptPath = path.join(moduleDirname, '../../ocr_service/parse_sds.py');
           const pythonProcess = spawn('python', [
             scriptPath,
             '--product-id',
