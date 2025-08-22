@@ -269,17 +269,25 @@ export default function BarcodeScanner() {
             setScanning(true);
             cooldownRef.current = Date.now();
 
-            // Show alert to user
+            // Show alert to user with navigation to register
             Alert.alert(
               'Item Already in Register',
               json.message || `This item is already in your chemical register list.`,
               [
                 {
-                  text: 'OK',
+                  text: 'View Register',
+                  onPress: () => {
+                    // Navigate to chemical register list
+                    router.replace('/register');
+                  },
+                },
+                {
+                  text: 'Scan Another',
                   onPress: () => {
                     // Reset scanner to allow scanning another item
                     resetBuffer();
                   },
+                  style: 'cancel',
                 },
               ]
             );

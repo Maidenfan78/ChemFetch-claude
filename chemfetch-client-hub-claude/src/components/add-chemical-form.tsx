@@ -192,7 +192,7 @@ export function AddChemicalForm({ onSuccess }: AddChemicalFormProps) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="mb-4 rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+        className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
       >
         Add Chemical
       </button>

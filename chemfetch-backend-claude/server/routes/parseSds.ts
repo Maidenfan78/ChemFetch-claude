@@ -2,12 +2,13 @@
 import { Router } from 'express';
 import { spawn } from 'child_process';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import logger from '../utils/logger';
 import { createServiceRoleClient } from '../utils/supabaseClient';
 
-// Use CommonJS __dirname for path resolution to maintain compatibility with Jest
-// and other tooling that executes code in a CJS context.
-const moduleDirname = __dirname;
+// Get current file directory for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const moduleDirname = path.dirname(__filename);
 
 const router = Router();
 
