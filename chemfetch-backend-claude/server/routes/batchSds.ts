@@ -22,7 +22,7 @@ router.post('/process-all', async (req, res) => {
       message: 'Batch SDS processing started in background',
     });
   } catch (error) {
-    logger.error('[BATCH-SDS] Batch processing failed:', error);
+    logger.error({ error }, '[BATCH-SDS] Batch processing failed');
     res.status(500).json({
       success: false,
       message: 'Failed to start batch processing',
@@ -65,7 +65,7 @@ router.post('/process-product', async (req, res) => {
       });
     }
   } catch (error) {
-    logger.error(`[BATCH-SDS] Failed to process product ${product_id}:`, error);
+    logger.error({ error, product_id }, `[BATCH-SDS] Failed to process product ${product_id}`);
     res.status(500).json({
       success: false,
       message: `Failed to process product ${product_id}`,
@@ -118,7 +118,7 @@ router.get('/status', async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error('[BATCH-SDS] Failed to get status:', error);
+    logger.error({ error }, '[BATCH-SDS] Failed to get status');
     res.status(500).json({
       success: false,
       message: 'Failed to get processing status',

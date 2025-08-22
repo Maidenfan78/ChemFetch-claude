@@ -1,0 +1,206 @@
+PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> npm run type-check
+
+> chemfetch-monorepo@1.0.0 type-check
+> node scripts/type-check-all.js
+
+🔍 ChemFetch Type Checking Suite
+=================================
+🔍 Running type checks for all projects
+
+📂 Type checking Mobile App...
+
+> chemfetch-mobile@1.0.0 type-check
+> tsc --noEmit || echo 'Type checking completed with warnings'
+
+app/barcode.tsx:324:16 - error TS2552: Cannot find name 'json'. Did you mean 'JSON'?
+
+324           if (!json?.alreadyInWatchlist) {
+                   ~~~~
+
+  ../node_modules/typescript/lib/lib.es5.d.ts:1182:13
+    1182 declare var JSON: JSON;
+                     ~~~~
+    'JSON' is declared here.
+
+
+Found 1 error in app/barcode.tsx:324
+
+'Type checking completed with warnings'
+✅ Mobile App type checking passed
+
+📂 Type checking Client Hub...
+
+> chemfetch-client-hub@0.1.0 type-check
+> tsc --noEmit || echo 'Type checking completed with warnings'
+
+✅ Client Hub type checking passed
+
+📂 Type checking Backend...
+
+> chemfetch-backend@1.0.0 type-check
+> tsc --noEmit || echo 'Type checking completed with warnings'
+
+server/routes/batchSds.ts:25:58 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+25     logger.error('[BATCH-SDS] Batch processing failed:', error);
+                                                            ~~~~~
+
+server/routes/batchSds.ts:68:74 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+68     logger.error(`[BATCH-SDS] Failed to process product ${product_id}:`, error);
+                                                                            ~~~~~
+
+server/routes/batchSds.ts:121:55 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+121     logger.error('[BATCH-SDS] Failed to get status:', error);
+                                                          ~~~~~
+
+server/routes/ocrProxy.ts:20:3 - error TS2353: Object literal may only specify known properties, and 'onProxyReq' does not exist in type 'Options<IncomingMessage, ServerResponse<IncomingMessage>>'.
+
+20   onProxyReq: (proxyReq, req, res) => {
+     ~~~~~~~~~~
+
+server/routes/parseSds.ts:54:48 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+54       logger.error('Failed to fetch product:', productError);
+                                                  ~~~~~~~~~~~~
+
+server/routes/parseSds.ts:135:37 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+
+135       logger.info(`Python stdout:`, stdout);
+                                        ~~~~~~
+
+server/routes/parseSds.ts:136:37 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+
+136       logger.info(`Python stderr:`, stderr);
+                                        ~~~~~~
+
+server/routes/parseSds.ts:139:65 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+
+139         logger.error(`Python script failed with code ${code}:`, stderr);
+                                                                    ~~~~~~
+
+server/routes/parseSds.ts:158:59 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+158             logger.error('Python script returned error:', parsedMetadata.error);
+                                                              ~~~~~~~~~~~~~~~~~~~~
+
+server/routes/parseSds.ts:167:66 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+
+167           logger.error('Failed to parse Python output as JSON:', output);
+                                                                     ~~~~~~
+
+server/routes/parseSds.ts:177:72 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+177         logger.info(`Storing SDS metadata for product ${product_id}:`, parsedMetadata);
+                                                                           ~~~~~~~~~~~~~~
+
+server/routes/parseSds.ts:193:57 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+193           logger.error('Failed to store SDS metadata:', upsertError);
+                                                            ~~~~~~~~~~~
+
+server/routes/parseSds.ts:217:61 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+217           logger.warn('Failed to update user watch lists:', updateError);
+                                                                ~~~~~~~~~~~
+
+server/routes/parseSds.ts:229:60 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+229         logger.error('Database error during SDS parsing:', dbError);
+                                                               ~~~~~~~
+
+server/routes/parseSds.ts:272:49 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+272     logger.error('Error in SDS parsing route:', error);
+                                                    ~~~~~
+
+server/routes/parseSds.ts:480:49 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+480     logger.error('Error in batch SDS parsing:', error);
+                                                    ~~~~~
+
+server/routes/parseSDSEnhanced.ts:55:48 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+55       logger.error('Failed to fetch product:', productError);
+                                                  ~~~~~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:116:44 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+116         logger.error('OCR service error:', ocrError);
+                                               ~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:145:44 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+145         logger.error('OCR service error:', ocrError);
+                                               ~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:156:77 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+156     logger.info(`Storing enhanced SDS metadata for product ${product_id}:`, parsedData);
+                                                                                ~~~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:172:53 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+172       logger.error('Failed to store SDS metadata:', upsertError);
+                                                        ~~~~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:196:57 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+196       logger.warn('Failed to update user watch lists:', updateError);
+                                                            ~~~~~~~~~~~
+
+server/routes/parseSDSEnhanced.ts:208:58 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+208     logger.error('Error in enhanced SDS parsing route:', error);
+                                                             ~~~~~
+
+server/utils/autoSdsParsing.ts:64:83 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+64     logger.error(`Auto-SDS: Failed to trigger parsing for product ${productId}:`, error);
+                                                                                     ~~~~~
+
+server/utils/autoSdsParsing.ts:128:75 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+128           logger.error(`Auto-SDS: Parse error for product ${productId}:`, parsedMetadata.error);
+                                                                              ~~~~~~~~~~~~~~~~~~~~
+
+server/utils/autoSdsParsing.ts:132:77 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+132         logger.debug(`Auto-SDS: Parsed metadata for product ${productId}:`, parsedMetadata);
+                                                                                ~~~~~~~~~~~~~~
+
+server/utils/autoSdsParsing.ts:150:88 - error TS2345: Argument of type 'PostgrestError' is not assignable to parameter of type 'never'.
+
+150           logger.error(`Auto-SDS: Failed to store metadata for product ${productId}:`, upsertError);
+                                                                                           ~~~~~~~~~~~
+
+server/utils/autoSdsParsing.ts:170:76 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+170         logger.error(`Auto-SDS: Database error for product ${productId}:`, dbError);
+                                                                               ~~~~~~~
+
+server/utils/autoSdsParsing.ts:199:73 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+199     logger.error(`Auto-SDS: Execution error for product ${productId}:`, error);
+                                                                            ~~~~~
+
+server/utils/autoSdsParsing.ts:238:56 - error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+
+238     logger.error('Auto-SDS: Batch processing failed:', error);
+                                                           ~~~~~
+
+
+Found 30 errors in 5 files.
+
+Errors  Files
+     3  server/routes/batchSds.ts:25
+     1  server/routes/ocrProxy.ts:20
+    12  server/routes/parseSds.ts:54
+     7  server/routes/parseSDSEnhanced.ts:55
+     7  server/utils/autoSdsParsing.ts:64
+'Type checking completed with warnings'
+✅ Backend type checking passed
+
+🎉 Type checking suite completed!
+PS C:\Users\Sav\ProgramingProjects\chemfetch-claude> 

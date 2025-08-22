@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
       .single();
 
     if (productError) {
-      logger.error('Failed to fetch product:', productError);
+      logger.error({ error: productError }, 'Failed to fetch product');
       return res.status(404).json({
         success: false,
         message: 'Product not found',
@@ -113,7 +113,7 @@ router.post('/', async (req, res) => {
         // Transform the direct parser result to chemfetch format
         parsedData = transformToChemfetchFormat(ocrResult.parsed_data, product_id, product.name);
       } catch (ocrError) {
-        logger.error('OCR service error:', ocrError);
+        logger.error({ error: ocrError }, 'OCR service error');
         return res.status(500).json({
           success: false,
           product_id,
@@ -142,7 +142,7 @@ router.post('/', async (req, res) => {
           throw new Error(parsedData.error || 'OCR service failed');
         }
       } catch (ocrError) {
-        logger.error('OCR service error:', ocrError);
+        logger.error({ error: ocrError }, 'OCR service error');
         return res.status(500).json({
           success: false,
           product_id,
@@ -153,7 +153,10 @@ router.post('/', async (req, res) => {
     }
 
     // 5. Store metadata in database
-    logger.info(`Storing enhanced SDS metadata for product ${product_id}:`, parsedData);
+    logger.info(
+      { parsedData, product_id },
+      `Storing enhanced SDS metadata for product ${product_id}`
+    );
 
     const { error: upsertError } = await supabase.from('sds_metadata').upsert({
       product_id,
@@ -169,7 +172,7 @@ router.post('/', async (req, res) => {
     });
 
     if (upsertError) {
-      logger.error('Failed to store SDS metadata:', upsertError);
+      logger.error({ error: upsertError }, 'Failed to store SDS metadata');
       return res.status(500).json({
         success: false,
         product_id,
@@ -193,7 +196,7 @@ router.post('/', async (req, res) => {
       .eq('product_id', product_id);
 
     if (updateError) {
-      logger.warn('Failed to update user watch lists:', updateError);
+      logger.warn({ error: updateError }, 'Failed to update user watch lists');
     }
 
     logger.info(`Successfully parsed SDS for product ${product_id} using enhanced parser`);
@@ -205,7 +208,7 @@ router.post('/', async (req, res) => {
       metadata: parsedData,
     });
   } catch (error) {
-    logger.error('Error in enhanced SDS parsing route:', error);
+    logger.error({ error }, 'Error in enhanced SDS parsing route');
     return res.status(500).json({
       success: false,
       product_id,

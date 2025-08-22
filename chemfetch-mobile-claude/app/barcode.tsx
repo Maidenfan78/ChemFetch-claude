@@ -1,5 +1,5 @@
-import { BACKEND_API_URL } from '@/lib/constants';
-import { supabase } from '@/lib/supabase';
+import { BACKEND_API_URL } from '../lib/constants';
+import { supabase } from '../lib/supabase';
 import { useIsFocused } from '@react-navigation/native';
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRouter } from 'expo-router';
@@ -253,6 +253,7 @@ export default function BarcodeScanner() {
     // Get current user ID if available
     supabase.auth.getSession().then(({ data: { session } }) => {
       const userId = session?.user?.id;
+      let responseData: any = null;
 
       fetch(`${BACKEND_API_URL}/scan`, {
         method: 'POST',
@@ -261,6 +262,7 @@ export default function BarcodeScanner() {
       })
         .then(res => res.json())
         .then(json => {
+          responseData = json;
           // Check if item is already in watchlist
           if (json.alreadyInWatchlist) {
             setLoading(false);
@@ -321,7 +323,7 @@ export default function BarcodeScanner() {
           router.replace({ pathname: '/ocr-info', params: { code: confirmed } });
         })
         .finally(() => {
-          if (!json?.alreadyInWatchlist) {
+          if (!responseData?.alreadyInWatchlist) {
             setLoading(false);
             cooldownRef.current = Date.now();
           }

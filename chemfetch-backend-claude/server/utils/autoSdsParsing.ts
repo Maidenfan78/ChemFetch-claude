@@ -61,7 +61,10 @@ export async function triggerAutoSdsParsing(
     logger.info(`Auto-SDS: Triggered parsing for product ${productId}`);
     return true;
   } catch (error) {
-    logger.error(`Auto-SDS: Failed to trigger parsing for product ${productId}:`, error);
+    logger.error(
+      { error, productId },
+      `Auto-SDS: Failed to trigger parsing for product ${productId}`
+    );
     return false;
   }
 }
@@ -125,11 +128,17 @@ async function executeSdsParsing(productId: number, sdsUrl: string): Promise<voi
         const parsedMetadata = JSON.parse(stdout.trim());
 
         if (parsedMetadata.error) {
-          logger.error(`Auto-SDS: Parse error for product ${productId}:`, parsedMetadata.error);
+          logger.error(
+            { error: parsedMetadata.error, productId },
+            `Auto-SDS: Parse error for product ${productId}`
+          );
           return;
         }
 
-        logger.debug(`Auto-SDS: Parsed metadata for product ${productId}:`, parsedMetadata);
+        logger.debug(
+          { parsedMetadata, productId },
+          `Auto-SDS: Parsed metadata for product ${productId}`
+        );
 
         // Store metadata in database
         const supabase = createServiceRoleClient();
@@ -147,7 +156,10 @@ async function executeSdsParsing(productId: number, sdsUrl: string): Promise<voi
         });
 
         if (upsertError) {
-          logger.error(`Auto-SDS: Failed to store metadata for product ${productId}:`, upsertError);
+          logger.error(
+            { error: upsertError, productId },
+            `Auto-SDS: Failed to store metadata for product ${productId}`
+          );
           return;
         }
 
@@ -167,7 +179,10 @@ async function executeSdsParsing(productId: number, sdsUrl: string): Promise<voi
 
         logger.info(`Auto-SDS: Successfully parsed and stored metadata for product ${productId}`);
       } catch (dbError) {
-        logger.error(`Auto-SDS: Database error for product ${productId}:`, dbError);
+        logger.error(
+          { error: dbError, productId },
+          `Auto-SDS: Database error for product ${productId}`
+        );
       }
     });
 
@@ -196,7 +211,7 @@ async function executeSdsParsing(productId: number, sdsUrl: string): Promise<voi
       clearTimeout(timeoutHandle);
     });
   } catch (error) {
-    logger.error(`Auto-SDS: Execution error for product ${productId}:`, error);
+    logger.error({ error, productId }, `Auto-SDS: Execution error for product ${productId}`);
   }
 }
 
@@ -235,6 +250,6 @@ export async function triggerBatchAutoSdsParsing(): Promise<void> {
       await triggerAutoSdsParsing(product.id, { delay });
     }
   } catch (error) {
-    logger.error('Auto-SDS: Batch processing failed:', error);
+    logger.error({ error }, 'Auto-SDS: Batch processing failed');
   }
 }

@@ -1,6 +1,6 @@
 // server/routes/ocrProxy.ts
 import { Router } from 'express';
-import { createProxyMiddleware, Options } from 'http-proxy-middleware';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,7 +12,7 @@ dotenv.config();
 const OCR_SERVICE_URL = process.env.OCR_SERVICE_URL || 'http://localhost:5001';
 const router = Router();
 
-const proxyOptions: Options = {
+const proxyOptions = {
   target: OCR_SERVICE_URL,
   changeOrigin: true,
   pathRewrite: () => '/ocr', // always forward as /ocr

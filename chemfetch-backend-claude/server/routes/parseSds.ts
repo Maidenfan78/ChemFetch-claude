@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
       .single();
 
     if (productError) {
-      logger.error('Failed to fetch product:', productError);
+      logger.error({ error: productError }, 'Failed to fetch product');
       return res.status(404).json({
         success: false,
         message: 'Product not found',
@@ -132,11 +132,11 @@ router.post('/', async (req, res) => {
       }
 
       logger.info(`Python script finished with code ${code}`);
-      logger.info(`Python stdout:`, stdout);
-      logger.info(`Python stderr:`, stderr);
+      logger.info({ stdout }, `Python stdout`);
+      logger.info({ stderr }, `Python stderr`);
 
       if (code !== 0) {
-        logger.error(`Python script failed with code ${code}:`, stderr);
+        logger.error({ stderr, code }, `Python script failed with code ${code}`);
         return sendResponse(500, {
           success: false,
           product_id,
@@ -155,7 +155,7 @@ router.post('/', async (req, res) => {
 
           // Check if Python script returned an error
           if (parsedMetadata.error) {
-            logger.error('Python script returned error:', parsedMetadata.error);
+            logger.error({ error: parsedMetadata.error }, 'Python script returned error');
             return sendResponse(500, {
               success: false,
               product_id,
@@ -164,7 +164,7 @@ router.post('/', async (req, res) => {
             });
           }
         } catch (parseError) {
-          logger.error('Failed to parse Python output as JSON:', output);
+          logger.error({ output }, 'Failed to parse Python output as JSON');
           return sendResponse(500, {
             success: false,
             product_id,
@@ -174,7 +174,10 @@ router.post('/', async (req, res) => {
         }
 
         // 6. Store metadata in database
-        logger.info(`Storing SDS metadata for product ${product_id}:`, parsedMetadata);
+        logger.info(
+          { parsedMetadata, product_id },
+          `Storing SDS metadata for product ${product_id}`
+        );
 
         const { error: upsertError } = await supabase.from('sds_metadata').upsert({
           product_id,
@@ -190,7 +193,7 @@ router.post('/', async (req, res) => {
         });
 
         if (upsertError) {
-          logger.error('Failed to store SDS metadata:', upsertError);
+          logger.error({ error: upsertError }, 'Failed to store SDS metadata');
           return sendResponse(500, {
             success: false,
             product_id,
@@ -214,7 +217,7 @@ router.post('/', async (req, res) => {
           .eq('product_id', product_id);
 
         if (updateError) {
-          logger.warn('Failed to update user watch lists:', updateError);
+          logger.warn({ error: updateError }, 'Failed to update user watch lists');
           // Don't fail the request, just log the warning
         }
 
@@ -226,7 +229,7 @@ router.post('/', async (req, res) => {
           metadata: parsedMetadata,
         });
       } catch (dbError) {
-        logger.error('Database error during SDS parsing:', dbError);
+        logger.error({ error: dbError }, 'Database error during SDS parsing');
         return sendResponse(500, {
           success: false,
           product_id,
@@ -269,7 +272,7 @@ router.post('/', async (req, res) => {
       clearTimeout(timeoutId);
     });
   } catch (error) {
-    logger.error('Error in SDS parsing route:', error);
+    logger.error({ error }, 'Error in SDS parsing route');
     return res.status(500).json({
       success: false,
       product_id,
@@ -477,7 +480,7 @@ router.post('/batch', async (req, res) => {
       results,
     });
   } catch (error) {
-    logger.error('Error in batch SDS parsing:', error);
+    logger.error({ error }, 'Error in batch SDS parsing');
     return res.status(500).json({
       success: false,
       message: 'Batch processing failed',
