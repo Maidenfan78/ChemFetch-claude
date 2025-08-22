@@ -1,1 +1,0 @@
-I have an issue. The initial OCR after scanning works ok. But if I scan another item the OCR fails. If I close the warning in the app testing in expo and press Run OCR it works without an error..

@@ -1,5 +1,5 @@
 // components/BottomBar.tsx
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../lib/supabase';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -19,8 +19,8 @@ export const BottomBar = () => {
         <Pressable onPress={() => router.replace('/')} className="flex-1 items-center">
           <Text className="text-sm text-gray-700">Home</Text>
         </Pressable>
-        <Pressable onPress={() => router.replace('/register')} className="flex-1 items-center">
-          <Text className="text-sm text-gray-700">Register List</Text>
+        <Pressable onPress={() => router.replace('/barcode')} className="flex-1 items-center">
+          <Text className="text-sm text-gray-700">Scan</Text>
         </Pressable>
         <Pressable onPress={handleLogout} className="flex-1 items-center">
           <Text className="text-sm text-gray-700">Logout</Text>

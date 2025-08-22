@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../lib/supabase';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 import '../app/global.css';
@@ -17,11 +17,18 @@ export default function HomeScreen() {
         className="mb-4 rounded-lg bg-primary px-6 py-3"
         onPress={() => router.push('/barcode')}
       >
-        <Text className="text-base font-bold text-white">📷 Start Scanning</Text>
+        <Text className="text-base font-bold text-white">📷 Scan Item</Text>
       </Pressable>
 
       <Pressable
-        className="rounded-lg bg-accent px-6 py-3"
+        className="mb-4 rounded-lg bg-secondary px-6 py-3"
+        onPress={() => router.push('/register')}
+      >
+        <Text className="text-base font-bold text-white">📋 Chemical List</Text>
+      </Pressable>
+
+      <Pressable
+        className="mb-4 rounded-lg bg-accent px-6 py-3"
         onPress={() => router.push('/confirm?editOnly=1')}
       >
         <Text className="text-base font-bold text-white">✍️ Manual Entry</Text>
