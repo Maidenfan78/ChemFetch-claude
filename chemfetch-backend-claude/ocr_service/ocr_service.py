@@ -56,34 +56,37 @@ class TimeoutError(Exception):
     pass
 
 def run_with_timeout(func, args=(), kwargs=None, timeout=120):
+    """Run ``func`` enforcing a timeout without using threads.
+
+    PaddleOCR's predictors are not thread-safe, so running the OCR call in a
+    separate thread (as was previously done) could leave the underlying
+    predictor in a bad state which manifested as "RuntimeError: Unknown
+    exception" on subsequent requests.  To keep the call in the main thread we
+    use ``signal.alarm`` on Unix-like systems.  On platforms without
+    ``SIGALRM`` (e.g. Windows) we simply execute the function without a
+    timeout.  This prioritises reliability of the OCR service over strict
+    cross-platform timeouts.
     """
-    Run a function with a timeout. Cross-platform alternative to signal.alarm.
-    """
+
     if kwargs is None:
         kwargs = {}
-    
-    result: List[Any] = [None]
-    exception: List[Optional[Exception]] = [None]
-    
-    def target():
+
+    if os.name != "nt":  # Unix: use signal-based alarm
+        import signal
+
+        def _handler(signum, frame):  # pragma: no cover - simple signal handler
+            raise TimeoutError("Function execution timeout")
+
+        old_handler = signal.signal(signal.SIGALRM, _handler)
+        signal.alarm(timeout)
         try:
-            result[0] = func(*args, **kwargs)
-        except Exception as e:
-            exception[0] = e
-    
-    thread = threading.Thread(target=target)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout)
-    
-    if thread.is_alive():
-        # Note: We can't forcibly kill the thread in Python, but we can ignore its result
-        raise TimeoutError("Function execution timeout")
-    
-    if exception[0]:
-        raise exception[0]
-    
-    return result[0]
+            return func(*args, **kwargs)
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old_handler)
+    else:
+        # Windows (no SIGALRM): run without enforced timeout
+        return func(*args, **kwargs)
 
 # -----------------------------------------------------------------------------
 # Helpers
