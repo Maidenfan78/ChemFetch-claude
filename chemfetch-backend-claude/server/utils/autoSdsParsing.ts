@@ -3,10 +3,8 @@ import { createServiceRoleClient } from './supabaseClient';
 import logger from './logger';
 import { spawn } from 'child_process';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Use Node's built-in __dirname for CommonJS compatibility
 
 interface AutoParseOptions {
   force?: boolean;
