@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useWatchList } from '@/lib/hooks/useWatchList';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 import { AddChemicalForm } from '@/components/add-chemical-form';
 
 export default function WatchListPage() {
-  const router = useRouter();
   const { data, loading, error, refresh } = useWatchList();
 
   const [updatingId, setUpdatingId] = useState<number | null>(null);
@@ -79,16 +77,22 @@ export default function WatchListPage() {
     }
   };
 
-  const handleInlineEdit = (watchListId: string, field: string, currentValue: any) => {
+  const handleInlineEdit = (
+    watchListId: string,
+    field: string,
+    currentValue: string | number | null
+  ) => {
     setEditingField(`${watchListId}-${field}`);
-    setEditingValue(currentValue || '');
+    setEditingValue(
+      currentValue !== null && currentValue !== undefined ? String(currentValue) : ''
+    );
   };
 
   const handleSaveEdit = async (watchListId: string, field: string) => {
     try {
       const supabase = supabaseBrowser();
 
-      let updateValue: any = editingValue;
+      let updateValue: unknown = editingValue;
       if (field === 'quantity_on_hand') {
         updateValue = editingValue ? parseInt(editingValue, 10) : null;
       }
@@ -127,8 +131,8 @@ export default function WatchListPage() {
   };
 
   const sortedData = [...data].sort((a, b) => {
-    let aValue: any;
-    let bValue: any;
+    let aValue: string | number | Date;
+    let bValue: string | number | Date;
 
     switch (sortField) {
       case 'product_name':
@@ -302,7 +306,7 @@ export default function WatchListPage() {
   const renderEditableCell = (
     watchListId: string,
     field: string,
-    value: any,
+    value: string | number | null,
     isTextArea = false
   ) => {
     const editKey = `${watchListId}-${field}`;

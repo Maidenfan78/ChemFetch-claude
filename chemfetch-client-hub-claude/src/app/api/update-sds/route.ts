@@ -28,22 +28,22 @@ export async function POST(request: Request) {
     clearTimeout(id);
 
     const text = await resp.text();
-    let data: any;
+    let data: unknown;
     try {
       data = JSON.parse(text);
     } catch {
       data = { raw: text };
     }
+    const parsedData = data as Record<string, unknown>;
 
     if (!resp.ok) {
-      return NextResponse.json(
-        { error: data?.error || data?.raw || 'Failed to trigger parse' },
-        { status: resp.status }
-      );
+      const errorMessage =
+        (parsedData.error as string) || (parsedData.raw as string) || 'Failed to trigger parse';
+      return NextResponse.json({ error: errorMessage }, { status: resp.status });
     }
 
     // bubble up parsed fields so the UI can refresh row(s)
-    return NextResponse.json({ success: true, ...data });
+    return NextResponse.json({ success: true, ...parsedData });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });

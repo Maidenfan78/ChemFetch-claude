@@ -19,6 +19,19 @@ type SdsDebugPanelProps = {
   currentMetadata: CurrentMetadata;
 };
 
+type ParsedDataEntry = {
+  confidence?: number;
+  [key: string]: unknown;
+};
+
+type DebugResults = {
+  error?: string;
+  debug: boolean;
+  parser_type: string;
+  parsed_data?: Record<string, ParsedDataEntry>;
+  [key: string]: unknown;
+};
+
 export function SdsDebugPanel({
   productId,
   productName,
@@ -27,7 +40,7 @@ export function SdsDebugPanel({
 }: SdsDebugPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [parsing, setParsing] = useState(false);
-  const [debugResults, setDebugResults] = useState<any>(null);
+  const [debugResults, setDebugResults] = useState<DebugResults | null>(null);
 
   useEffect(() => {
     const onEsc = (e: KeyboardEvent) => {
@@ -61,7 +74,7 @@ export function SdsDebugPanel({
         }),
       });
 
-      let payload: any = null;
+      let payload: unknown = null;
       try {
         payload = await response.json();
       } catch {
@@ -69,9 +82,10 @@ export function SdsDebugPanel({
       }
 
       if (!response.ok) {
+        const body = payload as Record<string, unknown> | null;
         setDebugResults({
           error:
-            (payload && (payload.error || payload.message)) ||
+            (body && ((body.error as string) || (body.message as string))) ||
             `HTTP ${response.status} ${response.statusText}`,
           debug: true,
           parser_type: useEnhancedParser ? 'enhanced' : 'legacy',
@@ -80,9 +94,9 @@ export function SdsDebugPanel({
       }
 
       setDebugResults({
-        ...payload,
+        ...(payload as Record<string, unknown>),
         parser_type: useEnhancedParser ? 'enhanced' : 'legacy',
-      });
+      } as DebugResults);
     } catch (error) {
       setDebugResults({
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -229,26 +243,30 @@ export function SdsDebugPanel({
                 <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-700">
                   <h5 className="font-medium text-sm mb-2">Confidence Scores:</h5>
                   <div className="grid grid-cols-2 gap-2 text-xs">
-                    {Object.entries(debugResults.parsed_data).map(([key, value]: [string, any]) => {
-                      if (value && typeof value === 'object' && 'confidence' in value) {
-                        const confidence = value.confidence || 0;
-                        const confidenceColor =
-                          confidence > 0.8
-                            ? 'text-green-600'
-                            : confidence > 0.5
-                              ? 'text-yellow-600'
-                              : 'text-red-600';
-                        return (
-                          <div key={key} className="flex justify-between">
-                            <span className="capitalize">{key.replace(/_/g, ' ')}:</span>
-                            <span className={confidenceColor}>
-                              {(confidence * 100).toFixed(1)}%
-                            </span>
-                          </div>
-                        );
-                      }
-                      return null;
-                    })}
+                    {typeof debugResults.parsed_data === 'object' &&
+                      debugResults.parsed_data !== null &&
+                      Object.entries(debugResults.parsed_data as Record<string, unknown>).map(
+                        ([key, value]) => {
+                          if (value && typeof value === 'object' && 'confidence' in value) {
+                            const confidence = (value as ParsedDataEntry).confidence || 0;
+                            const confidenceColor =
+                              confidence > 0.8
+                                ? 'text-green-600'
+                                : confidence > 0.5
+                                  ? 'text-yellow-600'
+                                  : 'text-red-600';
+                            return (
+                              <div key={key} className="flex justify-between">
+                                <span className="capitalize">{key.replace(/_/g, ' ')}:</span>
+                                <span className={confidenceColor}>
+                                  {(confidence * 100).toFixed(1)}%
+                                </span>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }
+                      )}
                   </div>
                 </div>
               )}

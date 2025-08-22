@@ -95,7 +95,18 @@ export function useWatchList() {
         });
 
         // Step 3: Get SDS metadata for products
-        let sdsMetadata: any[] = [];
+        type SdsMetadata = {
+          product_id: number;
+          vendor?: string | null;
+          issue_date?: string | null;
+          hazardous_substance?: boolean | null;
+          dangerous_good?: boolean | null;
+          dangerous_goods_class?: string | null;
+          packing_group?: string | null;
+          subsidiary_risks?: string | null;
+          description?: string | null;
+        };
+        let sdsMetadata: SdsMetadata[] = [];
         try {
           const { data: sdsData, error: sdsError } = await supabase
             .from('sds_metadata')
